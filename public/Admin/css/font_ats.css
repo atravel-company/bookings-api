@@ -1,0 +1,40 @@
+@font-face {
+  font-family: 'FontAts';
+  src: url('../fonts/ats-travel.eot');
+  src: url('../fonts/ats-travel.eot') format('embedded-opentype'), 
+  url('../fonts/ats-travel.woff2') format('woff2'), 
+  url('../fonts/ats-travel.woff') format('woff'), 
+  url('../fonts/ats-travel.ttf') format('truetype'),
+  url('../fonts/ats-travel.svg') format('svg');
+  font-weight: normal;
+  font-style: normal}
+.fats { display: inline-block;
+  font: normal normal normal 30px/1 FontAts;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale}
+.fats-2x {font-size: 2em}
+.fats-3x {font-size: 3em}
+.fats-4x {font-size: 4em}
+.fats-5x {font-size: 5em}
+.fats-fw {width: 1.28571429em;text-align: center}
+
+.fats-adult:before {content:"\68"}
+.fats-airport-check:before {content:"\69"}
+.fats-baby:before {content:"\53"}
+.fats-calendar:before {content:"\57"}
+.fats-new:before {content:"\55"}
+.fats-children:before {content:"\59"}
+.fats-plan:before {content:"\47"}
+.fats-golf:before {content:"\61"}
+.fats-keys:before {content:"\70"}
+.fats-type:before {content:"\71"}
+.fats-back:before {content:"\72"}
+.fats-edit:before {content:"\73"}
+.fats-people:before {content:"\62"}
+.fats-marker:before {content:"\63"}
+.fats-globe:before {content:"\64"}
+.fats-add-name:before {content:"\65"}
+.fats-plain:before {content:"\66"}
+.fats-clock:before {content:"\67"}

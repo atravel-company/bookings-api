@@ -1,0 +1,24 @@
+<?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class PedidoCar extends Model
+{
+    //use SoftDeletes;
+    
+    protected $fillable = ['pedido_produto_id','pickup', 'pickup_data', 'pickup_hora', 'pickup_flight', 'pickup_country', 'pickup_airport', 'dropoff', 'dropoff_data', 'dropoff_hora', 'dropoff_flight', 'dropoff_country', 'dropoff_airport', 'remark', 'group', 'model', 'rate', 'days', 'tax', 'tax_type', 'total', 'ats_rate', 'ats_total_rate', 'profit'];
+
+    protected $appends = ['checkin', 'TotalPax'];
+
+    public function getCheckinAttribute(){
+    	return $this->pickup_data;
+    }
+
+    public function getTotalPaxAttribute(){
+    	return 0;
+    }
+
+}
