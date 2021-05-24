@@ -8,7 +8,7 @@ color: #fff;
 }
 -->
 
-<link href="{{ asset('css/font_ats.css') }}" rel="stylesheet">
+<link href="{{ asset('Admin/css/font_ats.css') }}" rel="stylesheet">
 
 <script type="text/javascript" src="{{ URL::asset('Admin/js/principal.js') }}"></script>
 

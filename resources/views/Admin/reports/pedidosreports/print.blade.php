@@ -11,6 +11,10 @@
 
     <title>ATS Portugal</title>
 
+
+
+
+
     <!--load everything font-awesome-->
     <style type="text/css">
         #app-navbar-collapse {
@@ -35,12 +39,14 @@
             -webkit-print-color-adjust: exact;
         }
     </style>
+    <link href="https://www.w3schools.com/w3css/4/w3.css" rel="stylesheet">
+
+
     <script type="text/javascript" src="{{ URL::asset('Admin/js/node_modules/printthis/printThis.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('Admin/js/voucher.js') }}"></script>
 
-    <script type="text/javascript">
-        load ="{{ asset('css/w3.css') }}";
-    </script>
+
+
 </head>
 
 <body style="background: white; color: black">

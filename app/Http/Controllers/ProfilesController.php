@@ -3,34 +3,35 @@
 namespace App\Http\Controllers;
 
 use App;
-use App\Categoria;
-use App\Destinos;
+use Mail;
+use Excel;
+use App\User;
 use App\Extra;
+use App\Produto;
+use App\Destinos;
+use App\ValorCar;
+use App\Categoria;
 use App\PedidoCar;
+use App\ValorGolf;
+use Carbon\Carbon;
 use App\PedidoGame;
 use App\PedidoGeral;
-use App\PedidoGeralProfile;
-use App\PedidoPayments;
-use App\PedidoProduto;
-use App\PedidoProdutoExtra;
-use App\PedidoQuarto;
-use App\PedidoQuartoRoom;
-use App\PedidoQuartoRoomName;
-use App\PedidoTicket;
-use App\PedidoTransfer;
-use App\Produto;
-use App\User;
-use App\ValorCar;
-use App\ValorGolf;
 use App\ValorQuarto;
 use App\ValorTicket;
+use App\PedidoQuarto;
+use App\PedidoTicket;
+use App\PedidoProduto;
 use App\ValorTransfer;
-use Carbon\Carbon;
-use Excel;
+use App\PedidoPayments;
+use App\PedidoTransfer;
+use App\PedidoQuartoRoom;
+use App\PedidoGeralProfile;
+use App\PedidoProdutoExtra;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\PedidoQuartoRoomName;
+use App\Exports\RoomsListExport;
 use Illuminate\Support\Facades\DB;
-use Mail;
+use Illuminate\Support\Facades\Auth;
 
 class ProfilesController extends Controller
 {
@@ -304,10 +305,11 @@ class ProfilesController extends Controller
         return response()->json(['atualizado com sucesso']);
     }
 
-    public function excelRoomsList($id = null)
-    {
 
-        $pedido = PedidoGeral::find($id);
+    public function roomsList($id)
+    {
+        $pedido = PedidoGeral::find($id,'id');
+
 
         foreach ($pedido->produtos as $p) {
             if ($p->quartos()->count() > 0) {
@@ -317,35 +319,61 @@ class ProfilesController extends Controller
             }
         }
 
-        Excel::create('proforma_export_', function ($excel) use ($pedido) {
 
-            $excel->sheet('reports_room_list', function ($sheet) use ($pedido) {
-
-                $sheet->loadView('Admin.profile.Excel.roomlist')->with(['pedido' => $pedido, 'usuario' => Auth::user()]);
-
-                $sheet->cell('A1:A6', function ($cell) {
-                    $cell->setBorder('left');
-                });
-
-                $sheet->cell('A2:A6', function ($cell) {
-                    $cell->setFontColor('#005e69');
-                    $cell->setFontWeight('bold');
-                });
-
-                $sheet->cell('B1:B6', function ($cell) {
-                    $cell->setAlignment('right');
-                });
-
-                $sheet->cell('A1', function ($cell) {
-                    $cell->setAlignment('left');
-                    $cell->setFontWeight('bold');
-                    $cell->setFontSize(17);
-                });
-
-            });
-
-        })->export("xlsx");
+        return view('Admin.profile.Excel.roomlist',compact('pedido'));
+        //RoomsListExport
     }
+
+    public function export($pedido)
+    {
+        return Excel::download(new RoomsListExport($pedido),"excel.xlsx");
+    }
+
+    //
+
+
+    // public function excelRoomsList($id = null)
+    // {
+
+    //     $pedido = PedidoGeral::find($id);
+
+    //     foreach ($pedido->produtos as $p) {
+    //         if ($p->quartos()->count() > 0) {
+    //             foreach ($p->quartos()->get() as $q) {
+    //                 $quartos[] = $q;
+    //             }
+    //         }
+    //     }
+
+    //     Excel::create('proforma_export_', function ($excel) use ($pedido) {
+
+    //         $excel->sheet('reports_room_list', function ($sheet) use ($pedido) {
+
+    //             $sheet->loadView('Admin.profile.Excel.roomlist')->with(['pedido' => $pedido, 'usuario' => Auth::user()]);
+
+    //             $sheet->cell('A1:A6', function ($cell) {
+    //                 $cell->setBorder('left');
+    //             });
+
+    //             $sheet->cell('A2:A6', function ($cell) {
+    //                 $cell->setFontColor('#005e69');
+    //                 $cell->setFontWeight('bold');
+    //             });
+
+    //             $sheet->cell('B1:B6', function ($cell) {
+    //                 $cell->setAlignment('right');
+    //             });
+
+    //             $sheet->cell('A1', function ($cell) {
+    //                 $cell->setAlignment('left');
+    //                 $cell->setFontWeight('bold');
+    //                 $cell->setFontSize(17);
+    //             });
+
+    //         });
+
+    //     })->export("xlsx");
+    // }
 
     public function removeProducts(Request $request)
     {

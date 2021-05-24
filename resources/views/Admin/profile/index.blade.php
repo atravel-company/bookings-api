@@ -872,8 +872,16 @@ $users_api_transfergest = ['sales@atravel.pt', 'incoming@atravel.pt', 'bookings@
                                                         href="{{ route('profile.download.excel.roomlist', $pedido->id) }}"
                                                         data-pedido="{{$pedido->id}}"
                                                         data-button="downloadExcelRoomList"
-                                                        class="btn btn-danger btn-xs" target="_blank">Print RoomList</a>
+                                                        class="btn btn-danger btn-xs" target="_blank">Ver Print RoomList</a>
                                                 </span>
+                                                <span class="w3-right" style="margin-left: 1%">
+                                                    <a data-url="{{ route('export.excel') }}"
+                                                        href="{{ route('export.excel') }}"
+                                                        data-pedido="{{$pedido->id}}"
+                                                        data-button="downloadExcelRoomList"
+                                                        class="btn btn-danger btn-xs" target="_blank">Excel Print RoomList</a>
+                                                </span>
+
                                                 <span class="w3-right">
                                                     <a href="{{ route('profile.voucher',['pedido_produto_id'=>$produto[$key][$key1]->pivot->id,'pedido_id'=>$pedido->id]) }}"
                                                         class="btn btn-info btn-xs">Voucher</a>

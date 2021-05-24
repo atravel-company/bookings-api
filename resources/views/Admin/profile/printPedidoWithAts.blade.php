@@ -47,10 +47,10 @@
     }
 
 </style>
-<script type="text/javascript" src="{{ URL::asset('js/node_modules/printthis/printThis.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('js/voucher.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('Admin/js/node_modules/printthis/printThis.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('Admin/js/voucher.js') }}"></script>
 <script type="text/javascript">
-    load = "{{ asset('css/w3.css') }}";
+    load = "{{ asset('Admin/css/w3.css') }}";
 
 </script>
 

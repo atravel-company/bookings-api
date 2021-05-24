@@ -25,10 +25,8 @@
             </div>
         </div>
         <tr>
-            <!--<td>{{ $destino->id }}</td>-->
 
             <td>
-            {{ $destino->path_image }}
                 <div class="w3-container w3-cell">
                     <img class="w3-card-4" onclick="document.getElementById('{{ $destino->id }}').style.display='block'"
                         src="<?php echo asset("storage/$destino->path_image")?>" style="width:152px;height:114px;">

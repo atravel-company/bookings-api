@@ -27,12 +27,8 @@
                     <table>
                         @foreach($role->users()->orderBy("name")->get() as $user)
                         <tr>
-
                             <td style="width: 489px !important;">{{$user->name}}</td>
                             <td>&nbsp;&nbsp;<span onclick="delink({{$user->id}},'{{$role->id}}')" class="btn btn-xs  w3-red">Delete</span></td>
-
-
-
                         </tr>
                         @endforeach
                         <tr>
@@ -50,7 +46,7 @@
                     <a href="{{ route('groups.edit',['id'=>$role->id]) }}" class="btn btn-info btn-xs">Edit</a>&nbsp&nbsp&nbsp
                     @else
                     Not have permission!
-                    @endhasallroles
+                    @endhasrole
 
 
 
@@ -58,7 +54,7 @@
                     <a href="{{ route('groups.destroy',['id'=>$role->id]) }}" class="btn btn-danger btn-xs">Delete</a>
                     @else
                     Not have permission!
-                    @endhasallroles
+                    @endhasrole
                 </td>
             </tr>
 
@@ -75,27 +71,9 @@
     <a href="{{ route('groups.create') }}" class="btn btn-success  btn-xs">Create</a>
     @else
     Not have permission!
-    @endhasallroles
-
-
-
-
+    @endhasrole
     @else
-
-
-
-
-
-
-
-
-
     @endif
-
-
-
-
-
 </div>
 
 @endsection

@@ -2,6 +2,14 @@
 
 @section('content')
 <style type="text/css">
+
+    @media print
+    {
+        .no-print, .no-print *
+        {
+            display: none !important;
+        }
+    }
     #app-navbar-collapse {
         display: none !important;
     }
@@ -12,12 +20,12 @@
         background-color: #ffffff !important;
     }
 </style>
-<script type="text/javascript" src="{{ URL::asset('js/node_modules/printthis/printThis.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('js/voucher.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('Admin/js/node_modules/printthis/printThis.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('Admin/js/voucher.js') }}"></script>
 
 
 <script type="text/javascript">
-    load ="{{ asset('css/w3.css') }}";
+    load ="{{ asset('Admin/css/w3.css') }}";
 </script>
 
 <div class="container" id="cabeca" style="margin-top: -50px;">
@@ -38,7 +46,7 @@
                 </td>
             </tr>
         </table>
-
+<br>
         <div class="w3-col l12" style="margin-top:10px; margin-bottom:20px;">
             <div class="form-group">
 
@@ -84,8 +92,8 @@
     <table width="100%">
         <tr>
             <td width="49%"><b>Hotel Voucher</b>&nbsp;
-                {{-- <a  title="Print" onclick="PrintQuarto({{$pedidoQuarto->id}})" class="btn fa fa-print"
-                style="color:teal" aria-hidden="true"></a> --}}
+                <a title="" onclick="PrintQuarto({{$pedidoQuarto->id}})" class="btn fa fa-print no-print"
+                style="color:teal" aria-hidden="false"></a>
             </td>
             <td width="49%"><span class="w3-right"><b>Voucher Nº:&nbsp;</b>{{$pedidoGeral->referencia}}</span></td>
         </tr>
@@ -158,8 +166,8 @@
 
     <table width="100%">
         <tr>
-            <td width="49%"><b>Golf Services Voucher</b><a title="Print" onclick="PrintGame({{$PedidoGame->id}})"
-                    class="btn fa fa-print" style="color:teal" aria-hidden="true"></a></td>
+            <td width="49%"><b>Golf Services Voucher</b><a title="" onclick="PrintGame({{$PedidoGame->id}})"
+                    class="btn fa fa-print no-print" style="color:teal" aria-hidden="true"></a></td>
             <td width="49%"><span class="w3-right"><b>Voucher Nº:&nbsp;</b>{{$pedidoGeral->referencia}}</span></td>
         </tr>
     </table>
@@ -203,8 +211,8 @@
 <div class="container" id="transfer{{$PedidoTransfer->id}}">
     <table width="100%">
         <tr>
-            <td width="49%"><b>Transfers Voucher</b><a title="Print" onclick="PrintTransfer({{$PedidoTransfer->id}})"
-                    class="btn fa fa-print" style="color:teal" aria-hidden="true"></a></td>
+            <td width="49%"><b>Transfers Voucher</b><a title="" onclick="PrintTransfer({{$PedidoTransfer->id}})"
+                    class="btn fa fa-print no-print" style="color:teal" aria-hidden="true"></a></td>
             <td width="49%"><span class="w3-right"><b>Voucher Nº:&nbsp;</b>{{$pedidoGeral->referencia}}</span></td>
         </tr>
     </table>
@@ -270,8 +278,8 @@
 
     <table width="100%">
         <tr>
-            <td width="49%"><b>Rent a Car Voucher</b><a title="Print" onclick="PrintCar({{$PedidoCar->id}})"
-                    class="btn fa fa-print" style="color:teal" aria-hidden="true"></a></td>
+            <td width="49%"><b>Rent a Car Voucher</b><a title="" onclick="PrintCar({{$PedidoCar->id}})"
+                    class="btn fa fa-print no-print" style="color:teal" aria-hidden="true"></a></td>
             <td width="49%"><span class="w3-right"><b>Voucher Nº:&nbsp;</b>{{$pedidoGeral->referencia}}</span></td>
         </tr>
     </table>
@@ -346,8 +354,8 @@
 
     <table width="100%">
         <tr>
-            <td width="49%"><b>Tours Voucher</b><a title="Print" onclick="PrintTicket({{$PedidoTicket->id}})"
-                    class="btn fa fa-print" style="color:teal" aria-hidden="true"></a></td>
+            <td width="49%"><b>Tours Voucher</b><a title="" onclick="PrintTicket({{$PedidoTicket->id}})"
+                    class="btn fa fa-print no-print" style="color:teal" aria-hidden="true"></a></td>
             <td width="49%"><span class="w3-right"><b>Voucher Nº:&nbsp;</b>{{$pedidoGeral->referencia}}</span></td>
         </tr>
     </table>
