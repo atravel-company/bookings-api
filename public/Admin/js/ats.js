@@ -1,24 +1,4 @@
-// var assetBaseUrl = "{{ asset('') }}";
-var assetBaseUrl = "https://dev.atsportugal.com/admin/";
-
-console.log("VALOR DO ASSET ", assetBaseUrl);
-
-
-/** Add by Netto */
-// $(document).ready(function(){
-//   $('[id^="GolfExtrasQuantidade"]').input(function(){
-//     alert('teste');
-//     var checkbox = $(this).closest('div').find('.checkbox_extras');
-//     var input_value = $(this).val();
-//     console.log(checkbox, input_value);
-//     if(input_value <= 0){
-//       checkbox.prop('checked', false);
-//     }else{
-//       checkbox.prop('checked', true);
-//     }
-//   });
-// })
-/** Add by Netto FIM */
+var assetBaseUrl = window.location.origin + "/admin/";
 
 $(document).ready(function () {
     $(window).ready(function () {
@@ -61,67 +41,6 @@ function bag() {
 /************ Add by Netto ************/
 $(document).ready(function () {
     var people_number;
-
-    // //Lista o nome das pessoas - Rooms
-    // window.getRoomsNames = function(pedido_geral_id, produto_id, people_number) {
-    //     console.log(produto_id, pedido_geral_id, people_number);
-
-    //     return false;
-
-    //     $.ajax({
-    //         type: 'POST',
-    //         url: assetBaseUrl + "profile/getroomnames",
-    //         dataType: "json",
-    //         data: $.param({
-    //             "pedido_geral_id": pedido_geral_id,
-    //             "produto_id": produto_id,
-    //             "quarto_id": $('#quarto_id').val()
-    //         }),
-    //         success: function(data) {
-    //             console.log(JSON.stringify(data));
-    //             var i = 0;
-    //             var z = 1;
-    //             var room_id  = $('#quarto_id').val();
-    //             var adress = assetBaseUrl + 'profile';
-    //             console.log(data);
-    //             $.each(data, function(index, element) {
-    //                 var name = element.name ? element.name : "";
-    //                 room_id = element.room_id;
-    //                 $('#room_pax_names_div').append("<label>Name " + z + "</label>");
-    //                 $('#room_pax_names_div').append("<input type='text' data-room-id='" + room_id + "' name='room_pax_name" + i + "' data-id='" + element.id + "' class='room_pax_name_edit form-control w3-block' value='" + name + "'>");
-    //                 i++;
-    //                 z++;
-    //             });
-    //             var x = 0;
-    //             if (people_number) {
-    //                 var x = people_number - i;
-    //                 i++;
-    //             }
-    //             if (x > 0) {
-    //                 for (var z = 0; z < x; z++) {
-    //                     $('#room_pax_names_div').append("<label>Nome " + i + "</label>");
-    //                     $('#room_pax_names_div').append("<input type='text' data-room-id='" + room_id + "' name='new_room_pax" + z + "' class='room_pax_name_edit form-control w3-block' value=''>");
-    //                     i++;
-    //                 }
-    //             } else {
-    //                 x = Math.abs(x);
-    //                 for (var z = 0; z < x; z++) {
-    //                     $('#room_pax_names_div').find('label').last().remove();
-    //                     $('#room_pax_names_div').find(".room_pax_name_edit").last().remove();
-    //                     i++;
-    //                 }
-    //             }
-    //         },
-    //         error: function(jqXHR, textStatus, errorThrown) {
-    //             var errors = jqXHR.responseJSON;
-    //             var errorsHtml = '';
-    //             $.each(errors, function(key, value) {
-    //                 errorsHtml += '<li>' + value[0] + '</li>';
-    //             });
-    //             $('#contactediterror').html('<ul class="alert alert-warning">' + errorsHtml + '</ul>', "Error " + jqXHR.status + ': ' + errorThrown);
-    //         },
-    //     });
-    // }
 
     window.makeDiv = function (quarto_id, quartoRoomName, key, select) {
 

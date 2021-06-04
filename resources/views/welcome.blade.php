@@ -50,7 +50,7 @@
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
                             </button>
-                            <a class="navbar-brand" href="index.php"><img src="{{ asset('FrontEnd/images/ats_novo_header.png') }}"
+                            <a class="navbar-brand" href="index.php"><img src="{{ asset('FrontEnd/images/logoats.png') }}"
                                     style="margin-top: -13px;max-height: 45px" alt="logotipo - ats travel"
                                     title="logotipo - ats travel"></a>
                         </div>

@@ -11,14 +11,8 @@ use App\PedidoProdutoExtra;
 
 class ExtrasController extends Controller
 {
-    //
-
     public function index(){
-		//$nome = 'renato';
-		//return view('produtos', ['ola'=>$nome]);
-
-
-		$extras = Extra::orderBy('name')->get();
+		$extras = Extra::orderBy('name')->paginate(15);
 		return view('Admin.extras.index',['extras'=>$extras]);
 	}
 
@@ -49,7 +43,6 @@ class ExtrasController extends Controller
 	}
 
 	public function edit($id){
-
 		$extra = Extra::find($id);
 		return view('Admin.extras.edit', compact('extra'));
 	}

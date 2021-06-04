@@ -17,6 +17,7 @@
         "backpack/pagemanager": "^3.0",
         "backpack/permissionmanager": "^6.0",
         "backpack/settings": "^3.0",
+        "coffeecode/optimizer": "^2.0",
         "doctrine/dbal": "^2.13",
         "doctrine/inflector": "^2.0",
         "fideloper/proxy": "^4.4",

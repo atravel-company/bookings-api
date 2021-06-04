@@ -16,11 +16,6 @@ class Pdf extends FormRequest
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules()
     {
         return [
@@ -29,7 +24,7 @@ class Pdf extends FormRequest
         ];
     }
 
-    public function message(){
+    public function messages(){
 
         return [
             'path_image.required' => "Anexo obrigatorio",

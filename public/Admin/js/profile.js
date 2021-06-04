@@ -1,4 +1,4 @@
-var base_url = "https://dev.atsportugal.com/admin/"; //<--MUDAR QUANDO FOR PRODUÇAO REMOVER-> DEV.
+assetBaseUrl = window.location.origin + "/admin/";
 
 $(function() {
     $('.datetimepicker1').datetimepicker({

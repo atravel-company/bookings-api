@@ -87,8 +87,13 @@ Route::group(["prefix" => "admin", 'middleware' => ['auth']], function () {
 		Route::post('editroomnames',['as'=>'profile.editroomnames', 'uses'=>'ProfilesController@editRoomNames']);
 		Route::post('editar/rooms',['as'=>'profile.editroomnew', 'uses'=>'ProfilesController@newEditRoomNames']);
 		Route::post('delete/empty/rooms',['as'=> 'profile.delete.empty.rooms', 'uses'=>'ProfilesController@removeEmptyRooms']);
-		Route::match(['get', 'post'], 'download/excel/roomslist/{id}',['as'=>'profile.download.excel.roomlist', 'uses'=>'ProfilesController@roomsList']);
-        Route::get('excel/{id?}',['as'=>'export.excel', 'uses' => 'ProfilesController@export']);
+
+
+		Route::match(['get', 'post'], 'download/excel/roomslist/{id}',['as'=>'profile.download.excel.roomlist', 'uses'=>'ProfilesController@export']);
+        //Route::get('excel/{id?}',['as'=>'export.excel', 'uses' => 'ProfilesController@export']);
+
+
+
 		Route::post('new/update/rooms',['as'=>'profile.update.room.qtds', 'uses'=>'ProfilesController@updateRoomQtdAndPaxQtd']);
 		/* felix */
 

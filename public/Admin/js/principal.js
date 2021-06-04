@@ -171,7 +171,6 @@ function formulario(name, id, alojamento1, golf1, transfer1, car1, ticket1, usua
     $.ajax({
         type: 'GET',
         url: "../admin/../form/" + id,
-
         success: function(data) {
             $('#loading').load(assetBaseUrl + 'main/form/' + id, function() {
                 $('select[name="tipopedido"]').val(tipoPedido).change();

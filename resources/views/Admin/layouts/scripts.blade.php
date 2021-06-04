@@ -94,6 +94,3 @@
 </script>
 
 @stack("javascript")
-
-
-{{-- <script src="{{ asset('Admin/js/app.js') }}" defer></script> --}}

@@ -25,7 +25,7 @@
       </div>
       <div class="modal-footer">
 
-      <p style='text-align:center; margin:0;'><img class="img-logo" src="{{ asset('FrontEnd/images/ats_novo_header.png') }}" ></p>
+      <p style='text-align:center; margin:0;'><img class="img-logo" src="{{ asset('FrontEnd/images/logoats.png') }}" ></p>
       </div>
     </div>
   </div>
@@ -44,7 +44,7 @@
       </div>
       <div class="modal-footer">
 
-       <p style='text-align:center; margin:0;'><img class="img-logo" src="{{ asset('FrontEnd/images/ats_novo_header.png') }}" ></p>
+       <p style='text-align:center; margin:0;'><img class="img-logo" src="{{ asset('FrontEnd/images/logoats.png') }}" ></p>
 
       </div>
     </div>

@@ -28,7 +28,7 @@ return [
         | Enable strict null comparison
         |--------------------------------------------------------------------------
         |
-        | When enabling strict null comparison empty cells ( '' ) will
+        | When enabling strict null comparison empty cells ('') will
         | be added to the sheet.
         */
         'strict_null_comparison' => false,
@@ -55,19 +55,19 @@ return [
         | Worksheet properties
         |--------------------------------------------------------------------------
         |
-        | Configure e.g. default title, creator, subject, ...
+        | Configure e.g. default title, creator, subject,...
         |
         */
-        'properties' => [
-            'creator'        => 'ATS',
-            'lastModifiedBy' => 'ats',
-            'title'          => 'Spreadsheet',
-            'description'    => 'Default spreadsheet export',
-            'subject'        => 'Spreadsheet export',
-            'keywords'       => 'ats, rooms , transfers, export',
-            'category'       => 'Excel',
-            'manager'        => 'ATs',
-            'company'        => 'Ats',
+        'properties'             => [
+            'creator'        => '',
+            'lastModifiedBy' => '',
+            'title'          => '',
+            'description'    => '',
+            'subject'        => '',
+            'keywords'       => '',
+            'category'       => '',
+            'manager'        => '',
+            'company'        => '',
         ],
     ],
 
@@ -133,7 +133,7 @@ return [
         | Worksheet properties
         |--------------------------------------------------------------------------
         |
-        | Configure e.g. default title, creator, subject, ...
+        | Configure e.g. default title, creator, subject,...
         |
         */
         'properties'  => [
@@ -220,7 +220,7 @@ return [
         | want to mitigate that, you can configure a cell caching driver here.
         | When using the illuminate driver, it will store each value in a the
         | cache store. This can slow down the process, because it needs to
-        | store each value. You can use the 'batch' store if you want to
+        | store each value. You can use the "batch" store if you want to
         | only persist to the store when the memory limit is reached.
         |
         | Drivers: memory|illuminate|batch
@@ -233,7 +233,7 @@ return [
         | Batch memory caching
         |--------------------------------------------------------------------------
         |
-        | When dealing with the 'batch' caching driver, it will only
+        | When dealing with the "batch" caching driver, it will only
         | persist to the store when the memory limit is reached.
         | Here you can tweak the memory limit to your liking.
         |
@@ -247,11 +247,11 @@ return [
         | Illuminate cache
         |--------------------------------------------------------------------------
         |
-        | When using the 'illuminate' caching driver, it will automatically use
+        | When using the "illuminate" caching driver, it will automatically use
         | your default cache store. However if you prefer to have the cell
         | cache on a separate store, you can configure the store name here.
         | You can use any store defined in your cache config. When leaving
-        | at 'null' it will use the default store.
+        | at "null" it will use the default store.
         |
         */
         'illuminate' => [
@@ -289,7 +289,7 @@ return [
         | storing reading or downloading. Here you can customize that path.
         |
         */
-        'local_path'          => storage_path( 'framework/laravel-excel' ),
+        'local_path'          => storage_path('framework/laravel-excel'),
 
         /*
         |--------------------------------------------------------------------------

@@ -60,7 +60,6 @@
     @foreach($suppliers as $supplier)
 
     <!--................................................PROFILE.................................................-->
-
     <div id="divsup{{ $supplier->id }}" class="w3-padding-16">
         <div class=" w3-container">
             <table class="w3-table  w3-border-top w3-border-right w3-border-left  w3-striped">
@@ -77,8 +76,7 @@
                             <div class=" w3-container">
 
                                 <div class="row">
-                                    <div class="w3-col w3-center col-lg-3 col-md-3">
-
+                                    <div class="col-lg-3 col-md-3">
                                         @if(config('app.env') != 'local')
                                             <img style="width:152px;" class="w3-card-4"  src="<?php echo asset("storage/$supplier->path_image")?>">
                                         @else

@@ -219,7 +219,7 @@ Accounts
 <div id="myDIVrole{{ $user->id }}"  style="display: none;" >
 
 
-  {!! Form::open(['url'=>"users/$user->id/update", 'method'=>'put', 'id'=>"form$user->id",'class'=>'formula']) !!}
+  {!! Form::open(['url'=>"admin/users/$user->id/update", 'method'=>'put', 'id'=>"form$user->id",'class'=>'formula']) !!}
 
 
 

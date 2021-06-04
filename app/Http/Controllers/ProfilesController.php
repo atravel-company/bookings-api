@@ -7,6 +7,7 @@ use Mail;
 use Excel;
 use App\User;
 use App\Extra;
+use Exception;
 use App\Produto;
 use App\Destinos;
 use App\ValorCar;
@@ -309,8 +310,6 @@ class ProfilesController extends Controller
     public function roomsList($id)
     {
         $pedido = PedidoGeral::find($id,'id');
-
-
         foreach ($pedido->produtos as $p) {
             if ($p->quartos()->count() > 0) {
                 foreach ($p->quartos()->get() as $q) {
@@ -318,19 +317,24 @@ class ProfilesController extends Controller
                 }
             }
         }
-
-
         return view('Admin.profile.Excel.roomlist',compact('pedido'));
-        //RoomsListExport
     }
 
-    public function export($pedido)
+    public function export(Request $request)
     {
-        return Excel::download(new RoomsListExport($pedido),"excel.xlsx");
+        try {
+
+            // return view( 'Admin.profile.Excel.roomlist', [
+            //     'pedido' => PedidoGeral::find( $request->id)
+            // ] );
+
+             return Excel::download(new RoomsListExport($request->id), 'Export_' . Carbon::now()->format("Y-m-d H:i").".xls");
+        } catch (Exception $th) {
+            throw new Exception($th, 500);
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            throw new \Maatwebsite\Excel\Validators\ValidationException($e, 500);
+        }
     }
-
-    //
-
 
     // public function excelRoomsList($id = null)
     // {

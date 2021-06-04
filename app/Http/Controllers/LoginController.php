@@ -377,7 +377,7 @@ class LoginController extends BaseController
     }
 
     public function update(Request $request, $id){
-        $data = Input::get('ch');
+        $data = $request->get('ch');
         $user = User::find($id);
         if($user->hasAnyRole(['superuser','cria','edita','apaga','comenta'])){
             $user->roles()->sync($data);
@@ -390,8 +390,8 @@ class LoginController extends BaseController
         else{
             $user->roles()->sync($data);
         }
-        //return redirect('produtos/'.$id.'/edit');
-        return redirect()->route('users');
+
+        return redirect()->route('auth');
     }
 
 }

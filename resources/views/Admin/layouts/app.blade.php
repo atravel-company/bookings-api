@@ -9,14 +9,10 @@ $users_array = ['sales@atravel.pt', 'incoming@atravel.pt', 'transfers@atravel.pt
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
+    <link rel="icon" type="image/x-icon" href="{{ asset('FrontEnd/favicon.ico') }}">
     <title>ATRAVEL</title>
-
-
-
 
     <!--Font-Awesome-4.7.0-->
     <link href="{{ asset('Admin/css/font-awesome-4.7.0/css/font-awesome.min.css') }}" rel="stylesheet">
@@ -24,9 +20,6 @@ $users_array = ['sales@atravel.pt', 'incoming@atravel.pt', 'transfers@atravel.pt
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote-lite.css" rel="stylesheet">
-
-
-
 
     <link rel="stylesheet"
         href="{{ asset('Admin/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css') }}" />
@@ -39,7 +32,6 @@ $users_array = ['sales@atravel.pt', 'incoming@atravel.pt', 'transfers@atravel.pt
     <link href="{{ asset('Admin/css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('Admin/css/ats.css') }}" rel="stylesheet">
     <link href="{{ asset('Admin/css/w3.css') }}" rel="stylesheet">
-
 
     <style>
         .iconsNavebar a i.fa-exclamation-circle {
@@ -139,10 +131,10 @@ $users_array = ['sales@atravel.pt', 'incoming@atravel.pt', 'transfers@atravel.pt
                         <li>
 
                             @if(config('app.env') != 'local')
-                            <img class="w3-padding" id="" src="{{ asset("FrontEnd/images/ats_novo_header.png") }}"
+                            <img class="w3-padding" id="" src="{{ asset("FrontEnd/images/logoats.png") }}"
                                 alt="Picture">
                             @else
-                            <img class="w3-padding" id="" src="{{ asset("FrontEnd/images/ats_novo_header.png") }}">
+                            <img class="w3-padding" id="" src="{{ asset("FrontEnd/images/logoats.png") }}">
                             @endif
                         </li>
                         @if (Route::has('login'))
