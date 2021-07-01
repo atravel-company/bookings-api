@@ -6,7 +6,7 @@
             background-color: #24AEC9!important;
             color: white!important;
             font-size:14px!important;
-            -webkit-print-color-adjust: exact; 
+            -webkit-print-color-adjust: exact;
         }
         .align-center{
             text-align:center!important;
@@ -64,7 +64,7 @@
                     <th style="float:right; clear:right; text-align: right; margin-bottom: 20px">
                         <img width=190 src="{{ $message->embed($path) }}">
                     </th>
-                </tr>       
+                </tr>
             </table>
         </div>
         <div class="w3-row w3-padding">
@@ -74,13 +74,13 @@
             Solicitamos que seja efectuada a seguinte reserva:
         </div>
         <br>
-								
+
         <div class="w3-row w3-padding">
-            <span><b>Lead Name: </b> {{$pedido->lead_name}}</span>	
+            <span><b>Lead Name: </b> {{$pedido->lead_name}}</span>
         </div>
 
         <br>
-    
+
 
         @if($quartos->first())
 
@@ -99,9 +99,9 @@
                         <th>Checkout</th>
                         <th>Special Offer</th>
                         <th>Daily Rate</th>
-                    </tr>    
-                    @foreach($quartos->sortByDesc("checkin") as $key2=>$quarto) 
-                        @if($quarto['type'] and $quarto['rooms'] and $quarto['plan'] and $quarto['checkin'] and $quarto['checkout'])        
+                    </tr>
+                    @foreach($quartos->sortByDesc("checkin") as $key2=>$quarto)
+                        @if($quarto['type'] and $quarto['rooms'] and $quarto['plan'] and $quarto['checkin'] and $quarto['checkout'])
                             <tr class="table-body">
                                 <td>{{$quarto['type']}}</td>
                                 <td align="center" class="align-center">{{$quarto['rooms']}}</td>
@@ -111,24 +111,24 @@
                                 <td>{{ Carbon\Carbon::parse($quarto['checkin'])->format('d/m/Y') }}</td>
                                 <td>{{ Carbon\Carbon::parse($quarto['checkout'])->format('d/m/Y')}}</td>
                                 <td>{{$quarto['offer_name']}}</td>
-                                <td>{{$quarto['price']}}</td>           
+                                <td>{{$quarto['price']}}</td>
                             </tr>
                         @endif
-                    @endforeach     
+                    @endforeach
                 </table>
             </div>
-            
+
             <div class="w3-row w3-padding">
                 <table class="w3-table w3-striped w3-centered">
                     <tr class="head" style="background-color: #24AEC9; color: white;">
                         <th>Extra</th>
-                        <th>Amount</th>  
+                        <th>Amount</th>
                     </tr>
                     @foreach($extras as $key2=>$extra)
                         @if($produto['pivot']['id']==$extra->pedido_produto_id and $extra->tipo=='alojamento')
                             <tr class="table-body">
                                 <td>{{$extra->name}}</td>
-                                <td align="center" class="align-center">{{$extra->amount}}</td>   
+                                <td align="center" class="align-center">{{$extra->amount}}</td>
                             </tr>
                         @endif
                     @endforeach
@@ -136,7 +136,7 @@
             </div>
             <br>
         @endif
-       
+
         @if($golfs->first())
             <div class="w3-row w3-padding">
                 <table class="w3-table w3-striped w3-centered">
@@ -153,7 +153,7 @@
                         <th>Golf Course</th>
                         <th>Tee Time</th>
                         <th>Players</th>
-                        <th>Players Free</th>   
+                        <th>Players Free</th>
                     </tr>
                     @foreach($golfs->sortByDesc("data") as $key2=>$golf)
                         @if($golf['data'] and $golf['hora'] and $golf['people'])
@@ -162,13 +162,13 @@
                                 <td>{{$produto['nome']}}</td>
                                 <td align="center" class="align-center">{{ Carbon\Carbon::parse($golf['hora'])->format('H:i') }}</td>
                                 <td align="center" class="align-center">{{$golf['people']}}</td>
-                                <td align="center" class="align-center">{{$golf['free']}}</td>  
+                                <td align="center" class="align-center">{{$golf['free']}}</td>
                             </tr>
                         @endif
                     @endforeach
                 </table>
             </div>
-            
+
             <div class="w3-row w3-padding">
                 <table class="w3-table w3-striped w3-centered">
                     <tr class="head" style="background-color: #24AEC9; color: white;">
@@ -249,7 +249,7 @@
             </div>
             <br><br>
         @endif
-     
+
         @if($cars->first())
             <div class="w3-row w3-padding">
                 <table class="w3-table w3-striped w3-centered">
@@ -305,10 +305,10 @@
                                 <td>{{$car['dropoff_airport']}}</td>
                                 <td>{{$car['group']}}</td>
                                 <td>{{$car['model']}}</td>
-                                
+
                                 <td>{{$car['rate']}}</td>
                                 <td>{{$car['days']}}</td>
-                                
+
                                 <td>{{$car['tax']}}</td>
                                 <td>{{$car['tax_type']}}</td>
                                 <td>{{$car['total']}}</td>
@@ -328,7 +328,7 @@
                         @if($produto['pivot']['id']==$extra->pedido_produto_id and $extra->tipo=='car')
                             <tr class="table-body">
                                 <td>{{$extra->name}}</td>
-                                <td align="center" class="align-center">{{$extra->amount}}</td>   
+                                <td align="center" class="align-center">{{$extra->amount}}</td>
                             </tr>
                         @endif
                     @endforeach
@@ -336,7 +336,7 @@
             </div>
             <br><br>
         @endif
-      
+
         @if($tickets->first())
             <div class="w3-row w3-padding">
                 <table class="w3-table w3-striped w3-centered">
@@ -365,7 +365,7 @@
                                 <td align="center" class="align-center">{{$ticket['babie']}}</td>
                                 <td>{{$ticket['total']}}</td>
                             </tr>
-                        @endif      
+                        @endif
                     @endforeach
                 </table>
             </div>
@@ -388,16 +388,16 @@
             </div>
             <br><br><br>
         @endif
-                                        
+
         <div class="w3-row w3-padding">
             <table class="w3-table w3-striped w3-centered">
                 <tr>
                     <td style="text-align: left;">Aguardamos Confirmação e pro forma.
                     </td>
-                </tr>    
+                </tr>
                 <tr>
                     <td style="text-align: left;">Sem outro assunto de momento, subscrevemo-nos com elevada consideração.</td>
-                </tr> 
+                </tr>
             </table>
         </div>
 
@@ -409,15 +409,15 @@
             <tr>
                     <td class="footer" style="text-align: left;">ATS Travel</td>
                     <td class="footer" style="text-align: right; color:#24AEC9;">Av. da Liberdade,</td>
-                </tr>    
+                </tr>
                 <tr>
                     <td class="footer" style="text-align: left; font-size: small;">TOPICOS E DESCOBERTAS - licence RNVAT 8019</td>
                     <td class="footer" style="text-align: right; color:#24AEC9;">245, 4ºA </td>
-                </tr> 
+                </tr>
                 <tr>
                     <td class="footer" style="text-align: left; font-size: small;">VAT 514 974 567</td>
                     <td class="footer" style="text-align: right; color:#24AEC9;">1250-143 Lisboa</td>
-                </tr> 
+                </tr>
                 <tr>
                     <td class="footer" style="text-align: left; font-size: small;">Reg. Na C.R.C. de Portimão sob o nº 3628/000822</td>
                     <td class="footer" style="text-align: right; color:#24AEC9;">sales@atravel.pt</td>

@@ -89,7 +89,7 @@
 
                         {{-- @dd(asset($imgPath)) --}}
 
-                    <img class="w3-margin-bottom" id="editSupplier_img" width="65%" style="width:65%;" src="{{asset($imgPath)}}">
+                    <img class="w3-margin-bottom" id="editSupplier_img" width="65%" style="width:65%;" src="{{ asset($imgPath)}}">
                 </td>
             </tr>
         </table>
