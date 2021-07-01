@@ -69,7 +69,7 @@
                         <font size="2">In partnership with:</font>
                     </b>
 
-                    @php $imgPath = $usuario->path_image; @endphp
+                    {{-- @php $imgPath = $usuario->path_image; @endphp
 
                     @if(preg_match('/_user/', $imgPath) )
                     @php
@@ -80,10 +80,16 @@
                     @php
                     $imgPath = asset("storage/".$imgPath );
                     @endphp
-                    @endif
+                    @endif --}}
 
 
-                    <img class="w3-margin-bottom" id="editSupplier_img" width="65%" style="width:65%;" src="{{ $imgPath }}">
+                    @php
+                        $imgPath = str_replace("/storage/app/public","/storage",$usuario->path_image)
+                    @endphp
+
+                        {{-- @dd(asset($imgPath)) --}}
+
+                    <img class="w3-margin-bottom" id="editSupplier_img" width="65%" style="width:65%;" src="{{asset($imgPath)}}">
                 </td>
             </tr>
         </table>
