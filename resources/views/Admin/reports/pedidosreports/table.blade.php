@@ -102,15 +102,16 @@
             @endif
 
         </td>
+        {{-- {{ number_format(floor($pedidogeral->valortotalquarto * 100)/100,2,",",".") }} --}}
         <td style="text-align:left;"> {{ $pedidogeral->user->name }} </td>
-        <td style="text-align:right;"> {{ $pedidogeral->valortotalquarto }} </td>
-        <td style="text-align:right;"> {{ $pedidogeral->valortotalgolf }} </td>
-        <td style="text-align:right;"> {{ $pedidogeral->valortotaltransfer }}</td>
-        <td style="text-align:right;"> {{ $pedidogeral->valortotalcar }} </td>
-        <td style="text-align:right;"> {{ $pedidogeral->valortotalextras }} </td>
-        <td style="text-align:right;"> {{ $pedidogeral->ValorTotalKickBack }} </td>
+        <td style="text-align:right;"> {{ number_format(str_replace(',','',$pedidogeral->valortotalquarto),2,",",".")}} </td>
+        <td style="text-align:right;"> {{ number_format(str_replace(',','',$pedidogeral->valortotalgolf),2,",",".")  }} </td>
+        <td style="text-align:right;"> {{ number_format(str_replace(',','',$pedidogeral->valortotaltransfer),2,",",".")  }}</td>
+        <td style="text-align:right;"> {{ number_format(str_replace(',','',$pedidogeral->valortotalcar),2,",",".")  }} </td>
+        <td style="text-align:right;"> {{ number_format(str_replace(',','',$pedidogeral->valortotalextras),2,",",".")  }} </td>
+        <td style="text-align:right;"> {{ number_format(str_replace(',','',$pedidogeral->ValorTotalKickBack),2,",",".")  }} </td>
         <td style="background-color:yellow;text-align:right;" data-comentario="coluna TOTAL">
-            {{ number_format(floor($pedidogeral->valor * 100)/100, 2, ".", ",") }} </td>
+            {{ number_format(floor($pedidogeral->valor * 100)/100, 2, ",", ".") }} </td>
         <td style="background-color:yellow;text-align:right;" data-comentario="coluna vPaid">
             {{ $pedidogeral->TotalPagamento }} </td>
         <td style="background-color:yellow;text-align:right;" data-comentario="coluna unpaid">
@@ -133,8 +134,8 @@
         <td align="right">{{ $pedidogeral->AtsTotalCar }} </td>
         <td align="right" data-comentario="total extra ats">{{ $pedidogeral->AtsTotalExtra }} </td>
         <td align="right">
-            {{ number_format(floor(($pedidogeral->valor - $pedidogeral->profit) * 100)/100, 2 , ".", ",")  }} </td>
-        <td align="right">{{ number_format( floor($pedidogeral->profit*100)/100 , 2 , ".", ",") }} </td>
+            {{ number_format(floor(($pedidogeral->valor - $pedidogeral->profit) * 100)/100, 2 , ",", ".")  }} </td>
+        <td align="right">{{ number_format( floor($pedidogeral->profit*100)/100 , 2 , ",",".")  }} </td>
 
         @endif
 

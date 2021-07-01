@@ -90,7 +90,7 @@ $(document).ready(function() {
 
               // Remove the formatting to get integer data for summation
               var intVal = function ( i ) {
-                return typeof i === 'string' ? i.replace(/[\$,]/g, '')*1 : typeof i === 'number' ?	i : 0;
+                return typeof i === 'string' ? i.replace(/[\$,]/g, '.')*1 : typeof i === 'number' ?	i : 0;
               };
 
               // room nights total
@@ -220,7 +220,7 @@ $(document).ready(function() {
             $( api.column( 4 ).footer() ).html(adr.toFixed(2) +' €');
             $( api.column( 5 ).footer() ).html('-');
             $( api.column( 6 ).footer() ).html('-');
-            $( api.column( 7 ).footer() ).html(room.toFixed(2) +' €');
+            $( api.column( 7 ).footer() ).html(room.toLocaleString('de-DE') +' €');
             $( api.column( 8 ).footer() ).html(golf.toFixed(2) +' €');
             $( api.column( 9 ).footer() ).html(trans.toFixed(2) +' €');
             $( api.column( 10 ).footer() ).html(car.toFixed(2) +' €');
@@ -253,7 +253,6 @@ $(document).ready(function() {
             functionAfterRenderDatatable();
         }
     } );
-
 
 
     $(".reset").click(function() {

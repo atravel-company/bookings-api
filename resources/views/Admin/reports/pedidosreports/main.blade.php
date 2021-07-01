@@ -428,7 +428,7 @@ $users_array = ['sales@atravel.pt', 'incoming@atravel.pt', 'transfers@atravel.pt
 
                     rnts = parseFloat(rnts);
                     bedn = parseFloat(bedn);
-                    adr = parseFloat(adr);
+                    adr = parseFloat(adr).toFixed(2);
                     room = parseFloat(room);
                     golf = parseFloat(golf);
                     trans = parseFloat(trans);
@@ -439,17 +439,17 @@ $users_array = ['sales@atravel.pt', 'incoming@atravel.pt', 'transfers@atravel.pt
                     vpaid = $("#ValorTotalPago").attr("data-value");
                     unpaid = $("#TableTotalValorNaoPago").attr("data-value");
 
-                    $(api.column(3).footer()).html(isNaN(rnts) ? "0.00" : rnts.toFixed(2));
-                    $(api.column(4).footer()).html(isNaN(bedn) ? "0.00" : bedn.toFixed(2));
-                    $(api.column(5).footer()).html(isNaN(adr) ? "0.00" : adr.toFixed(2) + ' €');
+                    $(api.column(3).footer()).html(isNaN(rnts) ? "0.00" : rnts.toLocaleString('de-DE'));
+                    $(api.column(4).footer()).html(isNaN(bedn) ? "0.00" : bedn.toLocaleString('de-DE'));
+                    $(api.column(5).footer()).html(isNaN(adr) ? "0.00" : adr.toLocaleString('pt-PT') + ' €');
                     $(api.column(6).footer()).html('-');
                     $(api.column(7).footer()).html('-');
-                    $(api.column(8).footer()).html(room.toFixed(2) + ' €');
-                    $(api.column(9).footer()).html(golf.toFixed(2) + ' €');
-                    $(api.column(10).footer()).html(trans.toFixed(2) + ' €');
-                    $(api.column(11).footer()).html(car.toFixed(2) + ' €');
-                    $(api.column(12).footer()).html(extras.toFixed(2) + ' €');
-                    $(api.column(13).footer()).html(kback.toFixed(2) + ' €');
+                    $(api.column(8).footer()).html(room.toLocaleString('de-DE') + ' €');
+                    $(api.column(9).footer()).html(golf.toLocaleString('de-DE') + ' €');
+                    $(api.column(10).footer()).html(trans.toLocaleString('de-DE') + ' €');
+                    $(api.column(11).footer()).html(car.toLocaleString('de-DE') + ' €');
+                    $(api.column(12).footer()).html(extras.toLocaleString('de-DE') + ' €');
+                    $(api.column(13).footer()).html(kback.toLocaleString('de-DE') + ' €');
 
 
                     $(api.column(14).footer()).html(total + ' €');
