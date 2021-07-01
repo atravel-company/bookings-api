@@ -1208,7 +1208,7 @@ function cancel(id, key) {
     if (id != null && typeof id != "undefined") {
         $.ajax({
             type: 'GET',
-            url: assetBaseUrl + "admin/profile/confirm",
+            url: assetBaseUrl + "profile/confirm",
             data: val,
             success: function(data) {
                 try {

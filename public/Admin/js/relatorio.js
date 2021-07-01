@@ -248,8 +248,13 @@ $(document).ready(function() {
         format: 'd/m/y',
         pageLength: 20,
         autoWidth: true,
-        responsive: true
+        responsive: true,
+        drawCallback: function(settings) {
+            functionAfterRenderDatatable();
+        }
     } );
+
+
 
     $(".reset").click(function() {
       $(this).closest('form').find("input[type=text], textarea").val("");

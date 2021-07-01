@@ -233,13 +233,13 @@
                         </td>
                         <td style="background-color:yellow;text-align:right;" data-comentario="coluna unpaid">
                             @if($pedidogeral->ValorNaoPago > 0)
-                            <text style='color:green !important; font-weight: 600 '>
+                            <span style='color:green !important; font-weight: 600 '>
                                 {{$pedidogeral->ValorNaoPago }}
-                            </text>
-                            @elseif($pedidogeral->ValorNaoPago < 0) <text
+                            </span>
+                            @elseif($pedidogeral->ValorNaoPago < 0) <span
                                 style='color:red !important; font-weight: 600 '>
                                 {{$pedidogeral->ValorNaoPago }}
-                                </text>
+                                </span>
                                 @else
                                 {{ $pedidogeral->ValorNaoPago }}
                                 @endif
@@ -274,12 +274,12 @@
                         </th>
                         <th style="text-align:right;">
                             @if($ValorTotalNaoPago > 0)
-                            <text style='color:green !important; font-weight: 600 '>
+                            <span style='color:green !important; font-weight: 600 '>
                                 {{ number_format( $ValorTotalNaoPago , 2 , ",", ".") }}
-                            </text>
-                            @elseif($ValorTotalNaoPago < 0) <text style='color:red !important; font-weight: 600 '>
+                            </span>
+                            @elseif($ValorTotalNaoPago < 0) <span style='color:red !important; font-weight: 600 '>
                                 {{ number_format( $ValorTotalNaoPago , 2 , ",", ".") }}
-                                </text>
+                                </span>
                                 @else
                                 {{ number_format( $ValorTotalNaoPago , 2 , ",", ".") }}
                                 @endif
