@@ -1997,6 +1997,8 @@ class ProfilesController extends Controller
 
         $payments = PedidoPayments::where('pedido_geral_id', $id)->get();
 
+
+
         if ($ats == true) {
             $view = 'Admin.profile.printPedidoWithAts';
         } else {
