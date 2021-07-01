@@ -35,10 +35,10 @@ class Kernel extends ConsoleKernel
 
             if(config('app.env') == 'local'){
                 $host = "http://localhost:8000/profile/search?";
-            }else if(config('app.env') == 'production'){
+            }else if(config('app.env') == 'development'){
                 $host = "https://dev.atsportugal.com/admin/profile/search?";
             }else{
-                $host = "https://atsportugal.com/profile/search?";
+                $host = "https://atsportugal.com/admin/profile/search?";
             }
 
             $pedidos = PedidoGeral::pendings()->get();
