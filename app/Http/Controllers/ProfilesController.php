@@ -118,7 +118,7 @@ class ProfilesController extends Controller
                 $car = [];
             }
 
-            Mail::send('emails.product',
+            Mail::send('Admin.emails.product',
                 [
                     'pedido' => $pedido,
                     'usuario' => $usuario,
@@ -2309,7 +2309,6 @@ class ProfilesController extends Controller
                 ]);
 
             } else {
-
                 return response()->json([
                     "error" => true,
                     "msg" => "Error to send transfers",
@@ -2319,8 +2318,7 @@ class ProfilesController extends Controller
             }
 
         } catch (Exception $ex) {
-
-            dd($ex);
+            throw new Exception($ex, 500);
         }
     }
 
@@ -2470,12 +2468,9 @@ class ProfilesController extends Controller
 
     public function enviaServicoApi($token, $postdata)
     {
-
         try {
-
             $curl = curl_init();
             $token = $this->getSetApiToken();
-
             $optionsCurl = $this->optionsCurl;
             $optionsCurl[CURLOPT_URL] = config("app.api_transfergest_host") . "api/v2/criar-servico";
             $optionsCurl[CURLOPT_POSTFIELDS] = json_encode($postdata);
@@ -2486,9 +2481,8 @@ class ProfilesController extends Controller
             curl_close($curl);
 
             return $data;
-
         } catch (Throwable $th) {
-            dd($th);
+            throw new Throwable($th, 500);
         }
 
     }
@@ -2522,16 +2516,13 @@ class ProfilesController extends Controller
         if (isset($_COOKIE["transfergest_restapikey"]) && $_COOKIE["transfergest_restapikey"] != null && $_COOKIE["transfergest_restapikey"] != "") {
 
             $token = $_COOKIE["transfergest_restapikey"];
-
             $validado = $this->validaToken($token);
 
             if ($validado == false or $validado == "false") {
                 $token = $this->getToken()["access_token"];
                 setcookie("transfergest_restapikey", $token, time() + (3600 + (24 + 7)), "/", "atsportugal.com");
             }
-
         } else {
-
             $token = $this->getToken()["access_token"];
             setcookie("transfergest_restapikey", $token, time() + (3600 + (24 + 7)), "/", "atsportugal.com");
         }
@@ -2563,28 +2554,23 @@ class ProfilesController extends Controller
 
     public function enviaEmailServicosApi(Request $request, $data, $totalReservaEmail)
     {
-
         try {
 
             $data = PedidoGeral::where("id", $request->get("pedido_geral_id"))->with("reports")->with(["pedidoprodutos" => function ($query) use ($request) {
                 $query->with("produto");
                 $query->with(["pedidotransfer" => function ($q) use ($request) {
-
                     if ($request->has("pedido_transfer_id")) {
                         $q->where("id", $request->get("pedido_transfer_id"));
                     }
-
                 }])->whereHas("pedidotransfer", function ($q) use ($request) {
-
                     if ($request->has("pedido_transfer_id")) {
                         $q->where("id", $request->get("pedido_transfer_id"));
                     }
-
                 })->get();
 
             }])->first();
 
-            $mail = Mail::send('emails.enviaprodutoapi', ['pedido' => $data, 'usuario' => Auth::user()], function ($message) use ($request, $data) {
+            $mail = Mail::send('Admin.emails.enviaprodutoapi', ['pedido' => $data, 'usuario' => Auth::user()], function ($message) use ($request, $data) {
                 $message
                     ->from('noreply@atsportugal.com', 'Ats Travel - API service')
                     ->to('sales@atravel.pt')
@@ -2593,11 +2579,8 @@ class ProfilesController extends Controller
                     // ->cc('verificaspam@amen.pt')
                     ->subject('Services send to API Transfergest');
             });
-
             return response()->json("Email enviado com sucesso");
-
         } catch (Exception | ModelNotFoundException $th) {
-
             dd($th);
         }
     }

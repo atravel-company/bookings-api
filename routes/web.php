@@ -20,11 +20,6 @@ Route::group(["prefix" => "admin", 'middleware' => ['auth']], function () {
     Route::post('/add-deposito/api-transfergest',  [ 'as' => 'adddeposito.transfergest', 'uses' => 'ProfilesController@addDepositoTransfergest' ]  );
 
 
-
-
-
-
-
     Route::get('/', 'HomeController@index')->name("admin.index");
 
 	Route::group(['prefix'=>'reports'], function() {

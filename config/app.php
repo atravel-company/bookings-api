@@ -15,6 +15,12 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+    "api_transfergest_host" => env('API_TRANSFERGEST_HOST', null),
+    "api_transfergest_cliente_id" => env('API_TRANSFERGEST_CLIENTE_ID', null),
+    "api_transfergest_key" => env('API_TRANSFERGEST_KEY', null),
+    "api_transfergest_user" => env('API_TRANSFERGEST_USER', null),
+    "api_transfergest_password" => env('API_TRANSFERGEST_PASSWORD', null),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment
