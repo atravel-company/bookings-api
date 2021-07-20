@@ -16,9 +16,10 @@
     }
 
     @page {
+        size: A4; /* DIN A4 standard, Europe */
         size: 210mm 297mm;
         /* Chrome sets own margins, we change these printer settings */
-        margin: 27mm 16mm 27mm 16mm;
+         margin: 03mm 03mm 03mm 03mm;
     }
 
     .container {
@@ -30,10 +31,10 @@
         padding: inherit;
     }
 
-    @media print
+    /* @media print
     {
         @page {
-            size: A4; /* DIN A4 standard, Europe */
+
             margin:0.1;
         }
         html, body {
@@ -41,10 +42,7 @@
             height: 282mm;
             overflow:visible;
         }
-        body {
-            padding-top:15mm;
-        }
-    }
+    } */
 
 </style>
 
@@ -626,26 +624,26 @@ $total_payments += (float) $payment->payment;
         <table width="100%" style="margin-bottom: 15px;">
             <tr>
                 <td width="60%"></td>
-                <td width="25%" style="text-align: right;"><b>TOTAL € :</b></td>
-                <td width="15%"> {{ floor($total*100)/100  }}</td>
+                <td width="25%" style="text-align: right;padding-right: 5px"><b>TOTAL € :</b></td>
+                <td width="15%" style="text-align: right;padding-right: 5px"> {{ floor($total*100)/100  }}</td>
             </tr>
             @foreach($payments as $payment)
             <tr>
                 <td width="60%"></td>
-                <td width="25%" style="text-align: right;">{{Carbon\Carbon::parse( $payment->date )->format('d/m/y')}} -
+                <td width="25%" style="text-align: right;padding-right: 5px">{{Carbon\Carbon::parse( $payment->date )->format('d/m/y')}} -
                     <b>PAID:</b></td>
-                <td width="15%"> {{ number_format($payment->payment, 2, ',', '.') }}</td>
+                <td width="15%" style="text-align: right;padding-right: 5px"> {{ number_format($payment->payment, 2, ',', '.') }}</td>
             </tr>
             @endforeach
             <tr>
                 <td width="60%"></td>
-                <td width="25%" style="border-top: 2px solid; text-align: right;"><b>TOTAL PAID € :</b></td>
-                <td width="15%" style="border-top: 2px solid"> {{ number_format($total_payments, 2, ',', '.') }}</td>
+                <td width="25%" style="border-top: 2px solid; text-align: right;padding-right: 5px"><b>TOTAL PAID € :</b></td>
+                <td width="15%" style="border-top: 2px solid;  text-align: right;padding-right: 5px"> {{ number_format($total_payments, 2, ',', '.') }}</td>
             </tr>
             <tr>
                 <td width="60%"></td>
-                <td width="25%" style="border-top: 2px solid; text-align: right;"><b>DUE:</b></td>
-                <td width="15%" style="border-top: 2px solid">
+                <td width="25%" style="border-top: 2px solid; text-align: right;padding-right: 5px"><b>DUE:</b></td>
+                <td width="15%" style="border-top: 2px solid; text-align: right;padding-right: 5px">
                     {{ number_format($total - $total_payments, 2, ',', '.') }}</td>
             </tr>
         </table>
