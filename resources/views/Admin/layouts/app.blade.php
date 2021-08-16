@@ -83,6 +83,12 @@ $users_array = ['sales@atravel.pt', 'incoming@atravel.pt', 'transfers@atravel.pt
         .select2-container--default .select2-selection--single .select2-selection__rendered {
             line-height: 33px;
         }
+
+        .bordered-container {
+            border: solid 1px #eeeeee;
+            background: white;
+            border-radius: 8px;
+        }
     </style>
     @stack("css")
 

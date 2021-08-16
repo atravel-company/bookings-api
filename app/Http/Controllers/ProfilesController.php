@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Log;
 use App;
 use Mail;
 use Excel;
@@ -118,7 +119,7 @@ class ProfilesController extends Controller
                 $car = [];
             }
 
-            Mail::send('emails.product',
+            Mail::send('Admin.emails.product',
                 [
                     'pedido' => $pedido,
                     'usuario' => $usuario,
@@ -2287,29 +2288,22 @@ class ProfilesController extends Controller
             $response = $this->enviaServicoApi($token, $postdata);
 
             if (isset($response["data"])) {
-
                 foreach ($response["data"] as $d) {
-
                     PedidoTransfer::where("id", $d['transfer_id'])->update([
                         'transfergest_id' => $d['id'],
                         'transfergest_booking' => $d['cliente_booking_id'],
                     ]);
                 }
-
                 if ($request->get("send_email") == 1 or $request->get("send_email") == true or $request->get("send_email") == "true") {
-
                     $this->enviaEmailServicosApi($request, $data, $totalReservaEmail);
                 }
-
                 return response()->json([
                     "error" => false,
                     "msg" => "Serviços enviados com sucesso!",
                     "data" => $postdata,
                     "responseapi" => $response,
                 ]);
-
             } else {
-
                 return response()->json([
                     "error" => true,
                     "msg" => "Error to send transfers",
@@ -2318,9 +2312,8 @@ class ProfilesController extends Controller
                 ]);
             }
 
-        } catch (Exception $ex) {
-
-            dd($ex);
+        } catch (Exception $th) {
+            throw new Exception($th, 500);
         }
     }
 
@@ -2347,7 +2340,7 @@ class ProfilesController extends Controller
             return $data;
 
         } catch (Exception $th) {
-            dd($th);
+            throw new Exception($th, 500);
         }
     }
 
@@ -2375,7 +2368,7 @@ class ProfilesController extends Controller
             return $data;
 
         } catch (Exception $th) {
-            dd($th);
+            throw new Exception($th, 500);
         }
     }
 
@@ -2400,16 +2393,14 @@ class ProfilesController extends Controller
 
             $response = $this->enviarDeleteBookingApi($token, $postdata);
             return response()->json($response);
-        } catch (\Throwable $th) {
-            return response()->json($th);
+        } catch (Exception $th) {
+            throw new Exception($th, 500);
         }
     }
 
     public function enviarDeleteBookingApi($token, $postdata)
     {
-
         try {
-
             $curl = curl_init();
             $token = $this->getSetApiToken();
 
@@ -2421,34 +2412,29 @@ class ProfilesController extends Controller
             $data = json_decode(curl_exec($curl), true);
             curl_close($curl);
             return $data;
-        } catch (Throwable $th) {
-            dd($th);
+        } catch (Exception $th) {
+            throw new Exception($th, 500);
         }
 
     }
 
     public function apagarTransferApi($id)
     {
-
         try {
-
             $token = $this->getSetApiToken();
-
             $postdata["id"] = $id;
             $response = $this->enviarDeleteServicosApi($token, $postdata);
 
             return response()->json($response);
 
-        } catch (\Throwable $th) {
-            return response()->json($th);
+        } catch (Exception $th) {
+            throw new Exception($th, 500);
         }
     }
 
     public function enviarDeleteServicosApi($token, $postdata)
     {
-
         try {
-
             $curl = curl_init();
             $token = $this->getSetApiToken();
 
@@ -2462,17 +2448,15 @@ class ProfilesController extends Controller
 
             return $data;
 
-        } catch (Throwable $th) {
-            dd($th);
+        } catch (Exception $th) {
+            throw new Exception($th, 500);
         }
 
     }
 
     public function enviaServicoApi($token, $postdata)
     {
-
         try {
-
             $curl = curl_init();
             $token = $this->getSetApiToken();
 
@@ -2482,25 +2466,22 @@ class ProfilesController extends Controller
             $optionsCurl[CURLOPT_HTTPHEADER] = ["Content-Type: application/json", "Authorization: Bearer " . $token];
             curl_setopt_array($curl, $optionsCurl);
 
+            Log::alert("enviando servicos via api",
+                [config("app.api_transfergest_host") . "api/v2/criar-servico"]
+            );
             $data = json_decode(curl_exec($curl), true);
             curl_close($curl);
-
             return $data;
-
-        } catch (Throwable $th) {
-            dd($th);
+        } catch (Exception $th) {
+          throw new Exception($th, 500);
         }
-
     }
 
     public function getToken()
     {
-
         try {
-
             $curl = curl_init();
             $login = ["grant_type" => "password", "client_id" => config("app.api_transfergest_cliente_id"), "client_secret" => config("app.api_transfergest_key"), "username" => config("app.api_transfergest_user"), "password" => config("app.api_transfergest_password")];
-
             $optionsCurl = $this->optionsCurl;
             $optionsCurl[CURLOPT_URL] = config("app.api_transfergest_host") . "oauth/token";
             $optionsCurl[CURLOPT_POSTFIELDS] = json_encode($login);
@@ -2510,9 +2491,8 @@ class ProfilesController extends Controller
             curl_close($curl);
 
             return $data;
-
-        } catch (Throwable $th) {
-            dd($th);
+        } catch (Exception $th) {
+            throw new Exception($th, 500);
         }
     }
 
@@ -2584,7 +2564,7 @@ class ProfilesController extends Controller
 
             }])->first();
 
-            $mail = Mail::send('emails.enviaprodutoapi', ['pedido' => $data, 'usuario' => Auth::user()], function ($message) use ($request, $data) {
+            $mail = Mail::send('Admin.emails.enviaprodutoapi', ['pedido' => $data, 'usuario' => Auth::user()], function ($message) use ($request, $data) {
                 $message
                     ->from('noreply@atsportugal.com', 'Ats Travel - API service')
                     ->to('sales@atravel.pt')

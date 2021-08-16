@@ -1,15 +1,14 @@
 @extends('Admin.layouts.app')
 @section('content')
 
-
-
-
 @php
 $users_array = [ 'sales@atravel.pt', 'incoming@atravel.pt', 'transfers@atravel.pt',
 'bookings@atravel.pt','accounts@atravel.pt'];
-
-$users_api_transfergest = ['sales@atravel.pt', 'incoming@atravel.pt', 'bookings@atravel.pt'];
-
+$users_api_transfergest = [
+    'sales@atravel.pt',
+    'incoming@atravel.pt',
+    'bookings@atravel.pt',
+];
 @endphp
 
 

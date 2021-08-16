@@ -237,12 +237,19 @@ $users_array = ['sales@atravel.pt', 'incoming@atravel.pt', 'transfers@atravel.pt
 
     @push('javascript')
 
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js" ></script>
+    <script src="//cdn.datatables.net/plug-ins/1.10.20/sorting/datetime-moment.js" defer></script>
+
+
+
 
 
     <script>
 
         $(document).ready(function() {
+
+            $.fn.dataTable.moment( 'DD/MM/YYYY' );
+
 
             geraTabela();
 
@@ -261,6 +268,34 @@ $users_array = ['sales@atravel.pt', 'incoming@atravel.pt', 'transfers@atravel.pt
             line = line.replace("px");
             line = parseInt(line) + 5;
             $(".select2-container--default .select2-selection--single .select2-selection__rendered").css('line-height', line + "px");
+
+            /* metodo que altera o DataTable para poder filtrar datas no formato pt BR */
+            // $.fn.dataTable.ext.type.order['dataser-pre'] = function ( a,b) {
+            //     return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+            // };
+
+
+
+            // jQuery.extend(jQuery.fn.dataTableExt.oSort, {
+            //     "dataser-pre": function(a) {
+
+
+
+            //         if (a == null || a == "") {
+            //             return 0;
+            //         }
+            //         var brDatea = a.split('/');
+
+            //         console.log(brDatea);
+            //         return (brDatea[1] + brDatea[2] + brDatea[0]) * 1;
+            //     }
+            //     , "dataser-asc": function(a, b) {
+            //         return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+            //     }
+            //     , "dataser-desc": function(a, b) {
+            //         return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+            //     }
+            // });
 
         });
 
@@ -297,6 +332,8 @@ $users_array = ['sales@atravel.pt', 'incoming@atravel.pt', 'transfers@atravel.pt
         function geraTabela() {
 
             var table = $('#reports-table');
+
+            //$.fn.dataTable.moment('MM/DD/YYYY HH:mm');
 
             /* Formatting function for row details */
             function fnFormatDetails(oTable, nTr) {
@@ -346,19 +383,19 @@ $users_array = ['sales@atravel.pt', 'incoming@atravel.pt', 'transfers@atravel.pt
                         }
                     }
                 ]
-                , format: 'd/m/y'
-                , order: [
+                , format: 'dd/mm/yyyy'
+                , "order": [
                     [2, 'asc']
                     , [16, 'asc']
                 ]
                 , pageLength: 20
                 , autoWidth: true
                 , resposive: false
-                , columnDefs: [{
-                    "orderable": true
-                    , "targets": 2
-                    , "type": 'date-br'
-                }]
+                // , columnDefs: [{
+                //     "orderable": true
+                //     , "targets": 2
+                //     , "type": 'date-pt'
+                // }]
                 , language: {
                     "aria": {
                         "sortAscending": ": activate to sort column ascending"
@@ -558,6 +595,7 @@ $users_array = ['sales@atravel.pt', 'incoming@atravel.pt', 'transfers@atravel.pt
                     }
                 }
             });
+            $.fn.dataTable.moment( 'd M Y' );
         }
 
         /* CLASS */
@@ -671,6 +709,8 @@ $users_array = ['sales@atravel.pt', 'incoming@atravel.pt', 'transfers@atravel.pt
             });
         }
 
+
+
         /* metodo que altera o DataTable para poder filtrar datas no formato pt BR */
         jQuery.extend(jQuery.fn.dataTableExt.oSort, {
             "date-br-pre": function(a) {
@@ -678,7 +718,7 @@ $users_array = ['sales@atravel.pt', 'incoming@atravel.pt', 'transfers@atravel.pt
                     return 0;
                 }
                 var brDatea = a.split('/');
-                return (brDatea[2] + brDatea[1] + brDatea[0]) * 1;
+                return (brDatea[2] + brDatea[0] + brDatea[1]) * 1;
             }
             , "date-br-asc": function(a, b) {
                 return ((a < b) ? -1 : ((a > b) ? 1 : 0));

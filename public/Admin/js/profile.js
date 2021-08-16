@@ -802,6 +802,12 @@ function kickbackAcc(x, y, z) {
     percent = document.getElementById('kickbackAccInput' + x + '_' + y).value / 100;
     totalAcc = $('#totalAcc' + x + '_' + y).html();
     valorKickback = totalAcc * percent;
+    valorMarkup = 0;
+    if (typeof document.getElementById('markupAccInput' + x + '_' + y) != undefined && document.getElementById('markupAccInput' + x + '_' + y) != null) {
+        percentMarkup = document.getElementById('markupAccInput' + x + '_' + y).value / 100;
+        valorMarkup = totalAcc * percentMarkup;
+    }
+
     // $('#kickbackAcc' + x + '_' + y).html(parseFloat(valorKickback).toFixed(2));
     $('#kickbackAcc' + x + '_' + y).html(jqueryFloatFormat(parseFloat(valorKickback)));
 

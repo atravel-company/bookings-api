@@ -65,76 +65,76 @@ class PedidosController extends Controller
 
 		foreach ($tot as $numero=>$pedid) {
 
-		$obj[$numero]=$pedid;
-		$produ=$obj[$numero];
-		$array=$produ['array'];
-		$product=$produ['produto'];
+            $obj[$numero]=$pedid;
+            $produ=$obj[$numero];
+            $array=$produ['array'];
+            $product=$produ['produto'];
 
-		$produto = Produto::find($product);
+            $produto = Produto::find($product);
 
-		$pedido->produtoss()->attach($produto);
-		$pedidoID=DB::table('pedido_produto')->orderBy('id', 'desc')->first();
-		$pediProd[$numero]=$pedidoID->id;
-		if($produto->alojamento==1){
-			ValorQuarto::create(['pedido_produto_id'=>$pediProd[$numero]]);
-		}
-		if($produto->golf==1){
-			ValorGolf::create(['pedido_produto_id'=>$pediProd[$numero]]);
-		}
-		if($produto->transfer==1){
-			ValorTransfer::create(['pedido_produto_id'=>$pediProd[$numero]]);
-		}
-		if($produto->car==1){
-			ValorCar::create(['pedido_produto_id'=>$pediProd[$numero]]);
-		}
-		if($produto->ticket==1){
-			ValorTicket::create(['pedido_produto_id'=>$pediProd[$numero]]);
-		}
+            $pedido->produtoss()->attach($produto);
+            $pedidoID=DB::table('pedido_produto')->orderBy('id', 'desc')->first();
+            $pediProd[$numero]=$pedidoID->id;
+            if($produto->alojamento==1){
+                ValorQuarto::create(['pedido_produto_id'=>$pediProd[$numero]]);
+            }
+            if($produto->golf==1){
+                ValorGolf::create(['pedido_produto_id'=>$pediProd[$numero]]);
+            }
+            if($produto->transfer==1){
+                ValorTransfer::create(['pedido_produto_id'=>$pediProd[$numero]]);
+            }
+            if($produto->car==1){
+                ValorCar::create(['pedido_produto_id'=>$pediProd[$numero]]);
+            }
+            if($produto->ticket==1){
+                ValorTicket::create(['pedido_produto_id'=>$pediProd[$numero]]);
+            }
 
-		if(!empty($produ['extras'])){
-			$extras=$produ['extras'];
-				foreach ($extras as $key=>$extra) {
+            if(!empty($produ['extras'])){
+                $extras=$produ['extras'];
+                    foreach ($extras as $key=>$extra) {
 
-						DB::table('pedido_produto_extra')->insert(['pedido_produto_id'=>$pediProd[$numero], 'extra_id'=>$extra['valor'], 'tipo'=>$extra['tipo'], 'amount'=>$extra['quantidade'], 'created_at' =>  \Carbon\Carbon::now(), 'updated_at' => \Carbon\Carbon::now()]);
+                            DB::table('pedido_produto_extra')->insert(['pedido_produto_id'=>$pediProd[$numero], 'extra_id'=>$extra['valor'], 'tipo'=>$extra['tipo'], 'amount'=>$extra['quantidade'], 'created_at' =>  \Carbon\Carbon::now(), 'updated_at' => \Carbon\Carbon::now()]);
 
-				}
-		}
+                    }
+            }
 
-		if(!empty($produ['remarkalojamento'])){
-			$remark = "<b class='agency_b'>Agency: </b>".$produ['remarkalojamento']." </b> <br>";
-			$remarkalojamento=$remark;
-		}
-		else{
-			$remarkalojamento = null;
-		}
-		if(!empty($produ['remarkgolf'])){
-			$remark = "<b class='agency_b'>Agency: </b>".$produ['remarkgolf']." </b> <br>";
-			$remarkgolf=$remark;
-		}
-		else{
-			$remarkgolf= null;
-		}
-		if(!empty($produ['remarktransfer'])){
-			$remark = "<b class='agency_b'>Agency: </b>".$produ['remarktransfer']." </b> <br>";
-			$remarktransfer=$remark;
-		}
-		else{
-			$remarktransfer=null;
-		}
-		if(!empty($produ['remarkcar'])){
-			$remark = "<b class='agency_b'>Agency: </b>".$produ['remarkcar']." </b> <br>";
-			$remarkcar=$remark;
-		}
-		else{
-			$remarkcar=null;
-		}
-		if(!empty($produ['remarkticket'])){
-			$remark = "<b class='agency_b'>Agency: </b>".$produ['remarkticket']." </b> <br>";
-			$remarkticket=$remark;
-		}
-		else{
-			$remarkticket=null;
-		}
+            if(!empty($produ['remarkalojamento'])){
+                $remark = "<b class='agency_b'>Agency: </b>".$produ['remarkalojamento']." </b> <br>";
+                $remarkalojamento=$remark;
+            }
+            else{
+                $remarkalojamento = null;
+            }
+            if(!empty($produ['remarkgolf'])){
+                $remark = "<b class='agency_b'>Agency: </b>".$produ['remarkgolf']." </b> <br>";
+                $remarkgolf=$remark;
+            }
+            else{
+                $remarkgolf= null;
+            }
+            if(!empty($produ['remarktransfer'])){
+                $remark = "<b class='agency_b'>Agency: </b>".$produ['remarktransfer']." </b> <br>";
+                $remarktransfer=$remark;
+            }
+            else{
+                $remarktransfer=null;
+            }
+            if(!empty($produ['remarkcar'])){
+                $remark = "<b class='agency_b'>Agency: </b>".$produ['remarkcar']." </b> <br>";
+                $remarkcar=$remark;
+            }
+            else{
+                $remarkcar=null;
+            }
+            if(!empty($produ['remarkticket'])){
+                $remark = "<b class='agency_b'>Agency: </b>".$produ['remarkticket']." </b> <br>";
+                $remarkticket=$remark;
+            }
+            else{
+                $remarkticket=null;
+            }
 
 			foreach ($array as $key=>$total) {//AQUI SAO OS FORMS
 				$obj0[$numero][$key]= $total;

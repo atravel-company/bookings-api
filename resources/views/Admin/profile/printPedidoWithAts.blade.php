@@ -188,6 +188,10 @@
                 <td><b>Qty:</b> {{ $extra_quarto->amount }}</td>
                 <td><b>Unit €:</b> {{ number_format($extra_quarto->rate, 2, ',', '.') }}</td>
                 <td><b>Total €:</b> {{ number_format($extra_quarto->total, 2, ',', '.') }}</td>
+                {{-- <td width="15%">
+                    <b style="color:#FF5722">ATS EXTRA TOTAL €:</b>
+                    {{ number_format($extra_quarto->ats_total_rate, 2, ',', '.') }}
+                </td> --}}
             </tr>
             @php $subtotal += $extra_quarto->total; @endphp
             @endif
@@ -205,7 +209,6 @@
             $old_produto_id = $quarto->pedido_produto_id;
             $totalAtsPedido += $quarto->ats_total_rate;
             @endphp
-
 
             @endforeach {{-- end foreach quartos --}}
 
@@ -257,8 +260,6 @@
 @endif
 
 <!--golf-->
-
-
 
 @if($golfes->isEmpty() != true)
 <div class="container">
@@ -731,6 +732,7 @@ $total_payments += (float) $payment->payment;
                     @php
                     $total = $pedido_geral->valor - $pedido_geral->profit;
                     @endphp
+                    {{-- @dd($pedido_geral, $extra_quarto->amount) --}}
                     {{ number_format(floor($total*100)/100 , 2, ',', '.') }}
                 </td>
             </tr>
@@ -738,16 +740,15 @@ $total_payments += (float) $payment->payment;
                 <td width="60%"></td>
                 <td width="25%" style="border-top: 2px solid; text-align: right; "><b
                         style="color:green; font-weight:bold">TOTAL PROFIT:</b></td>
-                <td width="15%" style="border-top: 2px solid"> {{ number_format($pedido_geral->profit, 2, ',', '.') }}
+                <td width="15%" style="border-top: 2px solid"> {{ number_format($pedido_geral->profit - ($extra_quarto->amount ?? 0), 2, ',', '.') }}
                 </td>
             </tr>
             <tr>
                 <td width="60%"></td>
                 <td width="25%" style="border-top: 2px solid; text-align: right; "><b>TOTAL PEDIDO:</b></td>
                 <td width="15%" style="border-top: 2px solid; text-align: left; ">
-                    {{ number_format(floor($pedido_geral->valor*100)/100 , 2, ',', '.') }}</td>
+                    {{ number_format(floor(($pedido_geral->valor -( $extra_quarto->amount ?? 0))*100)/100 , 2, ',', '.') }}</td>
             </tr>
-
             @foreach($payments as $payment)
             <tr>
                 <td width="60%"></td>
@@ -765,7 +766,7 @@ $total_payments += (float) $payment->payment;
                 <td width="60%"></td>
                 <td width="25%" style="border-top: 2px solid; text-align: right;"><b>DUE:</b></td>
                 <td width="15%" style="border-top: 2px solid">
-                    {{ number_format($total - $total_payments, 2, ',', '.') }}</td>
+                    {{ number_format(($total) - $total_payments, 2, ',', '.') }}</td>
             </tr>
         </table>
     </div>

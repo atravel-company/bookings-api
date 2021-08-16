@@ -15,6 +15,9 @@
 <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js" ></script>
 
 <script type="text/javascript" src="{{ URL::asset('Admin/DataTables/datatables.min.js') }}" defer ></script>
+
+
+
 <!-- SELECT2 js-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js" ></script>
 
