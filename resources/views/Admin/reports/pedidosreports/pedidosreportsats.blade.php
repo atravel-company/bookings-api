@@ -1,9 +1,6 @@
 @extends('Admin.layouts.app')
 
-
-    <script type="text/javascript" src="{{ URL::asset('Admin/js/relatorio.js') }}" ></script>
-
-
+<script type="text/javascript" src="{{ URL::asset('Admin/js/relatorio.js') }}" ></script>
 
 @section('content')
 

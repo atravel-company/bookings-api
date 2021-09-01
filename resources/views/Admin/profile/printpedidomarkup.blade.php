@@ -115,7 +115,7 @@
             $id = 0;
             @endphp
 
-            @foreach($quartos->sortBy("nome")->sortBy("checkin") as $quarto)
+            @foreach($quartos->sortBy("checkin") as $quarto)
             @php
             $valor_quarto = App\ValorQuarto::where('pedido_produto_id', $quarto->pedido_produto_id)->first();
             $kick = ($valor_quarto->kick * $valor_quarto->valor_quarto)/100;
@@ -206,7 +206,7 @@
         $id = 0;
         @endphp
         <table width="100%" style="margin-bottom: 15px;">
-            @foreach($golfes->sortBy("nome")->sortBy("data") as $golfe)
+            @foreach($golfes->sortBy("data") as $golfe)
             @php
             $valor_golves = App\ValorGolf::where('pedido_produto_id', $golfe->pedido_produto_id)->first();
             $kick = ($valor_golves->kick * $valor_golves->valor_golf)/100;
@@ -291,7 +291,7 @@
         $id = 0;
         @endphp
         <table width="100%" style="margin-bottom: 15px;">
-            @foreach($transfers->sortBy("nome")->sortBy("data") as $transfer)
+            @foreach($transfers->sortBy("data") as $transfer)
             @php
             $valor_transfer = App\ValorTransfer::where('pedido_produto_id', $transfer->pedido_produto_id)->first();
             $kick = ($valor_transfer->kick * $valor_transfer->valor_transfer)/100;
@@ -387,7 +387,7 @@
         $id = 0;
         @endphp
         <table width="100%" style="margin-bottom: 15px;">
-            @foreach($carros->sortBy("nome")->sortBy("pickup_data") as $carro)
+            @foreach($carros->sortBy("pickup_data") as $carro)
             @php
             $valor_car = App\ValorCar::where('pedido_produto_id', $carro->pedido_produto_id)->first();
             $kick = ($valor_car->kick * $valor_car->valor_car)/100;
@@ -482,7 +482,7 @@
         $id = 0;
         @endphp
         <table width="100%" style="margin-bottom: 15px;">
-            @foreach($bilhetes->sortBy("nome")->sortBy("data") as $bilhete)
+            @foreach($bilhetes->sortBy("data") as $bilhete)
             @php
             $valor_ticket = App\ValorTicket::where('pedido_produto_id', $bilhete->pedido_produto_id)->first();
             $markup = ($valor_ticket->markup * $valor_ticket->valor_ticket)/100;

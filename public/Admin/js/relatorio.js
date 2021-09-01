@@ -243,7 +243,8 @@ $(document).ready(function() {
         },
         dom: 'Bfrtip',
         buttons: [
-             'colvis', 'print', 'excel',
+            'colvis', 'print', 'excel',
+
         ],
         format: 'd/m/y',
         pageLength: 20,

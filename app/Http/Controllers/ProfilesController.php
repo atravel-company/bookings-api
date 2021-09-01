@@ -2,38 +2,39 @@
 
 namespace App\Http\Controllers;
 
-use Log;
 use App;
-use Mail;
-use Excel;
-use App\User;
-use App\Extra;
-use Exception;
-use App\Produto;
-use App\Destinos;
-use App\ValorCar;
 use App\Categoria;
+use App\Destinos;
+use App\Exports\RoomsListExport;
+use App\Extra;
+use App\Http\Controllers\Controller;
 use App\PedidoCar;
-use App\ValorGolf;
-use Carbon\Carbon;
 use App\PedidoGame;
 use App\PedidoGeral;
+use App\PedidoGeralProfile;
+use App\PedidoPayments;
+use App\PedidoProduto;
+use App\PedidoProdutoExtra;
+use App\PedidoQuarto;
+use App\PedidoQuartoRoom;
+use App\PedidoQuartoRoomName;
+use App\PedidoTicket;
+use App\PedidoTransfer;
+use App\Produto;
+use App\User;
+use App\ValorCar;
+use App\ValorGolf;
 use App\ValorQuarto;
 use App\ValorTicket;
-use App\PedidoQuarto;
-use App\PedidoTicket;
-use App\PedidoProduto;
 use App\ValorTransfer;
-use App\PedidoPayments;
-use App\PedidoTransfer;
-use App\PedidoQuartoRoom;
-use App\PedidoGeralProfile;
-use App\PedidoProdutoExtra;
+use Carbon\Carbon;
+use Excel;
+use Exception;
 use Illuminate\Http\Request;
-use App\PedidoQuartoRoomName;
-use App\Exports\RoomsListExport;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Log;
+use Mail;
 
 class ProfilesController extends Controller
 {
@@ -430,6 +431,8 @@ class ProfilesController extends Controller
             $pedido_produto->delete();
             $tickets->delete();
             $tickets_valor->delete();
+        }else{
+            $pedido_produto->delete();
         }
 
         return json_encode($pedido_produto);
@@ -584,7 +587,9 @@ class ProfilesController extends Controller
     public function sendRemark(Request $request)
     {
 
-        if ($request->type == "room") {
+        try {
+
+            if ($request->type == "room") {
             $remark_antigo = PedidoQuarto::where('id', '=', $request->pedido_quarto_id)->first()['remark'];
         }
         if ($request->type == "golf") {
@@ -627,6 +632,10 @@ class ProfilesController extends Controller
 
         if ($request->type == "ticket") {
             PedidoTicket::where([['id', '=', $request->pedido_quarto_id]])->update(['remark' => $remark]);
+        }
+
+        } catch (\Throwable $th) {
+           throw new Exception($th, 500);
         }
     }
 
@@ -980,11 +989,13 @@ class ProfilesController extends Controller
 
                 $geral[$key]['nome'] = $user['name'];
 
+
                 foreach ($geral[$key]['produtoss'] as $key1 => $produtoss) {
                     // dd($geral[$key]->produtoss);
                     unset($produtoss->descricao);
                     $prod[$key][$key1] = $produtoss;
                     $pedido_prod_id = $prod[$key][$key1]['pivot']['id'];
+
                     $PedidoQuartos = PedidoQuarto::where([['pedido_produto_id', '=', $pedido_prod_id]])->get();
                     $ValorQuartos = ValorQuarto::where([['pedido_produto_id', '=', $pedido_prod_id]])->get();
 
@@ -1038,8 +1049,12 @@ class ProfilesController extends Controller
                     foreach ($PedidoCars as $key2 => $PedidoCar) {
                         $car[$key][$key1][$key2] = $PedidoCar;
                     }
+
+
                     $PedidoTickets = PedidoTicket::where([['pedido_produto_id', '=', $pedido_prod_id]])->get();
+
                     $ValorTics = ValorTicket::where([['pedido_produto_id', '=', $pedido_prod_id]])->get();
+                    // dd($PedidoTickets, $ValorTics);
 
                     foreach ($ValorTics as $key2 => $ValorTic) {
                         $valorTicket[$key][$key1] = $ValorTic;
@@ -1049,7 +1064,6 @@ class ProfilesController extends Controller
                     }
                 }
             }
-
         } else {
             $pedidos = array();
         }

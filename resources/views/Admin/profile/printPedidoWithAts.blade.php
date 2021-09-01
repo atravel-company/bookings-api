@@ -153,7 +153,7 @@
             $totalAtsPedido = 0;
             @endphp
 
-            @foreach($quartos->sortBy("nome")->sortBy("checkin") as $quarto)
+            @foreach($quartos->sortBy("checkin") as $quarto)
 
 
             <tr>
@@ -272,7 +272,7 @@
         $totalAtsPedido = 0;
         @endphp
         <table width="100%" style="margin-bottom: 15px; border">
-            @foreach($golfes->sortBy("nome")->sortBy("data") as $golfe)
+            @foreach($golfes->sortBy("data") as $golfe)
             <tr>
                 <td colspan="5"><b>Golf Course:</b> {{$golfe->nome}}</td>
             </tr>
@@ -382,7 +382,7 @@
         $totalAtsPedido = 0;
         @endphp
         <table width="100%" style="margin-bottom: 15px;">
-            @foreach($transfers->sortBy("nome")->sortBy("data") as $uniqueTransfer)
+            @foreach($transfers->sortBy("data") as $uniqueTransfer)
 
             <tr>
                 <td colspan="5"><b>Company:</b> {{$uniqueTransfer->nome}}</td>
@@ -499,7 +499,7 @@
         $totalAtsPedido = 0;
         @endphp
         <table width="100%" style="margin-bottom: 15px;">
-            @foreach($carros->sortBy("nome")->sortBy("pickup_data") as $carro)
+            @foreach($carros->sortBy("pickup_data") as $carro)
             <tr>
                 <td colspan="5"><b>Company:</b> {{$carro->nome}}</td>
             </tr>
@@ -624,7 +624,7 @@
         $totalAtsPedido = 0;
         @endphp
         <table width="100%" style="margin-bottom: 15px;">
-            @foreach($bilhetes->sortBy("nome")->sortBy("data") as $bilhete)
+            @foreach($bilhetes->sortBy("data") as $bilhete)
             <tr>
                 <td colspan="5"><b>Company:</b> {{$bilhete->nome}}</td>
             </tr>

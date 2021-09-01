@@ -130,7 +130,7 @@ $users_api_transfergest = [
                 <div class="input-group w3-block">
                     <select width="100%" class="form-control ats-border-color select-simple" name="operator_id">
                         <option value="0">Select</option>
-                        @foreach($utilizadores as $operadores)
+                        @foreach($utilizadores->sortBy("name")->values()->all() as $operadores)
                         @if(in_array(Auth::user()->email, $users_array))
                         @if($operador_id == $operadores->id)
                         <option selected value="{{$operadores->id}}">{{$operadores->name}}</option>
@@ -299,9 +299,6 @@ $users_api_transfergest = [
                             @foreach($pedido->produtoss as $key1 => $produtoss)
 
                             @php
-
-                            // $produto[$key] = [];
-
                             $tempProdutoKey = collect( $produto[$key] )->map(function ($q) {
                             return (object)$q;
                             });
@@ -311,12 +308,8 @@ $users_api_transfergest = [
                             $produto[$key][$key1]->pivot = (object)$produto[$key][$key1]->pivot;
                             @endphp
 
-
                             <!-- MENU DE INFORMAÇÃO GERAL DE PRODUTO -->
                             @if(in_array(Auth::user()->email, $users_array))
-
-
-
 
                             <div style="background-color: {{ $button_color }};height: 30px;padding: 5px;"
                                 id="product{{$pedido->id}}{{$produto[$key][$key1]->pivot->id}}"
@@ -385,8 +378,6 @@ $users_api_transfergest = [
                                             id="profitProduct_hidden{{$key}}_{{$key1}}">
                                             0.00
                                         </span>
-
-
 
                                         <span class="mail{{$key}}"
                                             onclick="mail('{{collect($produto[$key][$key1])}}', {{$produto[$key][$key1]->id}}, {{$pedido->id}})"></span>

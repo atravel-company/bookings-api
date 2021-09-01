@@ -11,10 +11,6 @@
 
     <title>ATS Portugal</title>
 
-
-
-
-
     <!--load everything font-awesome-->
     <style type="text/css">
         #app-navbar-collapse {

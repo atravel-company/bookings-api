@@ -27,7 +27,7 @@
                             <th class="th-date">Company</th>
                             <th class="th-price">Total</th>
                             {{-- <th class="th-string">Remark</th> --}}
-                            
+
                             @if(in_array(Auth::user()->email, $users_array))
                                 <th class="th-ats-rate">ATS Rate</th>
                                 <th class="th-ats-rate"></th>
@@ -40,7 +40,7 @@
                             <input type="hidden" name="pedido_produto_id{{$key1}}" value="{{$transfer['pedido_produto_id']}}">
                             <tr>
                                 @if(in_array(Auth::user()->email, $users_array))
-                                    <td> 
+                                    <td>
                                         @if( Auth::user()->id == 2)
                                             @if(isset($transfers[$key]))
                                                 <span title="Send transfers to transfergest" class="remove-transfer sendTransferTransfergest" data-pedidogeral-id="{{  $pedido->id }}" data-transfer-id="{{  $transfer['id'] }}" style="background-color: #fbb040; height: 32px;
@@ -65,7 +65,7 @@
                                                 <span class="w3-large ats-text-color fa fa-calendar"></span>
                                             </span>
                                         </div>
-                                    </div>                          
+                                    </div>
                                 </td>
                                 <td> <!-- Hora -->
                                     <div class="form-group" style="width: 140px;">
@@ -94,7 +94,7 @@
                                 </td>
                                 <td>
                                     <input value="{{$transfer['pickup']}}" id="pickup{{$key}}_{{$key1}}_{{$key2}}" class="form-control w3-block loaddd" type="text" name="pickup{{$key}}_{{$key1}}_{{$key2}}">
-                                    
+
                                 </td>
                                 <td>
                                     <input value="{{$transfer['dropoff']}}" id="dropoff{{$key}}_{{$key1}}_{{$key2}}" class="form-control w3-block loaddd" type="text" name="dropoff{{$key}}_{{$key1}}_{{$key2}}">
@@ -121,7 +121,7 @@
                                     </td>
                                     <td></td>
                                     <td >
-                                        <span id="atsProfitTransfer{{$key}}_{{$key1}}_{{$key2}}">0.00</span> 
+                                        <span id="atsProfitTransfer{{$key}}_{{$key1}}_{{$key2}}">0.00</span>
                                         <span  onclick="enviaTransfersEsp('{{$transfer['id']}}','{{$key}}','{{$key1}}','{{$key2}}')" class="buttonn{{$key}}"></span>
                                     </td>
                                 @endif
@@ -131,6 +131,9 @@
                 {{ Form::close() }}
             </p>
             <!-- TRANSFERS - RESERVA -->
+
+
+
             <!-- TRANSFERS - EXTRAS -->
             <p>
                 {{ Form::open(array('id'=>'form_extras'.$key.'_'.$key1, 'name'=>'form_extras'.$key.'_'.$key1, 'method'=>'GET')) }}
@@ -145,7 +148,7 @@
                         <th class="th-number">Rate</th>
                         <th style="min-width: 900px;"></th>
                         <th class="th-price">Total</th>
-                        
+
                         @if(in_array(Auth::user()->email, $users_array))
                             <th class="th-ats-rate">ATS Rate</th>
                             <th class="th-ats-rate">ATS Total Rate</th>
@@ -224,6 +227,7 @@
             </div>
         </p>
         <!-- TRANSFERS - EXTRAS -->
+
         <!-- TRANSFERS - CALCULOS -->
         <div class="w3-row w3-padding">
             <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
@@ -255,7 +259,7 @@
                             @endif
                         @endforeach
                         {!! $remark !!}
-                        {{-- {!! html_entity_decode($transfer['remark']) !!} --}} 
+                        {{-- {!! html_entity_decode($transfer['remark']) !!} --}}
                         {{-- html_entity_decode(App\PedidoQuartoRoom::where('pedido_quarto_id', '=', $quarto['id'])->first()['remark']) --}}
                     </div>
                 </section>
@@ -354,7 +358,7 @@
 
                 </div>
             </div>
-            
+
         @endif
 
 

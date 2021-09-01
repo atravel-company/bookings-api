@@ -9,7 +9,7 @@
                     <input type="hidden" class="produto_id" name="produto_id_{{$key1}}" value="{{$produto[$key][$key1]->id}}">
                     <input type="hidden" class="key_max" name="key_max_{{$key1}}" value="{{ count($quartos[$key][$key1]) }}">
                     <table class="w3-table w3-striped w3-centered rooms-table">
-                        <!-- Lista de Quartos --> 
+                        <!-- Lista de Quartos -->
                         <tr style="background-color: #24AEC9; color: white;">
                             @if(in_array(Auth::user()->email, $users_array))
                                 <th class="th-number"><span class="add-quarto" data-key="{{$key}}" data-key1="{{$key1}}"><i class="fa fa-plus-circle fa-2x" aria-hidden="true"></i></span></th>
@@ -45,7 +45,7 @@
                             <tr id="room-original">
                                     <input type="hidden" name="quarto_id{{$key}}_{{$key1}}_{{$key2}}" value="{{$quarto['id']}}">
                                     <input type="hidden" name="pedido_produto_id{{$key1}}" value="{{$quarto['pedido_produto_id']}}">
-                                    
+
                                 @if(in_array(Auth::user()->email, $users_array))
                                     <td> <!-- Room Remove -->
                                         <span class="remove-quarto" onclick="return confirm('Are you sure you want to delete?')?removeRow({{$quarto['id']}}, {{$key}}, $(this), 'alojamento'):'';"><i class="fa fa-minus-circle fa-2x" aria-hidden="true"></i></span>
@@ -73,7 +73,7 @@
                                                     <span class="w3-large ats-text-color fa fa-calendar"></span>
                                                 </span>
                                             </div>
-                                        </div>                          
+                                        </div>
                                     </td>
                                     <td> <!-- Checkout -->
                                         <div class="form-group" style="width: 140px;">
@@ -101,9 +101,9 @@
                                     </td>
                                     <td>{{$quarto['rooms']}}</td>
                                     <td>{{$quarto['checkin']}}</td>
-                                    <td>{{$quarto['checkout']}}</td>    
+                                    <td>{{$quarto['checkout']}}</td>
                                 @endif
-    
+
                                 <td id="dias{{$key}}_{{$key1}}_{{$key2}}"  ></td>
 
                                 <script type="text/javascript">
@@ -116,7 +116,7 @@
 
                                         soma({{$key}},{{$key1}},{{$key2}});
                                     });
-                
+
                                     $('.datetimepickers{{$key}}_{{$key1}}_{{$key2}}').datetimepicker({
                                        widgetParent: checkout,
                                        format: 'DD/MM/YYYY',
@@ -125,7 +125,7 @@
                                         vertical: 'bottom'
                                         },
                                     }).on("dp.change", function (e) {
-                            
+
                                         mudadia(document.getElementById('init{{$key}}_{{$key1}}_{{$key2}}').value,document.getElementById('find{{$key}}_{{$key1}}_{{$key2}}').value,'{{$key}}_{{$key1}}_{{$key2}}');
 
                                         soma({{$key}},{{$key1}},{{$key2}})
@@ -135,7 +135,7 @@
                                         var date1 = new Date(str);
                                         var date2 = new Date(str2);
                                         var timeDiff = date2.getTime() - date1.getTime();
-                                        var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+                                        var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
                                         $("#dias{{$key}}_{{$key1}}_{{$key2}}").html(diffDays)
                                     }
 
@@ -148,13 +148,13 @@
                                         var date1 = new Date(nd);
                                         var date2 = new Date(nd2);
                                         var timeDiff = date2.getTime() - date1.getTime();
-                                        var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
-                                        
+                                        var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
                                         $("#dias"+chave).html(diffDays)
                                     }
 
                                     parseDate("{{$quarto['checkin']}}","{{$quarto['checkout']}}")
-      
+
                                 </script>
 
                                 @if(in_array(Auth::user()->email, $users_array))
@@ -164,14 +164,14 @@
                                     </td>
                                     <td>
                                         <select data-boardID="people-number-select" onchange="soma({{$key}},{{$key1}},{{$key2}})" id="board{{$key}}_{{$key1}}_{{$key2}}" style="width: 100px;" class="form-control ats-border-color" name="board{{$key}}_{{$key1}}_{{$key2}}" placeholder="" required="required">
-                                            
+
 
                                             @if($quarto['plan']=='BB')
                                                 <option selected="selected" value="BB">BB</option>
                                             @else
                                                 <option value="BB">BB</option>
                                             @endif
-                                            
+
                                             @if($quarto['plan']=='RO')
                                                 <option selected="selected" value="RO">RO</option>
                                             @else
@@ -182,7 +182,7 @@
                                             @else
                                                 <option value="SC">SC</option>
                                             @endif
-                                            
+
                                             @if($quarto['plan']=='HB')
                                                 <option selected="selected" value="HB">HB</option>
                                             @else
@@ -213,7 +213,7 @@
                                         {{$quarto['plan']}}
                                     </td>
                                 @endif
-     
+
                                 @if(in_array(Auth::user()->email, $users_array))
                                     <td>
                                         <input value="{{$quarto['night']}}" id="real{{$key}}_{{$key1}}_{{$key2}}" onchange="soma({{$key}},{{$key1}},{{$key2}})" class="form-control w3-block loaddd" type="number" name="real{{$key}}_{{$key1}}_{{$key2}}" required="required">
@@ -255,7 +255,7 @@
                                         <span id="atsProfit{{$key}}_{{$key1}}_{{$key2}}">0.00</span>
                                         <span  onclick="enviaQuartosEsp('{{$quarto['id']}}','{{$key}}','{{$key1}}','{{$key2}}')" class="buttonn{{$key}}"></span>
                                     </td>
-                                @endif         
+                                @endif
                             </tr>
                         @endforeach
                     </table>
@@ -319,7 +319,7 @@
                                     <td>
                                         <input value="{{$extra->amount}}" id="room_extra_amount{{$key}}_{{$key1}}_{{$id_extra}}" onchange="somaExtra('',{{$key}},{{$key1}},{{$id_extra}},'Acc')" class="form-control w3-block loaddd" type="number" name="room_extra_amount{{$key}}_{{$key1}}_{{$id_extra}}">
                                     </td>
-                                    
+
                                     @if(in_array(Auth::user()->email, $users_array))
                                         <td>
                                             <input value="{{$extra->rate}}" id="extraRate{{$key}}_{{$key1}}_{{$id_extra}}" onchange="somaExtra('',{{$key}},{{$key1}},{{$id_extra}},'Acc')" type="number" name="extraRate{{$key}}_{{$key1}}_{{$id_extra}}" class="form-control loaddd">
@@ -331,7 +331,7 @@
                                         <td></td>
                                         <td>{{$extra->total}} €</td>
                                     @endif
-                                    
+
 
                                     @if(in_array(Auth::user()->email, $users_array))
                                         <td>
@@ -339,7 +339,7 @@
                                         </td>
                                         <td id="atsTotalExtraRate{{$key}}_{{$key1}}_{{$id_extra}}">0.00</td>
                                         <td >
-                                            <span id="atsExtraProfit{{$key}}_{{$key1}}_{{$id_extra}}">0.00</span> 
+                                            <span id="atsExtraProfit{{$key}}_{{$key1}}_{{$id_extra}}">0.00</span>
                                             <span  onclick="enviaExtra('{{$extra->id}}','{{$key}}','{{$key1}}','{{$id_extra}}', 1)" data-changed="false" class="buttonn{{$key}} hidden form-control"></span>
                                         </td>
                                     @endif
@@ -364,6 +364,7 @@
             </div>
         </p>
         <!-- ROOMS - RESERVA -->
+
         <!-- ROOMS - CALCULOS -->
         <div class="w3-row w3-padding">
             <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
@@ -439,7 +440,7 @@
                                 {{-- @endif --}}
                            @endif
                         </div>
-                        
+
                         <div class="col-xs-7" style="display: {{$hidden}}">
                             {{-- @if($valor[$key][$key1]->kick) --}}
                             <b>Kick-back</b>

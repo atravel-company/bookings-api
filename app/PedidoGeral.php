@@ -124,7 +124,7 @@ class PedidoGeral extends Model
     }
 
     public function formatDecimal($value)
-    {   
+    {
         try {
             return number_format(floor($value * 100) / 100, 2, ".", ",");
         } catch (\Throwable $th) {
@@ -278,8 +278,6 @@ class PedidoGeral extends Model
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $ex) {
             dd($ex);
         }
-
-        return $response;
     }
 
     public function getDataFirstServicoDescAttribute()
@@ -361,7 +359,7 @@ class PedidoGeral extends Model
 
             dd("pedidogeral execption", $ex);
         }
-    
+
     }
 
 }
