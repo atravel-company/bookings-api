@@ -333,8 +333,6 @@ class ProfilesController extends Controller
              return Excel::download(new RoomsListExport($request->id), 'Export_' . Carbon::now()->format("Y-m-d H:i").".xls");
         } catch (Exception $th) {
             throw new Exception($th, 500);
-        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
-            throw new \Maatwebsite\Excel\Validators\ValidationException($e, 500);
         }
     }
 
@@ -1995,7 +1993,7 @@ class ProfilesController extends Controller
         $extras_quartos = $extras_quartos->filter(function ($item, $key) {return $item->ExtraDeleted == null;});
 
         $golfes = $golfes->orderBy('data')->orderBy('hora')->orderBy('pedido_produto_id')->get();
-        $extras_golfes = $extras_golfes->whereNull('pedido_produto_extra.deleted_at')->get()->unique("pedido_produto_id");
+        $extras_golfes = $extras_golfes->whereNull('pedido_produto_extra.deleted_at')->get();
         $extras_golfes = $extras_golfes->filter(function ($item, $key) {return $item->ExtraDeleted == null;});
 
         $transfers = $transfers->orderBy('data')->orderBy('hora')->orderBy('pedido_produto_id')->get();

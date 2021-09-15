@@ -95,8 +95,8 @@
                 </th>
             </tr>
         </thead>
-
         <tbody>
+
             <tr>
                 <td style="width: 380px">{{ $produto->nome }}</td>
                 <td colspan=2>
@@ -124,10 +124,10 @@
                                             </span>
                                         </div>
                                     </div>
+
                                     <div id="reload{{ $produto->id }}">
                                         <div class="reload{{ $produto->id }}">
                                             @foreach($produto->imagem as $imagem)
-
 
                                             <div class="w3-col l2">
                                                 <div class="w3-cell-row w3-margin-bottom w3-center">

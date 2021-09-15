@@ -1,30 +1,30 @@
 <?php
 namespace App\Http\Controllers;
 
-use Storage;
-use App\User;
-use App\Extra;
-use Exception;
-use App\Produto;
-use App\Destinos;
-use App\Supplier;
-use App\Categoria;
-use App\ProdutoPdf;
-use App\Http\Requests;
-use App\ProdutoImagem;
-use App\SupplierContact;
 use App\AvaliacaoProduto;
-use App\Http\Requests\Pdf;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use App\Http\Requests\FotoLocal;
-
-use Illuminate\Support\Facades\DB;
-
+use App\Categoria;
+use App\Destinos;
+use App\Extra;
 use App\Http\Controllers\Controller;
+use App\Http\Requests;
+use App\Http\Requests\FotoLocal;
+use App\Http\Requests\Pdf;
 use App\Http\Requests\ProdutoRequest;
-use Illuminate\Support\Facades\Input;
+use App\Produto;
+use App\ProdutoImagem;
+use App\ProdutoPdf;
+use App\Supplier;
+use App\SupplierContact;
+use App\User;
 use Backpack\PermissionManager\app\Models\Role;
+use Exception;
+
+use Illuminate\Http\Request;
+
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Input;
+use Storage;
 
 class ProdutosController extends Controller {
 
@@ -51,9 +51,11 @@ class ProdutosController extends Controller {
     }
 
     public function index( Request $request ) {
+
         ini_set( 'memory_limit', '-1' );
         $extras = Extra::all()->sortBy( 'name' );
         $roles = Role::where( [ ['name', '!=', 'cria'], ['name', '!=', 'edita'], ['name', '!=', 'superuser'], ['name', '!=', 'apaga'], ['name', '!=', 'comenta'], ] )->get();
+
 
         if ( $request->has( 'nome' ) ) {
             $query = $request->nome;

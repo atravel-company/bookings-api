@@ -56,6 +56,8 @@ return [
 
     'asset_url' => env('ASSET_URL', null),
 
+    'server_status' => env('SERVER_STATUS', "running"),
+
     'api_transfergest_host' => env('API_TRANSFERGEST_HOST', null),
     'api_transfergest_key' => env('API_TRANSFERGEST_KEY', null),
     'api_transfergest_cliente_id' => env('API_TRANSFERGEST_CLIENTE_ID', null),

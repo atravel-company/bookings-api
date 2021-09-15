@@ -4,6 +4,10 @@ Route::get('/', 'FrontEndController@index');
 
 Auth::routes();
 
+
+Route::permanentRedirect('/public', '/admin');
+
+
 /* ADMIN */
 Route::group(["prefix" => "admin", 'middleware' => ['auth']], function () {
 

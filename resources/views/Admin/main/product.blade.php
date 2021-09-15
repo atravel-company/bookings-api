@@ -270,6 +270,7 @@ function showDivs(n) {
                     <h3>Rates</h3>
                     </div>
                  <div class="w3-col l12 w3-light-gray" style="border: 4px solid; border-color: #f5f8fa; overflow-y: auto; height: 90px;">
+
                         @foreach($produtoPdf as $key=>$pdf)
                             @php
                                 $regras_id = [];
@@ -277,7 +278,7 @@ function showDivs(n) {
                                     $regras_id[$key2] = $regras->id;
                                 }
 
-                                $role_users = DB::table('role_users')->whereIn('role_id', $regras_id)->where('user_id', $user_id)->select('user_id')->distinct()->first();
+                                $role_users = DB::table('model_has_roles')->whereIn('role_id', $regras_id)->where('model_id', $user_id)->select('model_id')->distinct()->first();
                                 $pdf_roles = DB::table('pdf_role')->where('produto_pdf_id', $pdf->id)->whereIn('role_id', $regras_id)->first();
                                 /* echo '<pre>';
                                 print_r($pdf_roles);
@@ -320,7 +321,7 @@ function showDivs(n) {
                                         $regras_id[$key2] = $regras->id;
                                     }
 
-                                    $role_users = DB::table('role_users')->whereIn('role_id', $regras_id)->where('user_id', $user_id)->select('user_id')->distinct()->first();
+                                    $role_users = DB::table('model_has_roles')->whereIn('role_id', $regras_id)->where('model_id', $user_id)->select('model_id')->distinct()->first();
                                     $pdf_roles = DB::table('pdf_role')->where('produto_pdf_id', $pdf->id)->whereIn('role_id', $regras_id)->first();
                             @endphp
 
