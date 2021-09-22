@@ -8,6 +8,8 @@ use App\Destinos;
 use App\Exports\RoomsListExport;
 use App\Extra;
 use App\Http\Controllers\Controller;
+use App\Jobs\SendEmailServicosApiTGJob;
+use App\Jobs\SendMailNovaReservaJob;
 use App\PedidoCar;
 use App\PedidoGame;
 use App\PedidoGeral;
@@ -58,12 +60,9 @@ class ProfilesController extends Controller
 
     public function mail(Request $request)
     {
-
         try {
 
             $prod = collect(json_decode($request->get("prod"), true));
-
-
             $extras = DB::table('pedido_produto_extra')->where('pedido_produto_extra.deleted_at', null)->join('extras', 'pedido_produto_extra.extra_id', '=', 'extras.id')->select('*', 'pedido_produto_extra.id')->orderBy('extras.name')->get();
             $to = $request->email;
             $pedido = PedidoGeral::find($request->get("pedido_geral_id"));
@@ -120,53 +119,47 @@ class ProfilesController extends Controller
                 $car = [];
             }
 
-            Mail::send('Admin.emails.product',
-                [
-                    'pedido' => $pedido,
-                    'usuario' => $usuario,
-                    'extras' => $extras,
-                    'produto' => $prod,
-                    'quartos' => $quarto,
-                    'valor' => $valor,
-                    'valorGolf' => $valorGolf,
-                    'valorTransfer' => $valorTransfer,
-                    'valorCar' => $valorCar,
-                    'valorTicket' => $valorTicket,
-                    'golfs' => $game,
-                    'transfers' => $transfer,
-                    'cars' => $car,
-                    'tickets' => $ticket,
-                ],
-                function ($message) use ($request, $pedido, $prod) {
-                    $message
-                        ->from('noreply@atsportugal.com', 'Ats Travel Reservation request')
-                        ->to('sales@atravel.pt')
-                        ->cc(Auth::user()->email)
-                        // ->to('henrique@oseubackoffice.com')
-                        ->subject('Reservation request Nº: ' . $pedido->referencia . ' / ' . $pedido->lead_name . ' / ' . $prod['nome']);
-                });
+            $mailData = [
+                'pedido' => $pedido,
+                'usuario' => $usuario,
+                'extras' => $extras,
+                'produto' => $prod,
+                'quartos' => $quarto,
+                'valor' => $valor,
+                'valorGolf' => $valorGolf,
+                'valorTransfer' => $valorTransfer,
+                'valorCar' => $valorCar,
+                'valorTicket' => $valorTicket,
+                'golfs' => $game,
+                'transfers' => $transfer,
+                'cars' => $car,
+                'tickets' => $ticket,
+            ];
 
-            //dd(Mail::failures());
-            if (count(Mail::failures()) > 0) {
-                DB::table('pedido_produto')->where([['id', '=', $pedido_prod_id]])->update(['email_check' => 'fail']);
-                return response()->json(["errors" => "Falha no envio do Email.", 'error_code' => Mail::failures()], 422);
-            } else {
-                DB::table('pedido_produto')->where([['id', '=', $pedido_prod_id]])->update(['email_check' => 'wait']);
-                return response()->json(["success" => "Email enviado com sucesso."], 201);
-            }
+            SendMailNovaReservaJob::dispatchAfterResponse(
+                $mailData,
+                $pedido,
+                $prod
+            );
+
+            // //dd(Mail::failures());
+            // if (count(Mail::failures()) > 0) {
+            //     DB::table('pedido_produto')->where([['id', '=', $pedido_prod_id]])->update(['email_check' => 'fail']);
+            //     return response()->json(["errors" => "Falha no envio do Email.", 'error_code' => Mail::failures()], 422);
+            // } else {
+            //     DB::table('pedido_produto')->where([['id', '=', $pedido_prod_id]])->update(['email_check' => 'wait']);
+            //     return response()->json(["success" => "Email enviado com sucesso."], 201);
+            // }
 
             // return response()->json(['result'=>Mail::failures()]);
-            return response()->json('email nao enviado , mas funcao ok');
-
+            return response()->json('Email esta sendo processo. Serviço enviado com sucesso');
         } catch (Exception $ex) {
 
             return response()->json($ex);
-
         } catch (ModelNotFoundException $ex) {
 
             return response()->json($ex);
         }
-
     }
 
     /* Add By Netto*/
@@ -200,7 +193,6 @@ class ProfilesController extends Controller
 
                 $data = DB::table('pedido_quartos')->where([['pedido_produto_id', '=', $request->produto_id]])->update(['people' => $request->people_number]);
                 return "Novo";
-
             } else {
                 $room = PedidoQuartoRoomName::findOrFail($request->room_pax_name_id);
                 $room->name = $request->room_pax_name;
@@ -270,7 +262,6 @@ class ProfilesController extends Controller
                     if ($roomId == null) {
                         $temp += 1;
                     }
-
                 }
 
                 $quarto = PedidoQuarto::find($request->get('quartos_pedido_quarto_id'));
@@ -279,11 +270,9 @@ class ProfilesController extends Controller
                     $totalPeople += $pedidoroom->pedidoquartoroomname->count();
                 }
                 $quarto->update(['people' => $totalPeople]);
-
             }
 
             return response()->json(['quartoRoom' => $pedidoQuartoRoom, 'quartoRoomName' => $roomName]);
-
         } catch (ModelNotFoundException $exception) {
             return response()->json($exception->getMessage())->withInput();
         }
@@ -311,7 +300,7 @@ class ProfilesController extends Controller
 
     public function roomsList($id)
     {
-        $pedido = PedidoGeral::find($id,'id');
+        $pedido = PedidoGeral::find($id, 'id');
         foreach ($pedido->produtos as $p) {
             if ($p->quartos()->count() > 0) {
                 foreach ($p->quartos()->get() as $q) {
@@ -319,7 +308,7 @@ class ProfilesController extends Controller
                 }
             }
         }
-        return view('Admin.profile.Excel.roomlist',compact('pedido'));
+        return view('Admin.profile.Excel.roomlist', compact('pedido'));
     }
 
     public function export(Request $request)
@@ -330,7 +319,7 @@ class ProfilesController extends Controller
             //     'pedido' => PedidoGeral::find( $request->id)
             // ] );
 
-             return Excel::download(new RoomsListExport($request->id), 'Export_' . Carbon::now()->format("Y-m-d H:i").".xls");
+            return Excel::download(new RoomsListExport($request->id), 'Export_' . Carbon::now()->format("Y-m-d H:i") . ".xls");
         } catch (Exception $th) {
             throw new Exception($th, 500);
         }
@@ -429,7 +418,7 @@ class ProfilesController extends Controller
             $pedido_produto->delete();
             $tickets->delete();
             $tickets_valor->delete();
-        }else{
+        } else {
             $pedido_produto->delete();
         }
 
@@ -458,7 +447,6 @@ class ProfilesController extends Controller
         }
 
         return json_encode($products);
-
     }
 
     public function createProducts(Request $request)
@@ -588,52 +576,51 @@ class ProfilesController extends Controller
         try {
 
             if ($request->type == "room") {
-            $remark_antigo = PedidoQuarto::where('id', '=', $request->pedido_quarto_id)->first()['remark'];
-        }
-        if ($request->type == "golf") {
-            $remark_antigo = PedidoGame::where('id', '=', $request->pedido_quarto_id)->first()['remark'];
-        }
+                $remark_antigo = PedidoQuarto::where('id', '=', $request->pedido_quarto_id)->first()['remark'];
+            }
+            if ($request->type == "golf") {
+                $remark_antigo = PedidoGame::where('id', '=', $request->pedido_quarto_id)->first()['remark'];
+            }
 
-        if ($request->type == "transfer") {
-            $remark_antigo = PedidoTransfer::where('id', '=', $request->pedido_quarto_id)->first()['remark'];
-        }
+            if ($request->type == "transfer") {
+                $remark_antigo = PedidoTransfer::where('id', '=', $request->pedido_quarto_id)->first()['remark'];
+            }
 
-        if ($request->type == "car") {
-            $remark_antigo = PedidoCar::where('id', '=', $request->pedido_quarto_id)->first()['remark'];
-        }
+            if ($request->type == "car") {
+                $remark_antigo = PedidoCar::where('id', '=', $request->pedido_quarto_id)->first()['remark'];
+            }
 
-        if ($request->type == "ticket") {
-            $remark_antigo = PedidoTicket::where('id', '=', $request->pedido_quarto_id)->first()['remark'];
-        }
+            if ($request->type == "ticket") {
+                $remark_antigo = PedidoTicket::where('id', '=', $request->pedido_quarto_id)->first()['remark'];
+            }
 
-        $remark = $remark_antigo;
-        if ($request->operador == "ats") {
-            $remark .= "<b class='ats_b'>ATS: </b>" . $request->remark . " </b> <br>";
-        } else {
-            $remark .= "<b class='agency_b'>Agency: </b>" . $request->remark . " </b> <br>";
-        }
+            $remark = $remark_antigo;
+            if ($request->operador == "ats") {
+                $remark .= "<b class='ats_b'>ATS: </b>" . $request->remark . " </b> <br>";
+            } else {
+                $remark .= "<b class='agency_b'>Agency: </b>" . $request->remark . " </b> <br>";
+            }
 
-        if ($request->type == "room") {
-            PedidoQuarto::where([['id', '=', $request->pedido_quarto_id]])->update(['remark' => $remark]);
-        }
-        if ($request->type == "golf") {
-            PedidoGame::where([['id', '=', $request->pedido_quarto_id]])->update(['remark' => $remark]);
-        }
+            if ($request->type == "room") {
+                PedidoQuarto::where([['id', '=', $request->pedido_quarto_id]])->update(['remark' => $remark]);
+            }
+            if ($request->type == "golf") {
+                PedidoGame::where([['id', '=', $request->pedido_quarto_id]])->update(['remark' => $remark]);
+            }
 
-        if ($request->type == "transfer") {
-            PedidoTransfer::where([['id', '=', $request->pedido_quarto_id]])->update(['remark' => $remark]);
-        }
+            if ($request->type == "transfer") {
+                PedidoTransfer::where([['id', '=', $request->pedido_quarto_id]])->update(['remark' => $remark]);
+            }
 
-        if ($request->type == "car") {
-            PedidoCar::where([['id', '=', $request->pedido_quarto_id]])->update(['remark' => $remark]);
-        }
+            if ($request->type == "car") {
+                PedidoCar::where([['id', '=', $request->pedido_quarto_id]])->update(['remark' => $remark]);
+            }
 
-        if ($request->type == "ticket") {
-            PedidoTicket::where([['id', '=', $request->pedido_quarto_id]])->update(['remark' => $remark]);
-        }
-
+            if ($request->type == "ticket") {
+                PedidoTicket::where([['id', '=', $request->pedido_quarto_id]])->update(['remark' => $remark]);
+            }
         } catch (\Throwable $th) {
-           throw new Exception($th, 500);
+            throw new Exception($th, 500);
         }
     }
 
@@ -771,7 +758,6 @@ class ProfilesController extends Controller
         $PedidoTickets = PedidoTicket::where([['pedido_produto_id', '=', $pedido_produto_id]])->orderBy('data')->orderBy('hora')->get();
 
         return view('Admin.profile.voucher', compact('produto', 'pedidoProduto', 'pedidoGeral', 'usuario', 'pedidoQuartos', 'PedidoGames', 'PedidoTransfers', 'PedidoCars', 'PedidoTickets'));
-
     }
 
     public function index()
@@ -846,7 +832,6 @@ class ProfilesController extends Controller
                     $quarto[$key][$key1][$key2] = $PedidoQuarto;
                     $quarto[$key][$key1][$key2]['ini'] = $ini;
                     $quarto[$key][$key1][$key2]['out'] = $saida;
-
                 }
 
                 $PedidoGames = PedidoGame::where([['pedido_produto_id', '=', $pedido_prod_id]])->orderBy('data', 'ASC')->orderBy('hora', 'ASC')->get();
@@ -1534,7 +1519,6 @@ class ProfilesController extends Controller
                                 $pedido_cars->tax = $tax[$key_id][$i][$j];
                                 $pedido_cars->save();
                             }
-
                         }
                         /* GUARDAR DADOS NOS PEDIDOS DE CARS */
                         /* GUARDAR DADOS NOS PEDIDOS DE TICKETS */
@@ -1558,16 +1542,13 @@ class ProfilesController extends Controller
                         }
                     }
                 }
-
             }
 
             return response()->json("Dados cadastrado com sucesso");
-
         } catch (Exception $ex) {
 
             dd($ex);
         }
-
     }
 
     public function create(Request $request)
@@ -1582,12 +1563,10 @@ class ProfilesController extends Controller
             $profit = $request->get('profit');
             PedidoGeral::find($request->id)->update(['valor' => $request->total, 'profit' => $profit, 'status' => $request->status]);
             return response()->json(['result' => ['valor' => 'nada', PedidoGeral::find($request->id)->toArray()]]);
-
         } catch (ModelNotFoundException $ex) {
 
             return response($ex);
         }
-
     }
 
     public function confirm(Request $request)
@@ -1623,7 +1602,6 @@ class ProfilesController extends Controller
         } catch (Exception $ex) {
             dd($ex);
         }
-
     }
 
     public function createProduct(Request $request)
@@ -1735,7 +1713,6 @@ class ProfilesController extends Controller
             }
 
             return response()->json(['result' => ['valor' => 'Extra editado com sucesso!']]);
-
         } else {
             $produtoExtra = new PedidoProdutoExtra;
             $produtoExtra->extra_id = $request->extra_name;
@@ -1777,7 +1754,9 @@ class ProfilesController extends Controller
                     // recupera todos os extras desse pedido_produto
                     $all = PedidoQuarto::where('pedido_produto_id', $pedidos_produtos->id)->get();
                     $total = 0;
-                    foreach ($all as $a) {$total += $a->total;}
+                    foreach ($all as $a) {
+                        $total += $a->total;
+                    }
                     $pedidos_produtos->valor = $total;
                     $pedidos_produtos->update();
                 }
@@ -1803,7 +1782,9 @@ class ProfilesController extends Controller
                     // recupera todos os extras desse pedido_produto
                     $all = PedidoGame::where('pedido_produto_id', $pedidos_produtos->id)->get();
                     $total = 0;
-                    foreach ($all as $a) {$total += $a->total;}
+                    foreach ($all as $a) {
+                        $total += $a->total;
+                    }
                     $pedidos_produtos->valor = $total;
                     $pedidos_produtos->update();
                 }
@@ -1830,7 +1811,9 @@ class ProfilesController extends Controller
                     // recupera todos os extras desse pedido_produto
                     $all = PedidoTransfer::where('pedido_produto_id', $pedidos_produtos->id)->get();
                     $total = 0;
-                    foreach ($all as $a) {$total += $a->total;}
+                    foreach ($all as $a) {
+                        $total += $a->total;
+                    }
                     $pedidos_produtos->valor = $total;
                     $pedidos_produtos->update();
                 }
@@ -1858,7 +1841,9 @@ class ProfilesController extends Controller
                     // recupera todos os extras desse pedido_produto
                     $all = PedidoCar::where('pedido_produto_id', $pedidos_produtos->id)->get();
                     $total = 0;
-                    foreach ($all as $a) {$total += $a->total;}
+                    foreach ($all as $a) {
+                        $total += $a->total;
+                    }
                     $pedidos_produtos->valor = $total;
                     $pedidos_produtos->update();
                 }
@@ -1885,7 +1870,9 @@ class ProfilesController extends Controller
                     // recupera todos os extras desse pedido_produto
                     $all = PedidoTicket::where('pedido_produto_id', $pedidos_produtos->id)->get();
                     $total = 0;
-                    foreach ($all as $a) {$total += $a->total;}
+                    foreach ($all as $a) {
+                        $total += $a->total;
+                    }
                     $pedidos_produtos->valor = $total;
                     $pedidos_produtos->update();
                 }
@@ -1983,30 +1970,39 @@ class ProfilesController extends Controller
 
                 $bilhetes->orWhere('pedido_produto_id', $pedido->id);
                 $extras_bilhetes->orWhere('pedido_produto_id', $pedido->id)->where('tipo', 'tickets');
-
             }
             $i++;
         }
 
         $quartos = $quartos->orderBy('checkin')->orderBy('checkout')->orderBy('pedido_produto_id')->get();
         $extras_quartos = $extras_quartos->whereNull('pedido_produto_extra.deleted_at')->get();
-        $extras_quartos = $extras_quartos->filter(function ($item, $key) {return $item->ExtraDeleted == null;});
+        $extras_quartos = $extras_quartos->filter(function ($item, $key) {
+            return $item->ExtraDeleted == null;
+        });
 
         $golfes = $golfes->orderBy('data')->orderBy('hora')->orderBy('pedido_produto_id')->get();
         $extras_golfes = $extras_golfes->whereNull('pedido_produto_extra.deleted_at')->get();
-        $extras_golfes = $extras_golfes->filter(function ($item, $key) {return $item->ExtraDeleted == null;});
+        $extras_golfes = $extras_golfes->filter(function ($item, $key) {
+            return $item->ExtraDeleted == null;
+        });
 
         $transfers = $transfers->orderBy('data')->orderBy('hora')->orderBy('pedido_produto_id')->get();
         $extras_transfers = $extras_transfers->whereNull('pedido_produto_extra.deleted_at')->get();
-        $extras_transfers = $extras_transfers->filter(function ($item, $key) {return $item->ExtraDeleted == null;});
+        $extras_transfers = $extras_transfers->filter(function ($item, $key) {
+            return $item->ExtraDeleted == null;
+        });
 
         $carros = $carros->orderBy('pickup_data')->orderBy('pickup_hora')->orderBy('dropoff_data')->orderBy('dropoff_hora')->orderBy('pedido_produto_id')->get();
         $extras_carros = $extras_carros->whereNull('pedido_produto_extra.deleted_at')->get();
-        $extras_carros = $extras_carros->filter(function ($item, $key) {return $item->ExtraDeleted == null;});
+        $extras_carros = $extras_carros->filter(function ($item, $key) {
+            return $item->ExtraDeleted == null;
+        });
 
         $bilhetes = $bilhetes->orderBy('data')->orderBy('hora')->orderBy('pedido_produto_id')->get();
         $extras_bilhetes = $extras_bilhetes->whereNull('pedido_produto_extra.deleted_at')->get();
-        $extras_bilhetes = $extras_bilhetes->filter(function ($item, $key) {return $item->ExtraDeleted == null;});
+        $extras_bilhetes = $extras_bilhetes->filter(function ($item, $key) {
+            return $item->ExtraDeleted == null;
+        });
 
         $payments = PedidoPayments::where('pedido_geral_id', $id)->get();
 
@@ -2115,7 +2111,6 @@ class ProfilesController extends Controller
 
                 $bilhetes->orWhere('pedido_produto_id', $pedido->id);
                 $extras_bilhetes->orWhere('pedido_produto_id', $pedido->id)->where('tipo', 'tickets');
-
             }
             $i++;
         }
@@ -2165,7 +2160,6 @@ class ProfilesController extends Controller
 
             $query->with("produto");
             $query->with("pedidotransfer")->whereHas("pedidotransfer")->get();
-
         }])->first();
 
         return $this->makeAndSendTransfergestData($request, $data);
@@ -2181,11 +2175,9 @@ class ProfilesController extends Controller
             $query->with(["pedidotransfer" => function ($q) use ($request) {
 
                 $q->where("id", $request->get("pedido_transfer_id"));
-
             }])->whereHas("pedidotransfer", function ($q) use ($request) {
                 $q->where("id", $request->get("pedido_transfer_id"));
             })->get();
-
         }])->first();
 
         return $this->makeAndSendTransfergestData($request, $data);
@@ -2323,7 +2315,6 @@ class ProfilesController extends Controller
                     "responseapi" => $response,
                 ]);
             }
-
         } catch (Exception $th) {
             throw new Exception($th, 500);
         }
@@ -2350,7 +2341,6 @@ class ProfilesController extends Controller
             curl_close($curl);
 
             return $data;
-
         } catch (Exception $th) {
             throw new Exception($th, 500);
         }
@@ -2378,7 +2368,6 @@ class ProfilesController extends Controller
             curl_close($curl);
 
             return $data;
-
         } catch (Exception $th) {
             throw new Exception($th, 500);
         }
@@ -2427,7 +2416,6 @@ class ProfilesController extends Controller
         } catch (Exception $th) {
             throw new Exception($th, 500);
         }
-
     }
 
     public function apagarTransferApi($id)
@@ -2438,7 +2426,6 @@ class ProfilesController extends Controller
             $response = $this->enviarDeleteServicosApi($token, $postdata);
 
             return response()->json($response);
-
         } catch (Exception $th) {
             throw new Exception($th, 500);
         }
@@ -2459,11 +2446,9 @@ class ProfilesController extends Controller
             curl_close($curl);
 
             return $data;
-
         } catch (Exception $th) {
             throw new Exception($th, 500);
         }
-
     }
 
     public function enviaServicoApi($token, $postdata)
@@ -2478,14 +2463,15 @@ class ProfilesController extends Controller
             $optionsCurl[CURLOPT_HTTPHEADER] = ["Content-Type: application/json", "Authorization: Bearer " . $token];
             curl_setopt_array($curl, $optionsCurl);
 
-            Log::alert("enviando servicos via api",
+            Log::alert(
+                "enviando servicos via api",
                 [config("app.api_transfergest_host") . "api/v2/criar-servico"]
             );
             $data = json_decode(curl_exec($curl), true);
             curl_close($curl);
             return $data;
         } catch (Exception $th) {
-          throw new Exception($th, 500);
+            throw new Exception($th, 500);
         }
     }
 
@@ -2521,7 +2507,6 @@ class ProfilesController extends Controller
                 $token = $this->getToken()["access_token"];
                 setcookie("transfergest_restapikey", $token, time() + (3600 + (24 + 7)), "/", "atsportugal.com");
             }
-
         } else {
 
             $token = $this->getToken()["access_token"];
@@ -2546,16 +2531,13 @@ class ProfilesController extends Controller
             curl_close($curl);
 
             return $data;
-
         } catch (Throwable $th) {
             dd($th);
         }
-
     }
 
     public function enviaEmailServicosApi(Request $request, $data, $totalReservaEmail)
     {
-
         try {
 
             $data = PedidoGeral::where("id", $request->get("pedido_geral_id"))->with("reports")->with(["pedidoprodutos" => function ($query) use ($request) {
@@ -2565,29 +2547,21 @@ class ProfilesController extends Controller
                     if ($request->has("pedido_transfer_id")) {
                         $q->where("id", $request->get("pedido_transfer_id"));
                     }
-
                 }])->whereHas("pedidotransfer", function ($q) use ($request) {
 
                     if ($request->has("pedido_transfer_id")) {
                         $q->where("id", $request->get("pedido_transfer_id"));
                     }
-
                 })->get();
-
             }])->first();
 
-            $mail = Mail::send('Admin.emails.enviaprodutoapi', ['pedido' => $data, 'usuario' => Auth::user()], function ($message) use ($request, $data) {
-                $message
-                    ->from('noreply@atsportugal.com', 'Ats Travel - API service')
-                    ->to('sales@atravel.pt')
-                    ->cc('transfers@atravel.pt')
-                    ->cc('henrique@oseubackoffice.com')
-                    // ->cc('verificaspam@amen.pt')
-                    ->subject('Services send to API Transfergest');
-            });
+            $mailData = ['pedido' => $data, 'usuario' => Auth::user()];
+
+            SendEmailServicosApiTGJob::dispatchAfterResponse(
+                $mailData
+            );
 
             return response()->json("Email enviado com sucesso");
-
         } catch (Exception | ModelNotFoundException $th) {
 
             dd($th);

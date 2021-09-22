@@ -49,7 +49,7 @@
 @php
     $path = asset('storage/LogotipoAtravelCor.png');
     if(!file_exists($path)){
-        $path = "https://atsportugal.com/public/storage/LogotipoAtravelCor.png";
+        $path = "https://atsportugal.com/storage/LogotipoAtravelCor.png";
     }
 @endphp
 
