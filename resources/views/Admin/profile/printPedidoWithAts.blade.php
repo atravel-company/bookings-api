@@ -1,4 +1,4 @@
-@if ($_SERVER['REMOTE_ADDR'] != '81.193.176.84' and config("app.server_status") == 'down')
+@if ($_SERVER['REMOTE_ADDR'] != '81.193.176.84' and config('app.server_status') == 'down')
     @push('css')
         <style>
             .code {
@@ -8,6 +8,7 @@
                 padding: 0 15px 0 15px;
                 text-align: center;
             }
+
         </style>
     @endpush
     @section('content')
@@ -17,7 +18,7 @@
                     402
                 </div>
                 <div class="message" style="padding: 10px;">
-                    <img src="{{ asset('Admin/img/manutention.jpg')}}" alt="" style="width: 80%">
+                    <img src="{{ asset('Admin/img/manutention.jpg') }}" alt="" style="width: 80%">
                 </div>
             </div>
         </div>
@@ -810,6 +811,93 @@
                             {{ number_format($pedido_geral->profit - ($extra_quarto->amount ?? 0), 2, ',', '.') }}
                         </td>
                     </tr>
+                </table>
+            </div>
+        </div>
+    @endif
+
+    <!--ticket-->
+    @if ($bilhetes->isEmpty() != true)
+        <div class="container">
+            <div class="w3-row-padding w3-padding-32" style="border-top: 2px solid #00bad1;">
+                @php
+                    $subtotal = 0;
+                    $old_produto_id = 0;
+                    $kick_back = 0;
+                    $id = 0;
+                    $totalAtsPedido = 0;
+                @endphp
+                <table width="100%" style="margin-bottom: 15px;">
+                    @foreach ($bilhetes->sortBy('nome')->sortBy('data') as $bilhete)
+                        <tr>
+                            <td colspan="5"><b>Company:</b> {{ $bilhete->nome }}</td>
+                        </tr>
+                        <tr>
+                            <td width="30%"><b>Date:</b> {{ Carbon\Carbon::parse($bilhete->data)->format('d-m-y') }}
+                            </td>
+                            <td width="20%"><b>Hour:</b> {{ Carbon\Carbon::parse($bilhete->hora)->format('H:i') }}
+                            </td>
+                            <td width="20%"><b></td>
+                            <td width="15%"><b></td>
+                            <td width="15%"><b>Total €:</b> {{ number_format($bilhete->total, 2, ',', '.') }}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Adults:</b> {{ $bilhete->adult }}</td>
+                            <td><b>Children:</b> {{ $bilhete->children }}</td>
+                            <td><b>Babies:</b> {{ $bilhete->babie }}</td>
+                            <td colspan="2"></td>
+                        </tr>
+                        @if (($old_produto_id != 0 && $old_produto_id != $bilhete->pedido_produto_id) || $loop->last)
+                            @foreach ($extras_bilhetes as $extra_bilhete)
+                                @if ($extra_bilhete->pedido_produto_id == $bilhete->pedido_produto_id)
+                                    <tr>
+                                        <td colspan="2"><b>Extra name:</b> {{ $extra_bilhete->name }}</td>
+                                        <td><b>Qty:</b> {{ $extra_bilhete->amount }}</td>
+                                        <td><b>Unit €:</b> {{ number_format($extra_bilhete->rate, 2, ',', '.') }}</td>
+                                        <td><b>Total €:</b> {{ number_format($extra_bilhete->total, 2, ',', '.') }}</td>
+                                    </tr>
+                                    @php $subtotal = $subtotal + $extra_bilhete->total; @endphp
+                                @endif
+                            @endforeach
+                        @endif
+                        <tr>
+                            <td colspan="3"><br>{!! html_entity_decode($bilhete->remark) !!}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="5"><br></td>
+                        </tr>
+
+                        @php
+                            $old_produto_id = $bilhete->pedido_produto_id;
+                            $totalAtsPedido += $bilhete->ats_total_rate;
+                        @endphp
+                    @endforeach
+
+                    @php
+
+                        $PedidosIds = $bilhetes->unique('pedido_produto_id')->pluck('pedido_produto_id');
+                        $ValoresPedidosProduto = App\ValorTicket::whereIn('pedido_produto_id', $PedidosIds->toArray())->get();
+                        $profit = 0;
+                        foreach ($ValoresPedidosProduto as $valor) {
+                            $kick = ($valor->kick * $valor->valor_ticket) / 100;
+                            $valor_markup_kick = $valor->valor_ticket - $kick;
+
+                            if ($valor->kick != null || $valor->markup != null) {
+                                $subtotal += $valor_markup_kick;
+                            } else {
+                                $subtotal += $valor->valor_ticket;
+                            }
+                            $profit += $valor->profit;
+                        }
+                        $total = $total + $subtotal;
+                    @endphp
+                    @if (isset($kick_back) && $kick_back != 0)
+                        <tr>
+                            <td colspan="3"></td>
+                            <td style="border-top: 2px solid; text-align: right;"><b>KICKBACK:</b></td>
+                            <td style="border-top: 2px solid"> {{ number_format($kick_back, 2, ',', '.') }}</td>
+                        </tr>
+                    @endif
                     <tr>
                         <td width="60%"></td>
                         <td width="25%" style="border-top: 2px solid; text-align: right; "><b>TOTAL BOOKING €:</b></td>
@@ -829,7 +917,8 @@
                     <tr>
                         <td width="60%"></td>
                         <td width="25%" style="border-top: 2px solid; text-align: right;"><b>TOTAL PAID €:</b></td>
-                        <td width="15%" style="border-top: 2px solid;text-align:right"> {{ number_format($total_payments, 2, ',', '.') }}
+                        <td width="15%" style="border-top: 2px solid;text-align:right">
+                            {{ number_format($total_payments, 2, ',', '.') }}
                         </td>
                     </tr>
                     <tr>
@@ -841,8 +930,5 @@
                 </table>
             </div>
         </div>
-
     @endsection
-
-
 @endif

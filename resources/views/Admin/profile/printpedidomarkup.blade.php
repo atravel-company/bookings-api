@@ -629,6 +629,96 @@
                         <td width="15%" style="border-top: 2px solid"> {{ number_format($total_payments, 2, ',', '.') }}
                         </td>
                     </tr>
+                </table>
+            </div>
+        </div>
+    @endif
+
+    <!--ticket-->
+    @if ($bilhetes->isEmpty() != true)
+        <div class="container">
+            <div class="w3-row-padding w3-padding-32" style="border-top: 2px solid #00bad1;">
+                @php
+                    $subtotal = 0;
+                    $old_produto_id = 0;
+                    $kick_back = 0;
+                    $id = 0;
+                @endphp
+                <table width="100%" style="margin-bottom: 15px;">
+                    @foreach ($bilhetes->sortBy('nome')->sortBy('data') as $bilhete)
+                        @php
+                            $valor_ticket = App\ValorTicket::where('pedido_produto_id', $bilhete->pedido_produto_id)->first();
+                            $markup = ($valor_ticket->markup * $valor_ticket->valor_ticket) / 100;
+                            $kick = ($valor_ticket->kick * $valor_ticket->valor_ticket) / 100;
+                            $valor_ticket_markup_kick = $valor_ticket->valor_ticket - $kick + $markup;
+
+                            $valor_ticket_id = (int) $valor_ticket->id;
+                            if ($id != $valor_ticket_id) {
+                                $kick_back += $kick;
+                                $id = $valor_ticket->id;
+
+                                if ($valor_ticket->kick != null || $valor_ticket->markup != null) {
+                                    $subtotal += $valor_ticket_markup_kick;
+                                } else {
+                                    $subtotal += $valor_ticket->valor_ticket;
+                                }
+                            } elseif ($subtotal == 0) {
+                                if ($valor_ticket->kick != null || $valor_ticket->markup != null) {
+                                    $subtotal = $valor_ticket_markup_kick;
+                                } else {
+                                    $subtotal = $valor_ticket->valor_ticket;
+                                }
+                            }
+                        @endphp
+                        <tr>
+                            <td colspan="5"><b>Company:</b> {{ $bilhete->nome }}</td>
+                        </tr>
+                        <tr>
+                            <td width="30%"><b>Date:</b> {{ Carbon\Carbon::parse($bilhete->data)->format('d-m-y') }}
+                            </td>
+                            <td width="25%"><b>Hour:</b> {{ Carbon\Carbon::parse($bilhete->hora)->format('H:i') }}
+                            </td>
+                            <td width="15%"><b>Adults:</b> {{ $bilhete->adult }}</td>
+                            <td width="15%"><b>Children:</b> {{ $bilhete->children }}</td>
+                            <td width="15%"><b>Babies:</b> {{ $bilhete->babie }}</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td colspan="2"></td>
+                        </tr>
+                        @if (($old_produto_id != 0 && $old_produto_id != $bilhete->pedido_produto_id) || $loop->last)
+                            @foreach ($extras_bilhetes as $extra_bilhete)
+                                @if ($extra_bilhete->pedido_produto_id == $bilhete->pedido_produto_id)
+                                    <tr>
+                                        <td colspan="2"><b>Extra name:</b> {{ $extra_bilhete->name }}</td>
+                                        <td><b>Qty:</b> {{ $extra_bilhete->amount }}</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    @php $subtotal = $subtotal + $extra_bilhete->total; @endphp
+                                @endif
+                            @endforeach
+                        @endif
+                        <tr>
+                            <td colspan="3"><br>{!! html_entity_decode($bilhete->remark) !!}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="5"><br></td>
+                        </tr>
+
+                        @php $old_produto_id = $bilhete->pedido_produto_id; @endphp
+                    @endforeach
+                    @php $total = $total + $subtotal; @endphp
+
+                    @if (isset($kick_back) && $kick_back != 0)
+                        <tr>
+                            <td colspan="3"></td>
+                            <!--<td style="text-align: right;"><b>KICKBACK:</b></td>
+                                                <td> {{ number_format($kick_back, 2, ',', '.') }}</td>-->
+                        </tr>
+                    @endif
                     <tr>
                         <td width="60%"></td>
                         <td width="25%" style="border-top: 2px solid; text-align: right;"><b>POR PAGAR:</b></td>
