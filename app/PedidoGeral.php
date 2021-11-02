@@ -6,20 +6,19 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class PedidoGeral extends Model
+class PedidoGeral extends Model implements Auditable
 {
     use SoftDeletes;
+    use \OwenIt\Auditing\Auditable;
 
     protected $fillable = ['id', 'type', 'lead_name', 'responsavel', 'referencia', 'user_id', 'valor', 'profit', 'status', 'deleted_at'];
-
     protected $appends = ['valortotalquarto', 'valortotalgolf', 'valortotaltransfer', 'valortotalcar', 'valortotalextras', 'valortotalkickback', 'TotalPagamento', 'ValorTotalProfitExtras', 'AtsTotalExtra', 'DataFirstServico', 'DataFirstServicoDesc'];
-
     protected $dates = ['DataFirstServico', 'DataFirstServicoDesc'];
 
     public function produtoss()
     {
-
         return $this->belongsToMany('App\Produto', 'pedido_produto')->withTrashed()->withTimestamps()->withPivot('id', 'valor', 'email_check');
     }
 

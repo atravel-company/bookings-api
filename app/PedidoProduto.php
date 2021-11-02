@@ -3,13 +3,16 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class PedidoProduto extends Model
+use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Contracts\Auditable;
+
+class PedidoProduto extends Model implements Auditable
 {
     //use SoftDeletes;
-  
-    protected $fillable = ['pedido_geral_id','produto_id', 'valor', 'profit', 'email_check'];
+    use \OwenIt\Auditing\Auditable;
+
+    protected $fillable = ['pedido_geral_id', 'produto_id', 'valor', 'profit', 'email_check'];
     protected $guarded = ['id', 'created_at', 'update_at'];
     protected $table = 'pedido_produto';
 
@@ -121,18 +124,18 @@ class PedidoProduto extends Model
                 return null;
             }
 
-            $rel = "pedido".$this->tipoProduto;
+            $rel = "pedido" . $this->tipoProduto;
 
             $field = "data";
             switch ($this->tipoProduto) {
-          case "quarto":
-            $field = "checkin";
-            break;
-          case "car":
-            $field = "pickup_data";
-            break;
-        }
-        
+                case "quarto":
+                    $field = "checkin";
+                    break;
+                case "car":
+                    $field = "pickup_data";
+                    break;
+            }
+
             $data =  $this->$rel()->get()->sortBy(function ($col) use ($field) {
                 return $col->checkin;
             })->values()->first();

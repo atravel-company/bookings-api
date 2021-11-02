@@ -80,7 +80,7 @@
                         282-457 306</td>
                 </tr>
                 <tr>
-                    <td style="text-align: left; font-size: 10px;">Mobile.(+351) 912 032 695</td>
+                    <td style="text-align: left; font-size: 10px;">Mobile.(+351) 282-457 306</td>
                 </tr>
                 <tr>
                     <td style="text-align: left; font-size: 10px;">reservations: incoming@atravel.pt</td>
