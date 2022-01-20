@@ -16,7 +16,7 @@ class PedidoQuarto extends Model implements Auditable
 
     protected $dates = ['created_at', 'updated_at'];
 
-    protected $appends = ['rnts', 'bednight'];
+    protected $appends = ['rnts', 'bednight', 'ats_total_rate'];
 
 
     public function pedidoquartoroom()
@@ -44,5 +44,10 @@ class PedidoQuarto extends Model implements Auditable
     public function getBedNightAttribute()
     {
         return ($this->days * $this->people);
+    }
+
+    public function getAtsTotalRateAttribute()
+    {
+        return PedidoQuarto::where('pedido_produto_id', $this->pedido_produto_id)->get()->sum('ats_rate');
     }
 }

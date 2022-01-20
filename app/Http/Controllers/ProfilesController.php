@@ -2006,15 +2006,11 @@ class ProfilesController extends Controller
 
         $payments = PedidoPayments::where('pedido_geral_id', $id)->get();
 
-
-
         if ($ats == true) {
             $view = 'Admin.profile.printPedidoWithAts';
         } else {
             $view = 'Admin.profile.printPedido';
         }
-
-        // dd($extras_golfes);
 
         return view($view)
             ->with('pedido_geral', $pedido_geral)

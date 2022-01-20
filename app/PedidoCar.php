@@ -14,7 +14,7 @@ class PedidoCar extends Model implements Auditable
 
     protected $fillable = ['pedido_produto_id', 'pickup', 'pickup_data', 'pickup_hora', 'pickup_flight', 'pickup_country', 'pickup_airport', 'dropoff', 'dropoff_data', 'dropoff_hora', 'dropoff_flight', 'dropoff_country', 'dropoff_airport', 'remark', 'group', 'model', 'rate', 'days', 'tax', 'tax_type', 'total', 'ats_rate', 'ats_total_rate', 'profit'];
 
-    protected $appends = ['checkin', 'TotalPax'];
+    protected $appends = ['checkin', 'TotalPax', 'ats_total_rate'];
 
     public function getCheckinAttribute()
     {
@@ -24,5 +24,10 @@ class PedidoCar extends Model implements Auditable
     public function getTotalPaxAttribute()
     {
         return 0;
+    }
+
+    public function getAtsTotalRateAttribute()
+    {
+        return PedidoCar::where('pedido_produto_id', $this->pedido_produto_id)->get()->sum('ats_rate');
     }
 }

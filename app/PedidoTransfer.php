@@ -29,8 +29,6 @@ class PedidoTransfer extends Model implements Auditable
 
     public function getAtsTotalRateAttribute()
     {
-        $data = PedidoTransfer::where('pedido_produto_id', $this->pedido_produto_id)->get()->sum('ats_rate');
-
-        return $data;
+        return PedidoTransfer::where('pedido_produto_id', $this->pedido_produto_id)->get()->sum('ats_rate');
     }
 }

@@ -43,7 +43,6 @@
 
             @page {
                 size: 210mm 297mm;
-                /* Chrome sets own margins, we change these printer settings */
                 margin: 27mm 16mm 27mm 16mm;
             }
 
@@ -76,95 +75,15 @@
             }
 
         </style>
-        <script type="text/javascript" src="{{ URL::asset('Admin/js/node_modules/printthis/printThis.js') }}"></script>
-        <script type="text/javascript" src="{{ URL::asset('Admin/js/voucher.js') }}"></script>
-        <script type="text/javascript">
-            load = "{{ asset('Admin/css/w3.css') }}";
-        </script>
 
-        <div class="container" id="cabeca">
-            <div class="w3-row-padding">
-                <table>
-                    <tr>
-                        <td style="width: 50%;">
-                            <img class="w3-margin-bottom" id="editSupplier_img" width="70%" style="width:70%; margin:0 auto;"
-                                src="<?php echo asset('storage/LogotipoAtravelCor.png'); ?>">
-                        </td>
-                        <td align="right" style="width: 50%;">
-                            <b>
-                                <font size="2">In partnership with:</font>
-                            </b>
+        <link rel="stylesheet" href="{{ asset('Admin/css/w3.css') }}">
 
-                            @php
-                                $imgPath = $usuario->path_image;
-                                if (preg_match('/_user/', $usuario->path_image)) {
-                                    $imgPath = asset(str_replace('/storage/app/public', '/storage', $usuario->path_image));
-                                } else {
-                                    $imgPath = asset('/storage/' . $imgPath);
-                                }
-                            @endphp
+        {{ renderCabecalhoVouchers($pedido_geral, $usuario) }}
 
 
-                            <img class="w3-margin-bottom" id="editSupplier_img" width="65%" style="width:65%;"
-                                src="{{ $imgPath }}">
-                        </td>
-                    </tr>
-                </table>
-
-                <div class="w3-col l12" style="margin-top:10px; margin-bottom:20px;">
-                    <div class="form-group">
-                        <table width="100%" class="w3-centered">
-                            <tr>
-                                <th style="text-align: left; width:30%;">TOPICOS E DESCOBERTAS LDA</th>
-                                <td align="right" style="text-align: left; width:25%; font-size: small; width: 30%;">
-                                    Telef.(+351) 282-457 306</td>
-                                <td style="width: 40%;"></td>
-                            </tr>
-                            <tr>
-                                <td class="footer" style="text-align: left; color:#24AEC9;">Av. da Liberdade,</td>
-                                <td style="text-align: left; font-size: small;">Mobile.(+351) 282-457 306</td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td class="footer" style="text-align: left; color:#24AEC9;">245, 4ºA </td>
-                                <td style="text-align: left; font-size: small;">reservations: incoming@atravel.pt</td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td class="footer" style="text-align: left; color:#24AEC9;">1250-143 , Lisboa</td>
-                                <td style="text-align: left; font-size: small;">www.atstravel.pt</td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td style="text-align: left; font-size: small; color:#24AEC9;">Licence RNVAT 8019</td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td style="color:#24AEC9;text-align: left; font-size: small;">VAT 514 974 567</td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="container">
-            <div class="w3-row-padding w3-padding-32" style="border-top: 2px solid #00bad1;">
-                <table width="100%" style="margin-bottom: 15px;">
-                    <tr>
-                        <td><b>Agency:</b> {{ $usuario->name }}</td>
-                        <td><b>Lead Name:</b> {{ $pedido_geral->lead_name }} </td>
-                        <td><b>Responsable:</b> {{ $pedido_geral->responsavel }} </td>
-                        <td><b>Reference</b> {{ $pedido_geral->referencia }} </td>
-                    </tr>
-                </table>
-            </div>
-        </div>
         @php $total = 0; @endphp
-        <!--Quartos-->
 
+        <!--Quartos-->
         @if ($quartos->isEmpty() != true)
             <div class="container">
                 <div class="w3-row-padding w3-padding-32" style="border-top: 2px solid #00bad1;">
@@ -214,10 +133,6 @@
                                             <td><b>Unit €:</b> {{ number_format($extra_quarto->rate, 2, ',', '.') }}</td>
                                             <td><b>Total €:</b> {{ number_format($extra_quarto->total, 2, ',', '.') }}
                                             </td>
-                                            {{-- <td width="15%">
-                    <b style="color:#FF5722">ATS EXTRA TOTAL €:</b>
-                    {{ number_format($extra_quarto->ats_total_rate, 2, ',', '.') }}
-                </td> --}}
                                         </tr>
                                         @php $subtotal += $extra_quarto->total; @endphp
                                     @endif
@@ -235,64 +150,25 @@
                                 $old_produto_id = $quarto->pedido_produto_id;
                                 $totalAtsPedido += $quarto->ats_total_rate;
                             @endphp
-
-                        @endforeach {{-- end foreach quartos --}}
+                        @endforeach
+                        {{-- end foreach quartos --}}
 
                         @php
-
                             $PedidosIds = $quartos->unique('pedido_produto_id')->pluck('pedido_produto_id');
                             $ValoresPedidosProduto = App\ValorQuarto::whereIn('pedido_produto_id', $PedidosIds->toArray())->get();
-                            $profit = 0;
-                            foreach ($ValoresPedidosProduto as $valor) {
-                                $kick = ($valor->kick * $valor->valor_quarto) / 100;
-                                $valor_markup_kick = $valor->valor_quarto - $kick;
+                            $dados = renderPrintSubTotalSection($ValoresPedidosProduto, 'valor_quarto', $total, $subtotal, $m = true, $k = true, $t = true, $withAts = true);
 
-                                if ($valor->kick != null || $valor->markup != null) {
-                                    $subtotal += $valor_markup_kick;
-                                } else {
-                                    $subtotal += $valor->valor_quarto;
-                                }
-                                $profit += $valor->profit;
-                            }
-                            $total = $total + $subtotal;
+                            $total += $dados->total;
+                            $profit = $dados->profit;
                         @endphp
-                        @if (isset($kick_back) && $kick_back != 0)
-                            <tr>
-                                <td colspan="3"></td>
-                                <td style="border-top: 2px solid; text-align: right;"><b>KICKBACK:</b></td>
-                                <td style="border-top: 2px solid"> {{ number_format($kick_back, 2, ',', '.') }}</td>
-                            </tr>
-                        @endif
-                        <tr>
-                            <td colspan="3"></td>
-                            <td style="border-top: 2px solid; text-align: right;"><b>SUBTOTAL:</b></td>
-                            <td style="border-top: 2px solid">
-                                {{ number_format(floor($subtotal * 100) / 100, 2, ',', '.') }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="3"></td>
-                            <td style="border-top: 2px solid; text-align: right;"><b style="color:#FF5722">ATS RATE:</b>
-                            </td>
-                            <td style="border-top: 2px solid">
-                                {{ number_format(floor($totalAtsPedido * 100) / 100, 2, ',', '.') }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="3"></td>
-                            <td style="border-top: 2px solid; text-align: right;"><b
-                                    style="color:green; font-weight:bold">PROFIT:</b></td>
-                            <td style="border-top: 2px solid">
-                                {{ number_format(floor($profit * 100) / 100, 2, ',', '.') }}
-                            </td>
-                        </tr>
+                        {{ renderSingleDecimalTableRow('ATS RATE', '#FF5722', floor($totalAtsPedido * 100) / 100) }}
+                        {{ renderSingleDecimalTableRow('PROFIT', '#07a307', floor($profit * 100) / 100) }}
                     </table>
                 </div>
             </div>
         @endif
 
         <!--golf-->
-
         @if ($golfes->isEmpty() != true)
             <div class="container">
                 <div class="w3-row-padding w3-padding-32" style="border-top: 2px solid #00bad1;">
@@ -360,51 +236,16 @@
                                 $totalAtsPedido += $golfe->ats_total_rate;
                             @endphp
                         @endforeach
-                        @php
 
+                        @php
                             $PedidosIds = $golfes->unique('pedido_produto_id')->pluck('pedido_produto_id');
                             $ValoresPedidosProduto = App\ValorGolf::whereIn('pedido_produto_id', $PedidosIds->toArray())->get();
-                            $profit = 0;
-                            foreach ($ValoresPedidosProduto as $valor) {
-                                $kick = ($valor->kick * $valor->valor_golf) / 100;
-                                $valor_markup_kick = $valor->valor_golf - $kick;
-                                if ($valor->kick != null || $valor->markup != null) {
-                                    $subtotal += $valor_markup_kick;
-                                } else {
-                                    $subtotal += $valor->valor_golf;
-                                }
-                                $profit += $valor->profit;
-                            }
-                            $total = $total + $subtotal;
+                            $dados = renderPrintSubTotalSection($ValoresPedidosProduto, 'valor_golf', $total, $subtotal, $m = true, $k = true, $t = true, $withAts = true);
+                            $total += $dados->total;
+                            $profit = $dados->profit;
                         @endphp
-                        @if (isset($kick_back) && $kick_back != 0)
-                            <tr>
-                                <td colspan="3"></td>
-                                <td style="border-top: 2px solid; text-align: right;"><b>KICKBACK:</b></td>
-                                <td style="border-top: 2px solid"> {{ number_format($kick_back, 2, ',', '.') }}</td>
-                            </tr>
-                        @endif
-                        <tr>
-                            <td colspan="3"></td>
-                            <td style="border-top: 2px solid; text-align: right;"><b>SUBTOTAL:</b></td>
-                            <td style="border-top: 2px solid"> {{ number_format(floor($subtotal * 100) / 100, 2) }}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3"></td>
-                            <td style="border-top: 2px solid; text-align: right;"><b style="color:#FF5722">ATS RATE:</b>
-                            </td>
-                            <td style="border-top: 2px solid">
-                                {{ number_format(floor($totalAtsPedido * 100) / 100, 2, ',', '.') }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="3"></td>
-                            <td style="border-top: 2px solid; text-align: right;"><b
-                                    style="color:green; font-weight:bold">PROFIT:</b></td>
-                            <td style="border-top: 2px solid">
-                                {{ number_format(floor($profit * 100) / 100, 2, ',', '.') }}
-                            </td>
-                        </tr>
+                        {{ renderSingleDecimalTableRow('ATS RATE', '#FF5722', floor($totalAtsPedido * 100) / 100) }}
+                        {{ renderSingleDecimalTableRow('PROFIT', '#07a307', floor($profit * 100) / 100) }}
                     </table>
                 </div>
             </div>
@@ -477,64 +318,27 @@
                             <tr>
                                 <td colspan="5"><br></td>
                             </tr>
+
                             @php
-
                                 $old_produto_id = $uniqueTransfer->pedido_produto_id;
-
                                 $totalAtsPedido = \App\PedidoTransfer::find($uniqueTransfer->PedidoItemId)->atsTotalRate;
                             @endphp
                         @endforeach
+
                         @php
                             $PedidosIds = $transfers->unique('pedido_produto_id')->pluck('pedido_produto_id');
                             $ValoresPedidosProduto = App\ValorTransfer::whereIn('pedido_produto_id', $PedidosIds->toArray())->get();
-                            $profit = 0;
-                            foreach ($ValoresPedidosProduto as $valor) {
-                                $kick = ($valor->kick * $valor->valor_transfer) / 100;
-                                $valor_markup_kick = $valor->valor_transfer - $kick;
-                                if ($valor->kick != null || $valor->markup != null) {
-                                    $subtotal += $valor_markup_kick;
-                                } else {
-                                    $subtotal += $valor->valor_transfer;
-                                }
-                                $profit += $valor->profit;
-                            }
-                            $total = $total + $subtotal;
+                            $dados = renderPrintSubTotalSection($ValoresPedidosProduto, 'valor_transfer', $total, $subtotal, $m = true, $k = true, $t = true, $withAts = true);
+
+                            $total += $dados->total;
+                            $profit = $dados->profit;
                         @endphp
-                        @if (isset($kick_back) && $kick_back != 0)
-                            <tr>
-                                <td colspan="3"></td>
-                                <td style="border-top: 2px solid; text-align: right;"><b> €:</b></td>
-                                <td style="border-top: 2px solid"> {{ number_format($kick_back, 2, ',', '.') }}</td>
-                            </tr>
-                        @endif
-                        <tr>
-                            <td colspan="3"></td>
-                            <td style="border-top: 2px solid; text-align: right;"><b>SUBTOTAL:</b></td>
-                            <td style="border-top: 2px solid"> {{ number_format(floor($subtotal * 100) / 100, 2) }}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3"></td>
-                            <td style="border-top: 2px solid; text-align: right;"><b style="color:#FF5722">ATS RATE:</b>
-                            </td>
-                            <td style="border-top: 2px solid">
-                                {{ number_format(floor($totalAtsPedido * 100) / 100, 2, ',', '.') }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="3"></td>
-                            <td style="border-top: 2px solid; text-align: right;"><b
-                                    style="color:green; font-weight:bold">PROFIT:</b></td>
-                            <td style="border-top: 2px solid">
-                                {{ number_format(floor($profit * 100) / 100, 2, ',', '.') }}
-                            </td>
-                        </tr>
+                        {{ renderSingleDecimalTableRow('ATS RATE', '#FF5722', floor($totalAtsPedido * 100) / 100) }}
+                        {{ renderSingleDecimalTableRow('PROFIT', '#07a307', floor($profit * 100) / 100) }}
                     </table>
-
-
                 </div>
             </div>
         @endif
-
 
         <!--car-->
         @if ($carros->isEmpty() != true)
@@ -622,50 +426,15 @@
                         @endforeach
 
                         @php
-
                             $PedidosIds = $carros->unique('pedido_produto_id')->pluck('pedido_produto_id');
                             $ValoresPedidosProduto = App\ValorCar::whereIn('pedido_produto_id', $PedidosIds->toArray())->get();
-                            $profit = 0;
-                            foreach ($ValoresPedidosProduto as $valor) {
-                                $kick = ($valor->kick * $valor->valor_car) / 100;
-                                $valor_markup_kick = $valor->valor_car - $kick;
-                                if ($valor->kick != null || $valor->markup != null) {
-                                    $subtotal += $valor_markup_kick;
-                                } else {
-                                    $subtotal += $valor->valor_car;
-                                }
-                                $profit += $valor->profit;
-                            }
-                            $total = $total + $subtotal;
+                            $dados = renderPrintSubTotalSection($ValoresPedidosProduto, 'valor_car', $total, $subtotal, $m = true, $k = true, $t = true, $withAts = true);
+
+                            $total += $dados->total;
+                            $profit = $dados->profit;
                         @endphp
-                        @if (isset($kick_back) && $kick_back != 0)
-                            <tr>
-                                <td colspan="3"></td>
-                                <td style="border-top: 2px solid; text-align: right;"><b>KICKBACK €:</b></td>
-                                <td style="border-top: 2px solid"> {{ number_format($kick_back, 2, ',', '.') }}</td>
-                            </tr>
-                        @endif
-                        <tr>
-                            <td colspan="3"></td>
-                            <td style="border-top: 2px solid; text-align: right;"><b>SUBTOTAL €:</b></td>
-                            <td style="border-top: 2px solid"> {{ number_format(floor($subtotal * 100) / 100, 2) }}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3"></td>
-                            <td style="border-top: 2px solid; text-align: right;"><b style="color:#FF5722">ATS TOTAL €:</b>
-                            </td>
-                            <td style="border-top: 2px solid">
-                                {{ number_format(floor($totalAtsPedido * 100) / 100, 2, ',', '.') }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="3"></td>
-                            <td style="border-top: 2px solid; text-align: right;"><b
-                                    style="color:green; font-weight:bold">PROFIT €:</b></td>
-                            <td style="border-top: 2px solid">
-                                {{ number_format(floor($profit * 100) / 100, 2, ',', '.') }}
-                            </td>
-                        </tr>
+                        {{ renderSingleDecimalTableRow('ATS RATE', '#FF5722', floor($totalAtsPedido * 100) / 100) }}
+                        {{ renderSingleDecimalTableRow('PROFIT', '#07a307', floor($profit * 100) / 100) }}
                     </table>
                 </div>
             </div>
@@ -726,56 +495,20 @@
 
                             @php
                                 $old_produto_id = $bilhete->pedido_produto_id;
-                                $totalAtsPedido += $bilhete->ats_total_rate;
+                                $totalAtsPedido += \App\PedidoTicket::find($bilhete->PedidoItemId)->atsTotalRate;
                             @endphp
                         @endforeach
 
                         @php
-
                             $PedidosIds = $bilhetes->unique('pedido_produto_id')->pluck('pedido_produto_id');
                             $ValoresPedidosProduto = App\ValorTicket::whereIn('pedido_produto_id', $PedidosIds->toArray())->get();
-                            $profit = 0;
-                            foreach ($ValoresPedidosProduto as $valor) {
-                                $kick = ($valor->kick * $valor->valor_ticket) / 100;
-                                $valor_markup_kick = $valor->valor_ticket - $kick;
+                            $dados = renderPrintSubTotalSection($ValoresPedidosProduto, 'valor_ticket', $total, $subtotal, $m = true, $k = true, $t = true, $withAts = true);
 
-                                if ($valor->kick != null || $valor->markup != null) {
-                                    $subtotal += $valor_markup_kick;
-                                } else {
-                                    $subtotal += $valor->valor_ticket;
-                                }
-                                $profit += $valor->profit;
-                            }
-                            $total = $total + $subtotal;
+                            $total += $dados->total;
+                            $profit = $dados->profit;
                         @endphp
-                        @if (isset($kick_back) && $kick_back != 0)
-                            <tr>
-                                <td colspan="3"></td>
-                                <td style="border-top: 2px solid; text-align: right;"><b>KICKBACK €:</b></td>
-                                <td style="border-top: 2px solid"> {{ number_format($kick_back, 2, ',', '.') }}</td>
-                            </tr>
-                        @endif
-                        <tr>
-                            <td colspan="3"></td>
-                            <td style="border-top: 2px solid; text-align: right;"><b>SUBTOTAL €:</b></td>
-                            <td style="border-top: 2px solid"> {{ number_format(floor($subtotal * 100) / 100, 2) }}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3"></td>
-                            <td style="border-top: 2px solid; text-align: right;"><b style="color:#FF5722">ATS RATE €:</b>
-                            </td>
-                            <td style="border-top: 2px solid">
-                                {{ number_format(floor($totalAtsPedido * 100) / 100, 2, ',', '.') }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="3"></td>
-                            <td style="border-top: 2px solid; text-align: right;"><b
-                                    style="color:green; font-weight:bold">PROFIT €:</b></td>
-                            <td style="border-top: 2px solid">
-                                {{ number_format(floor($profit * 100) / 100, 2, ',', '.') }}
-                            </td>
-                        </tr>
+                        {{ renderSingleDecimalTableRow('ATS RATE', '#FF5722', floor($totalAtsPedido * 100) / 100) }}
+                        {{ renderSingleDecimalTableRow('PROFIT', '#07a307', floor($profit * 100) / 100) }}
                     </table>
                 </div>
             </div>
@@ -789,146 +522,22 @@
         @endphp
 
         <div class="container" style="margin-top:50px">
-            <div class="w3-row-padding w3-padding-28" style="border-top: 2px solid #0513ffe3;">
-                <table width="100%" style="margin-bottom: 15px;">
+            <div class="w3-row-padding w3-padding-32" style="border-top: 2px solid #0513ffe3; border-top-style: dashed">
+                <table width="100%">
                     <tr>
-                        <td width="60%"></td>
-                        <td width="25%" style="text-align: right; "><b style="color:#FF5722; font-weight:bold">TOTAL ATS
-                                RATE €:</b></td>
-                        <td width="15%" style="text-align:right">
-                            @php
-                                $totalAtsRate = $pedido_geral->valor - $pedido_geral->profit;
-                            @endphp
-                            {{-- @dd($pedido_geral, $extra_quarto->amount) --}}
-                            {{ number_format(floor($totalAtsRate * 100) / 100, 2, ',', '.') }}
-                        </td>
+                        <td width="30%"> &nbsp;</td>
+                        <td width="20%"> &nbsp;</td>
+                        <td width="20%"> &nbsp;</td>
+                        <td width="15%"> &nbsp;</td>
+                        <td width="15%"> &nbsp;</td>
                     </tr>
-                    <tr>
-                        <td width="60%"></td>
-                        <td width="25%" style="border-top: 2px solid; text-align: right; "><b
-                                style="color:green; font-weight:bold">TOTAL PROFIT €:</b></td>
-                        <td width="15%" style="border-top: 2px solid;text-align:right">
-                            {{ number_format($pedido_geral->profit - ($extra_quarto->amount ?? 0), 2, ',', '.') }}
-                        </td>
-                    </tr>
+                    {{ renderSingleDecimalTableRow('TOTAL PRODUCT', '#00', $total) }}
+                    {{ renderSingleDecimalTableRow('Payments', '#FF5752', $total_payments) }}
+                    {{ renderSingleDecimalTableRow('TOTAL ATS RATE', '#Fe1111', floor(($pedido_geral->valor - $pedido_geral->profit) * 100) / 100) }}
+                    {{ renderSingleDecimalTableRow('PROFIT', '#07a307', $pedido_geral->profit - ($extra_quarto->amount ?? 0)) }}
                 </table>
             </div>
         </div>
-    @endif
 
-    <!--ticket-->
-    @if ($bilhetes->isEmpty() != true)
-        <div class="container">
-            <div class="w3-row-padding w3-padding-32" style="border-top: 2px solid #00bad1;">
-                @php
-                    $subtotal = 0;
-                    $old_produto_id = 0;
-                    $kick_back = 0;
-                    $id = 0;
-                    $totalAtsPedido = 0;
-                @endphp
-                <table width="100%" style="margin-bottom: 15px;">
-                    @foreach ($bilhetes->sortBy('nome')->sortBy('data') as $bilhete)
-                        <tr>
-                            <td colspan="5"><b>Company:</b> {{ $bilhete->nome }}</td>
-                        </tr>
-                        <tr>
-                            <td width="30%"><b>Date:</b> {{ Carbon\Carbon::parse($bilhete->data)->format('d-m-y') }}
-                            </td>
-                            <td width="20%"><b>Hour:</b> {{ Carbon\Carbon::parse($bilhete->hora)->format('H:i') }}
-                            </td>
-                            <td width="20%"><b></td>
-                            <td width="15%"><b></td>
-                            <td width="15%"><b>Total €:</b> {{ number_format($bilhete->total, 2, ',', '.') }}</td>
-                        </tr>
-                        <tr>
-                            <td><b>Adults:</b> {{ $bilhete->adult }}</td>
-                            <td><b>Children:</b> {{ $bilhete->children }}</td>
-                            <td><b>Babies:</b> {{ $bilhete->babie }}</td>
-                            <td colspan="2"></td>
-                        </tr>
-                        @if (($old_produto_id != 0 && $old_produto_id != $bilhete->pedido_produto_id) || $loop->last)
-                            @foreach ($extras_bilhetes as $extra_bilhete)
-                                @if ($extra_bilhete->pedido_produto_id == $bilhete->pedido_produto_id)
-                                    <tr>
-                                        <td colspan="2"><b>Extra name:</b> {{ $extra_bilhete->name }}</td>
-                                        <td><b>Qty:</b> {{ $extra_bilhete->amount }}</td>
-                                        <td><b>Unit €:</b> {{ number_format($extra_bilhete->rate, 2, ',', '.') }}</td>
-                                        <td><b>Total €:</b> {{ number_format($extra_bilhete->total, 2, ',', '.') }}</td>
-                                    </tr>
-                                    @php $subtotal = $subtotal + $extra_bilhete->total; @endphp
-                                @endif
-                            @endforeach
-                        @endif
-                        <tr>
-                            <td colspan="3"><br>{!! html_entity_decode($bilhete->remark) !!}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="5"><br></td>
-                        </tr>
-
-                        @php
-                            $old_produto_id = $bilhete->pedido_produto_id;
-                            $totalAtsPedido += $bilhete->ats_total_rate;
-                        @endphp
-                    @endforeach
-
-                    @php
-
-                        $PedidosIds = $bilhetes->unique('pedido_produto_id')->pluck('pedido_produto_id');
-                        $ValoresPedidosProduto = App\ValorTicket::whereIn('pedido_produto_id', $PedidosIds->toArray())->get();
-                        $profit = 0;
-                        foreach ($ValoresPedidosProduto as $valor) {
-                            $kick = ($valor->kick * $valor->valor_ticket) / 100;
-                            $valor_markup_kick = $valor->valor_ticket - $kick;
-
-                            if ($valor->kick != null || $valor->markup != null) {
-                                $subtotal += $valor_markup_kick;
-                            } else {
-                                $subtotal += $valor->valor_ticket;
-                            }
-                            $profit += $valor->profit;
-                        }
-                        $total = $total + $subtotal;
-                    @endphp
-                    @if (isset($kick_back) && $kick_back != 0)
-                        <tr>
-                            <td colspan="3"></td>
-                            <td style="border-top: 2px solid; text-align: right;"><b>KICKBACK:</b></td>
-                            <td style="border-top: 2px solid"> {{ number_format($kick_back, 2, ',', '.') }}</td>
-                        </tr>
-                    @endif
-                    <tr>
-                        <td width="60%"></td>
-                        <td width="25%" style="border-top: 2px solid; text-align: right; "><b>TOTAL BOOKING €:</b></td>
-                        <td width="15%" style="border-top: 2px solid; text-align:right ">
-                            {{ number_format(floor(($pedido_geral->valor - ($extra_quarto->amount ?? 0)) * 100) / 100, 2, ',', '.') }}
-                        </td>
-                    </tr>
-                    @foreach ($payments as $payment)
-                        <tr>
-                            <td width="60%"></td>
-                            <td width="25%" style="border-top: 2px solid;text-align: right;">
-                                {{ Carbon\Carbon::parse($payment->date)->format('d/m/y') }} - <b>PAID €:</b></td>
-                            <td width="15%" style="border-top: 2px solid;text-align:right">
-                                {{ number_format($payment->payment, 2, ',', '.') }}</td>
-                        </tr>
-                    @endforeach
-                    <tr>
-                        <td width="60%"></td>
-                        <td width="25%" style="border-top: 2px solid; text-align: right;"><b>TOTAL PAID €:</b></td>
-                        <td width="15%" style="border-top: 2px solid;text-align:right">
-                            {{ number_format($total_payments, 2, ',', '.') }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td width="60%"></td>
-                        <td width="25%" style="border-top: 2px solid; text-align: right;"><b>DUE €:</b></td>
-                        <td width="15%" style="border-top: 2px solid;text-align:right">
-                            {{ number_format($total - $total_payments, 2, ',', '.') }}</td>
-                    </tr>
-                </table>
-            </div>
-        </div>
     @endsection
 @endif
