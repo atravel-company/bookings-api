@@ -18,11 +18,12 @@ class SendMailNovaReservaJob implements ShouldQueue
     private $pedido;
     private $prod;
 
-    public function __construct($mailData, $pedido, $prod)
+    public function __construct($mailData, $pedido, $prod, $destinationEmail = null)
     {
         $this->mailData = $mailData;
         $this->pedido = $pedido;
         $this->prod = $prod;
+        $this->destinationEmail = $destinationEmail;
     }
 
     /**
@@ -35,16 +36,20 @@ class SendMailNovaReservaJob implements ShouldQueue
         $mailData = $this->mailData;
         $pedido = $this->pedido;
         $prod = $this->prod;
+        $destinationEmail = $this->destinationEmail;
+
+        if ($destinationEmail == null) {
+            $destinationEmail = Auth::user()->email;
+        }
 
         Mail::send(
             'Admin.emails.product',
             $mailData,
-            function ($message) use ($pedido, $prod) {
+            function ($message) use ($pedido, $prod, $destinationEmail) {
                 $message
                     ->from('noreply@atsportugal.com', 'Ats Travel Reservation request')
                     ->to('sales@atravel.pt')
-                    ->cc(Auth::user()->email)
-                    // ->cc('henrique@oseubackoffice.com')
+                    ->cc($destinationEmail)
                     ->subject('Reservation request Nº: ' . $pedido->referencia . ' / ' . $pedido->lead_name . ' / ' . $prod['nome']);
             }
         );

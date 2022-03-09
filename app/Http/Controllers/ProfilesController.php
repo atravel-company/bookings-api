@@ -139,19 +139,10 @@ class ProfilesController extends Controller
             SendMailNovaReservaJob::dispatchAfterResponse(
                 $mailData,
                 $pedido,
-                $prod
+                $prod,
+                $request->email
             );
 
-            // //dd(Mail::failures());
-            // if (count(Mail::failures()) > 0) {
-            //     DB::table('pedido_produto')->where([['id', '=', $pedido_prod_id]])->update(['email_check' => 'fail']);
-            //     return response()->json(["errors" => "Falha no envio do Email.", 'error_code' => Mail::failures()], 422);
-            // } else {
-            //     DB::table('pedido_produto')->where([['id', '=', $pedido_prod_id]])->update(['email_check' => 'wait']);
-            //     return response()->json(["success" => "Email enviado com sucesso."], 201);
-            // }
-
-            // return response()->json(['result'=>Mail::failures()]);
             return response()->json('Email esta sendo processo. Serviço enviado com sucesso');
         } catch (Exception $ex) {
 
