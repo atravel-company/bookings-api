@@ -14,7 +14,10 @@ class PedidoGeral extends Model implements Auditable
     use \OwenIt\Auditing\Auditable;
 
     protected $fillable = ['id', 'type', 'lead_name', 'responsavel', 'referencia', 'user_id', 'valor', 'profit', 'status', 'deleted_at'];
+
+
     protected $appends = ['valortotalquarto', 'valortotalgolf', 'valortotaltransfer', 'valortotalcar', 'valortotalextras', 'valortotalkickback', 'TotalPagamento', 'ValorTotalProfitExtras', 'AtsTotalExtra', 'DataFirstServico', 'DataFirstServicoDesc'];
+
     protected $dates = ['DataFirstServico', 'DataFirstServicoDesc'];
 
     public function produtoss()
@@ -127,7 +130,7 @@ class PedidoGeral extends Model implements Auditable
         try {
             return number_format(floor($value * 100) / 100, 2, ".", ",");
         } catch (\Throwable $th) {
-           dd( $th );
+            dd($th);
         }
     }
 
@@ -174,7 +177,9 @@ class PedidoGeral extends Model implements Auditable
         $total = 0;
 
         foreach ($this->pedidoprodutos as $pedidoprodutos) {
-            if ($pedidoprodutos->valorgame) {$total += $pedidoprodutos->valorgame->valor_golf;}
+            if ($pedidoprodutos->valorgame) {
+                $total += $pedidoprodutos->valorgame->valor_golf;
+            }
         }
 
         return $this->formatDecimal($total);
@@ -185,7 +190,9 @@ class PedidoGeral extends Model implements Auditable
 
         $total = 0;
         foreach ($this->pedidoprodutos as $pedidoprodutos) {
-            if ($pedidoprodutos->valorcar) {$total += $pedidoprodutos->valorcar->valor_car;}
+            if ($pedidoprodutos->valorcar) {
+                $total += $pedidoprodutos->valorcar->valor_car;
+            }
         }
         return $this->formatDecimal($total);
     }
@@ -195,17 +202,17 @@ class PedidoGeral extends Model implements Auditable
 
         $total = 0;
         foreach ($this->pedidoprodutos as $pedidoprodutos) {
-            if ($pedidoprodutos->valortransfer) {$total += $pedidoprodutos->valortransfer->valor_transfer;}
+            if ($pedidoprodutos->valortransfer) {
+                $total += $pedidoprodutos->valortransfer->valor_transfer;
+            }
         }
         return $this->formatDecimal($total);
     }
 
     public function setExtasConfig()
     {
-
         $this->extras_total = 0;
         $this->profits_extras = 0;
-
         foreach ($this->pedidoprodutos as $pedidoprodutos) {
             if ($pedidoprodutos->extras) {
                 foreach ($pedidoprodutos->extras as $extra) {
@@ -262,7 +269,6 @@ class PedidoGeral extends Model implements Auditable
             if ($data) {
                 $response = $data->sortBy(function ($col) {
                     return $col->firstCheckin;
-
                 })->values()->first();
 
                 if ($response) {
@@ -273,7 +279,6 @@ class PedidoGeral extends Model implements Auditable
             } else {
                 return Carbon::parse("00/01/0009");
             }
-
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $ex) {
             dd($ex);
         }
@@ -287,7 +292,6 @@ class PedidoGeral extends Model implements Auditable
         if ($data) {
             $response = $data->sortByDesc(function ($col) {
                 return $col->firstCheckin;
-
             })->values()->first();
 
             if ($response) {
@@ -304,7 +308,9 @@ class PedidoGeral extends Model implements Auditable
     {
         $total = 0;
         foreach ($this->pedidoprodutos as $pedidoprodutos) {
-            if ($pedidoprodutos->valorquarto) {$total = $pedidoprodutos->valorquarto->valor_quarto - $pedidoprodutos->valorquarto->profit;}
+            if ($pedidoprodutos->valorquarto) {
+                $total = $pedidoprodutos->valorquarto->valor_quarto - $pedidoprodutos->valorquarto->profit;
+            }
         }
         return $this->formatDecimal($total);
     }
@@ -313,7 +319,9 @@ class PedidoGeral extends Model implements Auditable
     {
         $total = 0;
         foreach ($this->pedidoprodutos as $pedidoprodutos) {
-            if ($pedidoprodutos->valorgame) {$total = $pedidoprodutos->valorgame->valor_golf - $pedidoprodutos->valorgame->profit;}
+            if ($pedidoprodutos->valorgame) {
+                $total = $pedidoprodutos->valorgame->valor_golf - $pedidoprodutos->valorgame->profit;
+            }
         }
         return $this->formatDecimal($total);
     }
@@ -322,7 +330,9 @@ class PedidoGeral extends Model implements Auditable
     {
         $total = 0;
         foreach ($this->pedidoprodutos as $pedidoprodutos) {
-            if ($pedidoprodutos->valortransfer) {$total = $pedidoprodutos->valortransfer->valor_transfer - $pedidoprodutos->valortransfer->profit;}
+            if ($pedidoprodutos->valortransfer) {
+                $total = $pedidoprodutos->valortransfer->valor_transfer - $pedidoprodutos->valortransfer->profit;
+            }
         }
         return $this->formatDecimal($total);
     }
@@ -341,7 +351,7 @@ class PedidoGeral extends Model implements Auditable
     public function getAtsTotalExtraAttribute()
     {
 
-        try{
+        try {
 
             $temp = str_replace(".", "@", $this->valortotalextras);
             $temp = str_replace(",", "", $temp);
@@ -353,12 +363,9 @@ class PedidoGeral extends Model implements Auditable
             $val2 = $temp;
 
             return $this->formatDecimal($val - $val2);
-
-        }catch(Exception $ex){
+        } catch (Exception $ex) {
 
             dd("pedidogeral execption", $ex);
         }
-
     }
-
 }
