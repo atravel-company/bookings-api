@@ -42,14 +42,21 @@ class SendMailNovaReservaJob implements ShouldQueue
             $destinationEmail = Auth::user()->email;
         }
 
+        if(Auth::user()){
+            $userEmail = Auth::user()->email;
+        }else{
+            $userEmail = '';
+        }
+
         Mail::send(
             'Admin.emails.product',
             $mailData,
-            function ($message) use ($pedido, $prod, $destinationEmail) {
+            function ($message) use ($pedido, $prod, $destinationEmail, $userEmail) {
                 $message
                     ->from('noreply@atsportugal.com', 'Ats Travel Reservation request')
                     ->to('sales@atravel.pt')
-                    ->cc($destinationEmail)
+                    // ->cc($destinationEmail)
+                    ->cc($userEmail)
                     ->subject('Reservation request Nº: ' . $pedido->referencia . ' / ' . $pedido->lead_name . ' / ' . $prod['nome']);
             }
         );

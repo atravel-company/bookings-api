@@ -817,7 +817,7 @@ $users_api_transfergest = [
                                             <div class="w3-col l12">
                                                 @if($pedido->status=='Edited' || $pedido->status=='Waiting
                                                 Confirmation')
-                                                @if(in_array(Auth::user()->email, $users_array))
+                                                {{-- @if(in_array(Auth::user()->email, $users_array)) --}}
                                                 <span class="w3-right">
 
                                                     <span class="w3-button w3-gray"
@@ -825,7 +825,7 @@ $users_api_transfergest = [
                                                         Send email
                                                     </span>
                                                 </span>
-                                                @endif
+                                                {{-- @endif --}}
                                                 @endif
                                             </div>
 
