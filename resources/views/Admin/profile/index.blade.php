@@ -817,7 +817,7 @@ $users_api_transfergest = [
                                             <div class="w3-col l12">
                                                 @if($pedido->status=='Edited' || $pedido->status=='Waiting
                                                 Confirmation')
-                                                {{-- @if(in_array(Auth::user()->email, $users_array)) --}}
+                                                @if(in_array(Auth::user()->email, $users_array))
                                                 <span class="w3-right">
 
                                                     <span class="w3-button w3-gray"
@@ -825,7 +825,7 @@ $users_api_transfergest = [
                                                         Send email
                                                     </span>
                                                 </span>
-                                                {{-- @endif --}}
+                                                @endif
                                                 @endif
                                             </div>
 
@@ -856,27 +856,27 @@ $users_api_transfergest = [
 
                                             <div class="w3-col l12">
                                                 @if($pedido->status=='Confirmed')
-                                                @if(in_array(Auth::user()->email, $users_array))
-                                                <span class="w3-right" style="margin-left: 1%">
-                                                    <a data-url="{{ route('profile.download.excel.roomlist', $pedido->id) }}"
-                                                        href="{{ route('profile.download.excel.roomlist', $pedido->id) }}"
-                                                        data-pedido="{{$pedido->id}}"
-                                                        data-button="downloadExcelRoomList"
-                                                        class="btn btn-danger btn-xs" target="_blank">Excel Print RoomList</a>
-                                                </span>
-                                                {{-- <span class="w3-right" style="margin-left: 1%">
-                                                    <a data-url="{{ route('export.excel') }}"
-                                                        href="{{ route('export.excel') }}"
-                                                        data-pedido="{{$pedido->id}}"
-                                                        data-button="downloadExcelRoomList"
-                                                        class="btn btn-danger btn-xs" target="_blank">Excel Print RoomList</a>
-                                                </span> --}}
+                                                    @if(in_array(Auth::user()->email, $users_array))
+                                                    <span class="w3-right" style="margin-left: 1%">
+                                                        <a data-url="{{ route('profile.download.excel.roomlist', $pedido->id) }}"
+                                                            href="{{ route('profile.download.excel.roomlist', $pedido->id) }}"
+                                                            data-pedido="{{$pedido->id}}"
+                                                            data-button="downloadExcelRoomList"
+                                                            class="btn btn-danger btn-xs" target="_blank">Excel Print RoomList</a>
+                                                    </span>
+                                                    {{-- <span class="w3-right" style="margin-left: 1%">
+                                                        <a data-url="{{ route('export.excel') }}"
+                                                            href="{{ route('export.excel') }}"
+                                                            data-pedido="{{$pedido->id}}"
+                                                            data-button="downloadExcelRoomList"
+                                                            class="btn btn-danger btn-xs" target="_blank">Excel Print RoomList</a>
+                                                    </span> --}}
 
-                                                <span class="w3-right">
-                                                    <a href="{{ route('profile.voucher',['pedido_produto_id'=>$produto[$key][$key1]->pivot->id,'pedido_id'=>$pedido->id]) }}"
-                                                        class="btn btn-info btn-xs">Voucher</a>
-                                                </span>
-                                                @endif
+                                                    <span class="w3-right">
+                                                        <a href="{{ route('profile.voucher',['pedido_produto_id'=>$produto[$key][$key1]->pivot->id,'pedido_id'=>$pedido->id]) }}"
+                                                            class="btn btn-info btn-xs">Voucher</a>
+                                                    </span>
+                                                    @endif
                                                 @endif
                                             </div>
 
