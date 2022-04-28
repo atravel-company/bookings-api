@@ -244,7 +244,6 @@
                                 @else
                                     <td>{{$quarto['total']}} €</td>
                                 @endif
-                                <!-- <td>{{App\PedidoQuartoRoom::where('pedido_quarto_id', '=', $quarto['id'])->first()['remark']}}</td> -->
 
                                 @if(in_array(Auth::user()->email, $users_array))
                                     <td>
