@@ -305,59 +305,12 @@ class ProfilesController extends Controller
     public function export(Request $request)
     {
         try {
-
-            // return view( 'Admin.profile.Excel.roomlist', [
-            //     'pedido' => PedidoGeral::find( $request->id)
-            // ] );
-
             return Excel::download(new RoomsListExport($request->id), 'Export_' . Carbon::now()->format("Y-m-d H:i") . ".xls");
         } catch (Exception $th) {
+            dd($th);
             throw new Exception($th, 500);
         }
     }
-
-    // public function excelRoomsList($id = null)
-    // {
-
-    //     $pedido = PedidoGeral::find($id);
-
-    //     foreach ($pedido->produtos as $p) {
-    //         if ($p->quartos()->count() > 0) {
-    //             foreach ($p->quartos()->get() as $q) {
-    //                 $quartos[] = $q;
-    //             }
-    //         }
-    //     }
-
-    //     Excel::create('proforma_export_', function ($excel) use ($pedido) {
-
-    //         $excel->sheet('reports_room_list', function ($sheet) use ($pedido) {
-
-    //             $sheet->loadView('Admin.profile.Excel.roomlist')->with(['pedido' => $pedido, 'usuario' => Auth::user()]);
-
-    //             $sheet->cell('A1:A6', function ($cell) {
-    //                 $cell->setBorder('left');
-    //             });
-
-    //             $sheet->cell('A2:A6', function ($cell) {
-    //                 $cell->setFontColor('#005e69');
-    //                 $cell->setFontWeight('bold');
-    //             });
-
-    //             $sheet->cell('B1:B6', function ($cell) {
-    //                 $cell->setAlignment('right');
-    //             });
-
-    //             $sheet->cell('A1', function ($cell) {
-    //                 $cell->setAlignment('left');
-    //                 $cell->setFontWeight('bold');
-    //                 $cell->setFontSize(17);
-    //             });
-
-    //         });
-
-    //     })->export("xlsx");
-    // }
 
     public function removeProducts(Request $request)
     {

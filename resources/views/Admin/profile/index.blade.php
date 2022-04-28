@@ -5,9 +5,9 @@
 $users_array = [ 'sales@atravel.pt', 'incoming@atravel.pt', 'transfers@atravel.pt',
 'bookings@atravel.pt','accounts@atravel.pt'];
 $users_api_transfergest = [
-    'sales@atravel.pt',
-    'incoming@atravel.pt',
-    'bookings@atravel.pt',
+'sales@atravel.pt',
+'incoming@atravel.pt',
+'bookings@atravel.pt',
 ];
 @endphp
 
@@ -253,11 +253,11 @@ $users_api_transfergest = [
                     </div>
                     <div class="info-agency">
                         <b style="color: #333; font-size:15px; font-weight: bold"> Created: </b>
-                        <span
-                            style="font-size:15px; font-weight: bold">{{  Carbon\Carbon::parse( $pedido->created_at)->format('d/m/y') }}</span>
+                        <span style="font-size:15px; font-weight: bold">{{ Carbon\Carbon::parse(
+                            $pedido->created_at)->format('d/m/y') }}</span>
                         <b style="color: #333; font-size:15px; font-weight: bold "> / Check-In: </b>
                         <span style="font-size:15px; font-weight: bold">
-                            {{  Carbon\Carbon::parse($pedido->DataFirstServico)->format('d/m/Y') }}
+                            {{ Carbon\Carbon::parse($pedido->DataFirstServico)->format('d/m/Y') }}
                             {{-- {{ $pedido->id }} --}}
                         </span>
                     </div>
@@ -292,136 +292,137 @@ $users_api_transfergest = [
             <div id="panel{{$key}}" class="panel"
                 style="overflow-y: auto; background-color:#333; font-size:15px; font-weight: bold">
                 <p>
-                    <div class="w3-row w3-padding">
-                        <div class="w3-col l12">
-                            @php $i = 0; @endphp
+                <div class="w3-row w3-padding">
+                    <div class="w3-col l12">
+                        @php $i = 0; @endphp
 
-                            @foreach($pedido->produtoss as $key1 => $produtoss)
+                        @foreach($pedido->produtoss as $key1 => $produtoss)
 
-                            @php
-                            $tempProdutoKey = collect( $produto[$key] )->map(function ($q) {
-                            return (object)$q;
-                            });
+                        @php
+                        $tempProdutoKey = collect( $produto[$key] )->map(function ($q) {
+                        return (object)$q;
+                        });
 
-                            $produto[$key][$key1] = $tempProdutoKey[$key1];
+                        $produto[$key][$key1] = $tempProdutoKey[$key1];
 
-                            $produto[$key][$key1]->pivot = (object)$produto[$key][$key1]->pivot;
-                            @endphp
+                        $produto[$key][$key1]->pivot = (object)$produto[$key][$key1]->pivot;
+                        @endphp
 
-                            <!-- MENU DE INFORMAÇÃO GERAL DE PRODUTO -->
-                            @if(in_array(Auth::user()->email, $users_array))
+                        <!-- MENU DE INFORMAÇÃO GERAL DE PRODUTO -->
+                        @if(in_array(Auth::user()->email, $users_array))
 
-                            <div style="background-color: {{ $button_color }};height: 30px;padding: 5px;"
-                                id="product{{$pedido->id}}{{$produto[$key][$key1]->pivot->id}}"
-                                data-pedido-geral-id="{{$pedido->id}}" data-key="{{$key}}"
-                                data-product-id="{{$produto[$key][$key1]->pivot->id}}"
-                                class="accordion accordion-product">
-                                <span style=" color: white;">
-                                    <div class="w3-col l3"><b><i style="color:#333;" class="fa fa-university fa-1x"
-                                                aria-hidden="true" title="Product"></i>
-                                        </b>{{$produto[$key][$key1]->nome}} </div>
+                        <div style="background-color: {{ $button_color }};height: 30px;padding: 5px;"
+                            id="product{{$pedido->id}}{{$produto[$key][$key1]->pivot->id}}"
+                            data-pedido-geral-id="{{$pedido->id}}" data-key="{{$key}}"
+                            data-product-id="{{$produto[$key][$key1]->pivot->id}}" class="accordion accordion-product">
+                            <span style=" color: white;">
+                                <div class="w3-col l3"><b><i style="color:#333;" class="fa fa-university fa-1x"
+                                            aria-hidden="true" title="Product"></i>
+                                    </b>{{$produto[$key][$key1]->nome}} </div>
 
-                                    @php
-                                    $suppliers = App\SupplierContact::where('supplier_id', '=',
-                                    $produto[$key][$key1]->supplier_id)->where('type', '=', 'Reservations')->get();
-                                    @endphp
+                                @php
+                                $suppliers = App\SupplierContact::where('supplier_id', '=',
+                                $produto[$key][$key1]->supplier_id)->where('type', '=', 'Reservations')->get();
+                                @endphp
 
-                                    <div class="w3-col l4 m8">
-                                        <b><i style="color:#333; font-weight: bold; font-size: 18px"
-                                                class="fa fa-envelope fa-1x" aria-hidden="true"></i> </b>
-                                        <select id="email_{{$produto[$key][$key1]->id}}_{{$pedido->id}}"
-                                            style="width: 362px; color:#000!important;">
-                                            <option
-                                                value="{{$produto[$key][$key1]->email ? $produto[$key][$key1]->email : " - "}}">
-                                                {{$produto[$key][$key1]->email ? $produto[$key][$key1]->email."(".$produto[$key][$key1]->nome.")" : " - "}}
-                                            </option>
-                                            @foreach($suppliers as $supplier)
-                                            <option value="{{$supplier->email}}" style="color:#000!important;">
-                                                {{$supplier->email}} ({{$supplier->name}})
-                                            </option>
-                                            @endforeach
-                                            <option value="sales@atravel.pt">sales@atravel.pt</option>
-                                        </select>
+                                <div class="w3-col l4 m8">
+                                    <b><i style="color:#333; font-weight: bold; font-size: 18px"
+                                            class="fa fa-envelope fa-1x" aria-hidden="true"></i> </b>
+                                    <select id="email_{{$produto[$key][$key1]->id}}_{{$pedido->id}}"
+                                        style="width: 362px; color:#000!important;">
+                                        <option value="{{$produto[$key][$key1]->email ? $produto[$key][$key1]->email : "
+                                            - "}}">
+                                            {{$produto[$key][$key1]->email ?
+                                            $produto[$key][$key1]->email."(".$produto[$key][$key1]->nome.")" : " - "}}
+                                        </option>
+                                        @foreach($suppliers as $supplier)
+                                        <option value="{{$supplier->email}}" style="color:#000!important;">
+                                            {{$supplier->email}} ({{$supplier->name}})
+                                        </option>
+                                        @endforeach
+                                        <option value="sales@atravel.pt">sales@atravel.pt</option>
+                                    </select>
+                                </div>
+
+                                <div class="w3-col l1 m4"><b><i style="color:#333;"
+                                            class="fa fa-exclamation-triangle fa-1x" aria-hidden="true"></i>
+                                    </b>{{$produto[$key][$key1]->pivot->email_check ?
+                                    $produto[$key][$key1]->pivot->email_check : " - "}}
+                                </div>
+                                <div class="w3-col l2 m4">
+                                    <b style="color:#333; font-weight: bold; font-size: 18px ">Total
+                                        Product:&nbsp;&nbsp;</b>
+                                    @if(in_array(Auth::user()->email, $users_array))
+
+                                    <div style="display:inline-flex; font-weight: bold; font-size: 18px"
+                                        id="totalProduct{{$key}}_{{$key1}}">
+                                        0.00
                                     </div>
-
-                                    <div class="w3-col l1 m4"><b><i style="color:#333;"
-                                                class="fa fa-exclamation-triangle fa-1x" aria-hidden="true"></i>
-                                        </b>{{$produto[$key][$key1]->pivot->email_check ? $produto[$key][$key1]->pivot->email_check : " - "}}
+                                    <div>
+                                        <span
+                                            onclick="enviaProduct('{{$produto[$key][$key1]->pivot->id}}','{{$key}}','{{$key1}}')"
+                                            class="buttonn{{$key}}"></span>
                                     </div>
-                                    <div class="w3-col l2 m4">
-                                        <b style="color:#333; font-weight: bold; font-size: 18px ">Total
-                                            Product:&nbsp;&nbsp;</b>
-                                        @if(in_array(Auth::user()->email, $users_array))
+                                    @else
 
-                                        <div style="display:inline-flex; font-weight: bold; font-size: 18px"
-                                            id="totalProduct{{$key}}_{{$key1}}">
-                                            0.00
-                                        </div>
-                                        <div>
-                                            <span
-                                                onclick="enviaProduct('{{$produto[$key][$key1]->pivot->id}}','{{$key}}','{{$key1}}')"
-                                                class="buttonn{{$key}}"></span>
-                                        </div>
-                                        @else
+                                    <div>{{$produto[$key][$key1]->pivot->valor}}&nbsp;€&nbsp;</div>
+                                    @endif
+                                </div>
+                                <div class="w3-col l2 m4">
+                                    <b style="color:#333; font-weight: bold; font-size: 18px ">Product
+                                        Profit:&nbsp;&nbsp;</b>
+                                    <span style="display:inline-flex; font-weight: bold; font-size: 18px"
+                                        id="profitProduct{{$key}}_{{$key1}}">
+                                        0.00
+                                    </span>
+                                    <span style="display:none; font-weight: bold; font-size: 18px "
+                                        id="profitProduct_hidden{{$key}}_{{$key1}}">
+                                        0.00
+                                    </span>
 
-                                        <div>{{$produto[$key][$key1]->pivot->valor}}&nbsp;€&nbsp;</div>
-                                        @endif
-                                    </div>
-                                    <div class="w3-col l2 m4">
-                                        <b style="color:#333; font-weight: bold; font-size: 18px ">Product
-                                            Profit:&nbsp;&nbsp;</b>
-                                        <span style="display:inline-flex; font-weight: bold; font-size: 18px"
-                                            id="profitProduct{{$key}}_{{$key1}}">
-                                            0.00
-                                        </span>
-                                        <span style="display:none; font-weight: bold; font-size: 18px "
-                                            id="profitProduct_hidden{{$key}}_{{$key1}}">
-                                            0.00
-                                        </span>
+                                    <span class="mail{{$key}}"
+                                        onclick="mail('{{collect($produto[$key][$key1])}}', {{$produto[$key][$key1]->id}}, {{$pedido->id}})"></span>
+                                </div>
+                            </span>
+                        </div>
 
-                                        <span class="mail{{$key}}"
-                                            onclick="mail('{{collect($produto[$key][$key1])}}', {{$produto[$key][$key1]->id}}, {{$pedido->id}})"></span>
-                                    </div>
-                                </span>
-                            </div>
+                        @else
+                        <button class="accordion accordion-product">
+                            <span>
+                                <b>Product: </b>{{$produto[$key][$key1]->nome}}
+                            </span>
+                        </button>
+                        @endif
+                        <!-- MENU DE INFORMAÇÃO GERAL DE PRODUTO -->
 
-                            @else
-                            <button class="accordion accordion-product">
-                                <span>
-                                    <b>Product: </b>{{$produto[$key][$key1]->nome}}
-                                </span>
-                            </button>
-                            @endif
-                            <!-- MENU DE INFORMAÇÃO GERAL DE PRODUTO -->
-
-                            <div class="panel" style="overflow-y: auto;">
-                                <p>
-                                    <div class="w3-row w3-padding">
-                                        <div class="w3-col l12">
-                                            @include('Admin.profile.struct.rooms')
-                                            <!-- ROOMS -->
-                                            @include('Admin.profile.struct.golfs')
-                                            <!-- GOLF -->
-                                            @include('Admin.profile.struct.transfer')
-                                            <!-- TRANSFERS -->
-                                            @include('Admin.profile.struct.car')
-                                            <!-- RENT A CAR -->
-                                            @include('Admin.profile.struct.tickets')
-                                            <!-- TICKETS -->
-                                        </div>
+                        <div class="panel" style="overflow-y: auto;">
+                            <p>
+                            <div class="w3-row w3-padding">
+                                <div class="w3-col l12">
+                                    @include('Admin.profile.struct.rooms')
+                                    <!-- ROOMS -->
+                                    @include('Admin.profile.struct.golfs')
+                                    <!-- GOLF -->
+                                    @include('Admin.profile.struct.transfer')
+                                    <!-- TRANSFERS -->
+                                    @include('Admin.profile.struct.car')
+                                    <!-- RENT A CAR -->
+                                    @include('Admin.profile.struct.tickets')
+                                    <!-- TICKETS -->
+                                </div>
 
 
 
 
-                                        <div class="w3-row w3-padding">
-                                            <div class="w3-col l2">&nbsp;</div>
+                                <div class="w3-row w3-padding">
+                                    <div class="w3-col l2">&nbsp;</div>
 
-                                            <div class="w3-col l2">
-                                                <span class="w3-right">
-                                                    <table frame="box">
-                                                        <tr>
-                                                            <script type="text/javascript">
-                                                                /* $('.accordion-agency').click(function(){
+                                    <div class="w3-col l2">
+                                        <span class="w3-right">
+                                            <table frame="box">
+                                                <tr>
+                                                    <script type="text/javascript">
+                                                        /* $('.accordion-agency').click(function(){
                                                                                 $('this').closest('button').
                                                                             }); */
 
@@ -591,21 +592,21 @@ $users_api_transfergest = [
                                                                                 $('.grandTotal{{$key}}').html(parseFloat(grand).toFixed(2));
                                                                                 // var prev = $('grandTotal{{$key}}').data('val');
                                                                             });
-                                                            </script>
-                                                        </tr>
-                                                    </table>
-                                                </span>
-                                            </div>
+                                                    </script>
+                                                </tr>
+                                            </table>
+                                        </span>
+                                    </div>
 
 
 
-                                            <div class="w3-col l2">
-                                                @if(in_array(Auth::user()->email, $users_array))
-                                                <span class="w3-right">
-                                                    <table frame="box">
-                                                        <tr>
-                                                            <script type="text/javascript">
-                                                                var valorKickback;
+                                    <div class="w3-col l2">
+                                        @if(in_array(Auth::user()->email, $users_array))
+                                        <span class="w3-right">
+                                            <table frame="box">
+                                                <tr>
+                                                    <script type="text/javascript">
+                                                        var valorKickback;
                                                                                 var valorMarkup;
 
                                                                                 $('#totalProfitAcc{{$key}}_{{$key1}}, #kickbackAcc{{$key}}_{{$key1}}, #markupAcc{{$key}}_{{$key1}}').bind("DOMSubtreeModified",function(){
@@ -806,306 +807,294 @@ $users_api_transfergest = [
                                                                                     $('#grandProfit{{$key}}').html(parseFloat(grand2).toFixed(2));
 
                                                                                 });
-                                                            </script>
-                                                        </tr>
-                                                    </table>
-                                                </span>
-                                                @endif
-                                            </div>
-
-
-                                            <div class="w3-col l12">
-                                                @if($pedido->status=='Edited' || $pedido->status=='Waiting
-                                                Confirmation')
-                                                @if(in_array(Auth::user()->email, $users_array))
-                                                <span class="w3-right">
-
-                                                    <span class="w3-button w3-gray"
-                                                        onclick="mail('{{ collect($produto[$key][$key1]) }}', {{$produto[$key][$key1]->id}}, {{$pedido->id}})">
-                                                        Send email
-                                                    </span>
-                                                </span>
-                                                @endif
-                                                @endif
-                                            </div>
-
-
-                                            <div class="w3-col l12">
-                                                @if($pedido->status=='Edited' || $pedido->status=='Waiting
-                                                Confirmation')
-                                                @if(in_array(Auth::user()->email, $users_array))
-                                                @if($produto[$key][$key1]->pivot->email_check=='wait')
-                                                <span class="w3-right">
-                                                    <table frame="box">
-                                                        <tr>
-                                                            <td>
-                                                                <span class="w3-button w3-green"
-                                                                    onclick="mailConf({{ collect($produto[$key][$key1]) }})">Confirmed
-                                                                    email</span>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </span>
-                                                @endif
-                                                @endif
-                                                @endif
-                                            </div>
-
-
-
-
-                                            <div class="w3-col l12">
-                                                @if($pedido->status=='Confirmed')
-                                                    @if(in_array(Auth::user()->email, $users_array))
-                                                    <span class="w3-right" style="margin-left: 1%">
-                                                        <a data-url="{{ route('profile.download.excel.roomlist', $pedido->id) }}"
-                                                            href="{{ route('profile.download.excel.roomlist', $pedido->id) }}"
-                                                            data-pedido="{{$pedido->id}}"
-                                                            data-button="downloadExcelRoomList"
-                                                            class="btn btn-danger btn-xs" target="_blank">Excel Print RoomList</a>
-                                                    </span>
-                                                    {{-- <span class="w3-right" style="margin-left: 1%">
-                                                        <a data-url="{{ route('export.excel') }}"
-                                                            href="{{ route('export.excel') }}"
-                                                            data-pedido="{{$pedido->id}}"
-                                                            data-button="downloadExcelRoomList"
-                                                            class="btn btn-danger btn-xs" target="_blank">Excel Print RoomList</a>
-                                                    </span> --}}
-
-                                                    <span class="w3-right">
-                                                        <a href="{{ route('profile.voucher',['pedido_produto_id'=>$produto[$key][$key1]->pivot->id,'pedido_id'=>$pedido->id]) }}"
-                                                            class="btn btn-info btn-xs">Voucher</a>
-                                                    </span>
-                                                    @endif
-                                                @endif
-                                            </div>
-
-                                        </div>
+                                                    </script>
+                                                </tr>
+                                            </table>
+                                        </span>
+                                        @endif
                                     </div>
-                                </p>
+
+
+                                    <div class="w3-col l12">
+                                        @if($pedido->status=='Edited' || $pedido->status=='Waiting
+                                        Confirmation')
+                                        @if(in_array(Auth::user()->email, $users_array))
+                                        <span class="w3-right">
+
+                                            <span class="w3-button w3-gray"
+                                                onclick="mail('{{ collect($produto[$key][$key1]) }}', {{$produto[$key][$key1]->id}}, {{$pedido->id}})">
+                                                Send email
+                                            </span>
+                                        </span>
+                                        @endif
+                                        @endif
+                                    </div>
+
+
+                                    <div class="w3-col l12">
+                                        @if($pedido->status=='Edited' || $pedido->status=='Waiting
+                                        Confirmation')
+                                        @if(in_array(Auth::user()->email, $users_array))
+                                        @if($produto[$key][$key1]->pivot->email_check=='wait')
+                                        <span class="w3-right">
+                                            <table frame="box">
+                                                <tr>
+                                                    <td>
+                                                        <span class="w3-button w3-green"
+                                                            onclick="mailConf({{ collect($produto[$key][$key1]) }})">Confirmed
+                                                            email</span>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </span>
+                                        @endif
+                                        @endif
+                                        @endif
+                                    </div>
+
+
+                                    <div class="w3-col l12">
+                                        @if($pedido->status=='Confirmed')
+                                        @if(in_array(Auth::user()->email, $users_array))
+                                        <span class="w3-right" style="margin-left: 1%">
+                                            <a data-url="{{ route('profile.download.excel.roomlist', $pedido->id) }}"
+                                                href="{{ route('profile.download.excel.roomlist', $pedido->id) }}"
+                                                data-pedido="{{$pedido->id}}" data-button="downloadExcelRoomList"
+                                                class="btn btn-danger btn-xs" target="_blank">Excel Print RoomList</a>
+                                        </span>
+                                        @endif
+
+                                        <span class="w3-right">
+                                            <a href="{{ route('profile.voucher',['pedido_produto_id'=>$produto[$key][$key1]->pivot->id,'pedido_id'=>$pedido->id]) }}"
+                                                class="btn btn-info btn-xs">Voucher</a>
+                                        </span>
+                                        @endif
+                                    </div>
+
+                                </div>
                             </div>
-
-
-                            @php $i++; @endphp
-
-                            @endforeach
+                            </p>
                         </div>
 
 
+                        @php $i++; @endphp
 
-                        @php $total_payments = 0; @endphp
-
-                        @if(isset($pedido->getTotalPayment))
-
-                        @if( isset($pedido->getTotalPayment) == false )
-                        @php $total_payments = 0; @endphp
-                        @else
-                        @foreach($pedido->getTotalPayment as $payments)
-                        @php $total_payments += (float) $payments['payment']; @endphp
                         @endforeach
-                        @endif
-                        @else
-
-                        @if(!isset($pedido->get_total_payment))
-                        @php $total_payments = 0; @endphp
-                        @else
-                        @foreach($pedido->get_total_payment as $payments)
-                        @php $total_payments += (float) $payments['payment']; @endphp
-                        @endforeach
-                        @endif
-                        @endif
-
-                        @php
-
-                        $total_pedido = 0;
-                        foreach($pedido->produtos as $produto_valor){
-                        $total_pedido += (float) $produto_valor['valor'];
-                        }
+                    </div>
 
 
-                        $total_payments = (float) $total_payments;
-                        $total_pedido = (float) $total_pedido;
 
-                        if($total_pedido < $total_payments){ $background_button="#green" ; $color_button="#333" ;
-                            }elseif($total_pedido==$total_payments){ $background_button="#4CAF50" ; $color_button="#333"
-                            ; } else{ $background_button="#eee" ; $color_button="#333" ; } @endphp <div
-                            class="w3-row w3-padding">
-                            <div class="w3-col l12 pull-right">
-                                @if(in_array(Auth::user()->email, $users_array))
-                                <div class="w3-left col-lg-3">
-                                    <label style="color:#fff; font-size:20px; font-weight: bold "><b>Total Paid:
-                                        </b></label>
-                                    <div class="input-group">
-                                        <input
-                                            style="background-color:{{$background_button}};color:{{$color_button}}; font-size:20px; font-weight: bold"
-                                            type="text" value="{{$total_payments}}" id="total-paid{{$key}}"
-                                            class="form-control w3-block" name="total-paid" disabled>
-                                        <button type="hidden" id="total_pedido"
-                                            class="grandTotal{{$key}} hidden"></button>
-                                        <span class="input-group-btn">
-                                            <button data-agency="{{$geral[$key]['nome']}}" data-id="{{$pedido->id}}"
-                                                data-total="{{$pedido->valor}}" data-leadname="{{$pedido->lead_name}}"
-                                                class="payments-modal-btn btn btn-default" data-toggle="modal"
-                                                data-target="#payments-modal" aria-hidden="true" type="button">See
-                                                all</button>
-                                        </span>
-                                    </div><!-- /input-group -->
-                                </div>
-                                @endif
-                                <span class="w3-right">
-                                    <table frame="box">
-                                        <tr>
+                    @php $total_payments = 0; @endphp
 
-                                            @if(in_array(Auth::user()->email, $users_api_transfergest))
-                                            @if(isset($transfers[$key]))
+                    @if(isset($pedido->getTotalPayment))
 
-                                            <td>
-                                                <span title="Send All transfers to transfergest"
-                                                    class="w3-button w3-block sendTransfergest"
-                                                    data-pedidogeral-id="{{  $pedido->id }}"
-                                                    style="font-size: 1em; background-color: #fbb040">
-                                                    <i class="fa fa-arrow-right"
-                                                        style="margin-right: 2px; transform:  rotate(-45deg); font-size: 1.1em; "></i>
-                                                    TG
-                                                </span>
-                                            </td>
+                    @if( isset($pedido->getTotalPayment) == false )
+                    @php $total_payments = 0; @endphp
+                    @else
+                    @foreach($pedido->getTotalPayment as $payments)
+                    @php $total_payments += (float) $payments['payment']; @endphp
+                    @endforeach
+                    @endif
+                    @else
 
-                                            @endif
-                                            @endif
+                    @if(!isset($pedido->get_total_payment))
+                    @php $total_payments = 0; @endphp
+                    @else
+                    @foreach($pedido->get_total_payment as $payments)
+                    @php $total_payments += (float) $payments['payment']; @endphp
+                    @endforeach
+                    @endif
+                    @endif
 
-                                            @if($pedido->status=='Confirmed')
-                                            <td>
-                                                <span style="background-color:#008000!important; color:#fff!important;"
-                                                    class="w3-button w3-yellow w3-block" id="imprimir-pedido"
-                                                    data-id="{{ $pedido->id }}" data-type="noats">Print</span>
-                                            </td>
+                    @php
 
-                                            @if(in_array(Auth::user()->email, $users_array ))
-                                            <td style="padding-right: 30px;">
-                                                <span
-                                                    style="background-color:#fb5a00 !important ; color:#fff!important;"
-                                                    class="w3-button w3-yellow w3-block" id="imprimir-pedido"
-                                                    data-id="{{ $pedido->id }}" data-type="ats">Print ATs</span>
-                                            </td>
-                                            @foreach($pedido->pedidoprodutos as $p)
+                    $total_pedido = 0;
+                    foreach($pedido->produtos as $produto_valor){
+                    $total_pedido += (float) $produto_valor['valor'];
+                    }
 
-                                            @if($p['tipoproduto'] == 'quarto')
-                                            <td>
-                                                <span class="w3-button w3-yellow w3-block" id="imprimir-pedido-markup"
-                                                    data-id="{{ $pedido->id }}">Print w/markup</span>
-                                            </td>
-                                            @break
-                                            @endif
-                                            @endforeach
-                                            @endif
 
-                                            @endif
-                                            @if($pedido->status=='Cancelled')
+                    $total_payments = (float) $total_payments;
+                    $total_pedido = (float) $total_pedido;
+
+                    if($total_pedido < $total_payments){ $background_button="#green" ; $color_button="#333" ;
+                        }elseif($total_pedido==$total_payments){ $background_button="#4CAF50" ; $color_button="#333" ; }
+                        else{ $background_button="#eee" ; $color_button="#333" ; } @endphp <div
+                        class="w3-row w3-padding">
+                        <div class="w3-col l12 pull-right">
+                            @if(in_array(Auth::user()->email, $users_array))
+                            <div class="w3-left col-lg-3">
+                                <label style="color:#fff; font-size:20px; font-weight: bold "><b>Total Paid:
+                                    </b></label>
+                                <div class="input-group">
+                                    <input
+                                        style="background-color:{{$background_button}};color:{{$color_button}}; font-size:20px; font-weight: bold"
+                                        type="text" value="{{$total_payments}}" id="total-paid{{$key}}"
+                                        class="form-control w3-block" name="total-paid" disabled>
+                                    <button type="hidden" id="total_pedido" class="grandTotal{{$key}} hidden"></button>
+                                    <span class="input-group-btn">
+                                        <button data-agency="{{$geral[$key]['nome']}}" data-id="{{$pedido->id}}"
+                                            data-total="{{$pedido->valor}}" data-leadname="{{$pedido->lead_name}}"
+                                            class="payments-modal-btn btn btn-default" data-toggle="modal"
+                                            data-target="#payments-modal" aria-hidden="true" type="button">See
+                                            all</button>
+                                    </span>
+                                </div><!-- /input-group -->
+                            </div>
+                            @endif
+                            <span class="w3-right">
+                                <table frame="box">
+                                    <tr>
+
+                                        @if(in_array(Auth::user()->email, $users_api_transfergest))
+                                        @if(isset($transfers[$key]))
+
+                                        <td>
+                                            <span title="Send All transfers to transfergest"
+                                                class="w3-button w3-block sendTransfergest"
+                                                data-pedidogeral-id="{{  $pedido->id }}"
+                                                style="font-size: 1em; background-color: #fbb040">
+                                                <i class="fa fa-arrow-right"
+                                                    style="margin-right: 2px; transform:  rotate(-45deg); font-size: 1.1em; "></i>
+                                                TG
+                                            </span>
+                                        </td>
+
+                                        @endif
+                                        @endif
+
+                                        @if($pedido->status=='Confirmed')
+                                        <td>
+                                            <span style="background-color:#008000!important; color:#fff!important;"
+                                                class="w3-button w3-yellow w3-block" id="imprimir-pedido"
+                                                data-id="{{ $pedido->id }}" data-type="noats">Print</span>
+                                        </td>
+
+                                        @if(in_array(Auth::user()->email, $users_array ))
+                                        <td style="padding-right: 30px;">
+                                            <span style="background-color:#fb5a00 !important ; color:#fff!important;"
+                                                class="w3-button w3-yellow w3-block" id="imprimir-pedido"
+                                                data-id="{{ $pedido->id }}" data-type="ats">Print ATs</span>
+                                        </td>
+                                        @foreach($pedido->pedidoprodutos as $p)
+
+                                        @if($p['tipoproduto'] == 'quarto')
+                                        <td>
+                                            <span class="w3-button w3-yellow w3-block" id="imprimir-pedido-markup"
+                                                data-id="{{ $pedido->id }}">Print w/markup</span>
+                                        </td>
+                                        @break
+                                        @endif
+                                        @endforeach
+                                        @endif
+
+                                        @endif
+                                        @if($pedido->status=='Cancelled')
+                                        @if(in_array(Auth::user()->email, $users_array))
+                                        <td>
+                                            <span onclick="edita('{{$pedido->id}}','{{$key}}', $(this))"
+                                                class="w3-button w3-blue w3-block">
+                                                Edit
+                                            </span>
+                                        </td>
+                                        @endif
+                                        @else
+
+                                        @if(in_array(Auth::user()->email, $users_array))
+                                        @if($pedido->status=='In Progress')
+                                        <td>
+                                            <span onclick="envia('{{$pedido->id}}','{{$key}}')"
+                                                class="w3-button w3-blue w3-block">
+                                                Send
+                                            </span>
+                                        </td>
+                                        @endif
+
+                                        @if($pedido->status=='Waiting Client Confirmation')
+                                        <td>
+                                            <span onclick="edita('{{$pedido->id}}','{{$key}}', $(this))"
+                                                class="w3-button w3-blue w3-block">
+                                                Edit
+                                            </span>
+                                        </td>
+                                        @endif
+
+                                        @if($pedido->status=='Edited')
+                                        <td>
+                                            <span onclick="edita('{{$pedido->id}}','{{$key}}', $(this))"
+                                                class="w3-button w3-blue w3-block">
+                                                Edit
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span onclick="confirmaAts('{{$pedido->id}}','{{$key}}')"
+                                                class="w3-button w3-green w3-block">
+                                                Confirm
+                                            </span>
+                                        </td>
+                                        @endif
+
+                                        @if($pedido->status=='Confirmed')
+                                        <td>
+                                            <span onclick="edita('{{$pedido->id}}','{{$key}}'), $(this)"
+                                                class="w3-button w3-blue w3-block">
+                                                Edit
+                                            </span>
+                                        </td>
+                                        @endif
+
+                                        @if($pedido->status=='In Progress')
+                                        <td>
+                                            <span onclick="recalcular('{{$pedido->id}}','{{$key}}'), $(this)"
+                                                class="w3-button w3-green w3-block">
+                                                Recalcular
+                                            </span>
+                                        </td>
+                                        @endif
+
+                                        @if($pedido->status=='Waiting Confirmation')
+                                        <td>
+                                            <span onclick="edita('{{$pedido->id}}','{{$key}}'), $(this)"
+                                                class="w3-button w3-blue w3-block">
+                                                Edit
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span onclick="confirmaAts('{{$pedido->id}}','{{$key}}')"
+                                                class="w3-button w3-green w3-block">
+                                                Confirm
+                                            </span>
+                                        </td>
+                                        @endif
+                                        @else
+                                        @if($pedido->status=='Waiting Client Confirmation')
+                                        <td>
+                                            <span onclick="confirma('{{$pedido->id}}','{{$key}}')"
+                                                class="w3-button w3-green w3-block">
+                                                Confirm
+                                            </span>
+                                        </td>
+                                        @endif
+                                        @endif
+                                        <td>
                                             @if(in_array(Auth::user()->email, $users_array))
-                                            <td>
-                                                <span onclick="edita('{{$pedido->id}}','{{$key}}', $(this))"
-                                                    class="w3-button w3-blue w3-block">
-                                                    Edit
-                                                </span>
-                                            </td>
-                                            @endif
-                                            @else
-
-                                            @if(in_array(Auth::user()->email, $users_array))
-                                            @if($pedido->status=='In Progress')
-                                            <td>
-                                                <span onclick="envia('{{$pedido->id}}','{{$key}}')"
-                                                    class="w3-button w3-blue w3-block">
-                                                    Send
-                                                </span>
-                                            </td>
-                                            @endif
-
-                                            @if($pedido->status=='Waiting Client Confirmation')
-                                            <td>
-                                                <span onclick="edita('{{$pedido->id}}','{{$key}}', $(this))"
-                                                    class="w3-button w3-blue w3-block">
-                                                    Edit
-                                                </span>
-                                            </td>
-                                            @endif
-
-                                            @if($pedido->status=='Edited')
-                                            <td>
-                                                <span onclick="edita('{{$pedido->id}}','{{$key}}', $(this))"
-                                                    class="w3-button w3-blue w3-block">
-                                                    Edit
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <span onclick="confirmaAts('{{$pedido->id}}','{{$key}}')"
-                                                    class="w3-button w3-green w3-block">
-                                                    Confirm
-                                                </span>
-                                            </td>
-                                            @endif
-
-                                            @if($pedido->status=='Confirmed')
-                                            <td>
-                                                <span onclick="edita('{{$pedido->id}}','{{$key}}'), $(this)"
-                                                    class="w3-button w3-blue w3-block">
-                                                    Edit
-                                                </span>
-                                            </td>
-                                            @endif
-
-                                            @if($pedido->status=='In Progress')
-                                            <td>
-                                                <span onclick="recalcular('{{$pedido->id}}','{{$key}}'), $(this)"
-                                                    class="w3-button w3-green w3-block">
-                                                    Recalcular
-                                                </span>
-                                            </td>
-                                            @endif
-
-                                            @if($pedido->status=='Waiting Confirmation')
-                                            <td>
-                                                <span onclick="edita('{{$pedido->id}}','{{$key}}'), $(this)"
-                                                    class="w3-button w3-blue w3-block">
-                                                    Edit
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <span onclick="confirmaAts('{{$pedido->id}}','{{$key}}')"
-                                                    class="w3-button w3-green w3-block">
-                                                    Confirm
-                                                </span>
-                                            </td>
-                                            @endif
-                                            @else
-                                            @if($pedido->status=='Waiting Client Confirmation')
-                                            <td>
-                                                <span onclick="confirma('{{$pedido->id}}','{{$key}}')"
-                                                    class="w3-button w3-green w3-block">
-                                                    Confirm
-                                                </span>
-                                            </td>
-                                            @endif
-                                            @endif
-                                            <td>
-                                                @if(in_array(Auth::user()->email, $users_array))
-                                                <span onclick="cancel('{{$pedido->id}}','{{$key}}')"
-                                                    class="w3-button w3-red w3-block">
-                                                    Cancel
-                                                </span>
-                                                @else
-                                                {{-- <span onclick="cancelSendMail('{{$pedido->id}}','{{$key}}')"
+                                            <span onclick="cancel('{{$pedido->id}}','{{$key}}')"
                                                 class="w3-button w3-red w3-block">
                                                 Cancel
-                                </span> --}}
-                                @endif
-                                </td>
-                                @endif
-                                </tr>
+                                            </span>
+                                            @else
+                                            {{-- <span onclick="cancelSendMail('{{$pedido->id}}','{{$key}}')"
+                                                class="w3-button w3-red w3-block">
+                                                Cancel
+                                            </span> --}}
+                                            @endif
+                                        </td>
+                                        @endif
+                                    </tr>
                                 </table>
-                                </span>
-                            </div>
-                    </div>
+                            </span>
+                        </div>
+                </div>
             </div>
             <!-- MENU DE INFORMAÇÃO DE PRODUTO -->
             </p>
@@ -1196,16 +1185,17 @@ $key = 0;
                 <div class="row">
                     <div class="col-lg-3">
                         {{-- <div class="input-group"> --}}
-                        <label>Type:</label>
-                        <select id="add_product_type" width="100%" name="product_type" class="select-simple">
-                            <option value=""> Selecione</option>
-                            <option value="alojamento">Accommodation</option>
-                            <option value="golf">Golf</option>
-                            <option value="transfer">Transfer</option>
-                            <option value="car">Rent-a-Car</option>
-                            <option value="ticket">Ticket</option>
-                        </select>
-                        {{-- </div> --}}
+                            <label>Type:</label>
+                            <select id="add_product_type" width="100%" name="product_type" class="select-simple">
+                                <option value=""> Selecione</option>
+                                <option value="alojamento">Accommodation</option>
+                                <option value="golf">Golf</option>
+                                <option value="transfer">Transfer</option>
+                                <option value="car">Rent-a-Car</option>
+                                <option value="ticket">Ticket</option>
+                            </select>
+                            {{--
+                        </div> --}}
                     </div>
                     <div class="col-lg-7">
                         <div class="input-group" style="min-width:100%">
@@ -1245,7 +1235,8 @@ $key = 0;
                     <span aria-hidden="true">&times;</span>
                 </button>
                 <h5 class="modal-title"><b>Edit Remark</b></h5>
-                {{-- <label>Agency: <label id="add_product_agency"></label> | Lead Name: <label id="add_product_lead_name"></label></label> --}}
+                {{-- <label>Agency: <label id="add_product_agency"></label> | Lead Name: <label
+                        id="add_product_lead_name"></label></label> --}}
             </div>
             <div class="modal-body">
                 <div class="row">

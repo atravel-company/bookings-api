@@ -91,13 +91,13 @@
              </td>
              <td style="text-align:right;">
                  @if (request('hotel') !== '0' and request('hotel') !== null)
-                     {{ $pedidogeral->pedidoprodutos()->where('produto_id', request('hotel'))->first()->produto->nome }}
+                     {{ $pedidogeral->pedidoprodutos()->where('produto_id', request('hotel'))->first()->produto ? $pedidogeral->pedidoprodutos()->where('produto_id', request('hotel'))->first()->produto->nome : "Suplier Deleted" }}
                  @else
-                     {{ $pedidogeral->pedidoprodutos()->first()->produto->nome }}
+                     {{ $pedidogeral->pedidoprodutos()->first()->produto ? $pedidogeral->pedidoprodutos()->first()->produto->nome : "Suplier Deleted" }}
                  @endif
              </td>
              {{-- {{ number_format(floor($pedidogeral->valortotalquarto * 100)/100,2,",",".") }} --}}
-             <td style="text-align:right;"> {{ $pedidogeral->user->name }} </td>
+             <td style="text-align:right;"> {{ $pedidogeral->user ? $pedidogeral->user->name : "User Deleted" }} </td>
              <td style="text-align:right;">
                  {{ number_format(str_replace(',', '', $pedidogeral->valortotalquarto), 2, '.' , ',') }} </td>
              <td style="text-align:right;">

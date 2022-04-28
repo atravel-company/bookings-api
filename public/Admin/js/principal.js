@@ -156,7 +156,6 @@ function formulario(name, id, alojamento1, golf1, transfer1, car1, ticket1, usua
     transfer = transfer1;
     car = car1;
     ticket = ticket1;
-    console.log(imagem);
     modal = modal.id;
     localStorage.setItem('imagemLogo' + userID, imagem);
     tipoPedido = localStorage.getItem('tipoPedido' + userID);

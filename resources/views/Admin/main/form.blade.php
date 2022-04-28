@@ -240,151 +240,130 @@ color: #fff;
 
 
     $(function() {
-
         try {
-
-
             if ($("#room0").length >= 1) {
                 $("#room0").removeAttr("readonly");
             }
 
-            $('.datetimepicker1').datetimepicker({
-                widgetParent: '#checkin1'
-                , format: 'DD/MM/YYYY'
-                , ignoreReadonly: true
-            , }).on("dp.change", function(e) {
-                $('.datetimepickers1').data("DateTimePicker").minDate(e.date);
-            });
+            if($("form .w3-container div#alojamento").is(":visible") == true){
+                $('.datetimepicker1').datetimepicker({
+                    widgetParent: '#checkin1'
+                    , format: 'DD/MM/YYYY'
+                    , ignoreReadonly: true
+                , }).on("dp.change", function(e) {
+                    $('.datetimepickers1').data("DateTimePicker").minDate(e.date);
+                });
 
-            $('.datetimepickers1').datetimepicker({
-                widgetParent: '#checkout1'
-                , format: 'DD/MM/YYYY'
-                , ignoreReadonly: true,
+                $('.datetimepickers1').datetimepicker({
+                    widgetParent: '#checkout1'
+                    , format: 'DD/MM/YYYY'
+                    , ignoreReadonly: true,
+                });
+            }
 
-            });
+            if($("form .w3-container div#golf").is(":visible") == true){
+                $('.datetimepickergolf1').datetimepicker({
+                    widgetParent: '#data1'
+                    , format: 'DD/MM/YYYY'
+                    , ignoreReadonly: true,
+                });
 
+                $('.datetimepickersgolf1').datetimepicker({
+                    widgetParent: '#hora1'
+                    , format: 'HH:mm'
+                    , ignoreReadonly: true,
+                });
+            }
+           
+            if($("form .w3-container div#car").is(":visible") == true){
+                $('.datecar').datetimepicker({
+                    format: 'DD/MM/YYYY'
+                    , ignoreReadonly: true
+                , });
 
-            $('.datetimepickergolf1').datetimepicker({
-                widgetParent: '#data1'
-                , format: 'DD/MM/YYYY'
-                , ignoreReadonly: true,
+                $('.hourcar').datetimepicker({
+                    format: 'HH:mm'
+                    , ignoreReadonly: true,
+                });
 
+                $('.datecar2').datetimepicker({
+                    format: 'DD/MM/YYYY'
+                    , ignoreReadonly: true,
+                });
 
-            });
+                $('.hourcar2').datetimepicker({
+                    format: 'HH:mm'
+                    , ignoreReadonly: true,
+                });
 
-            $('.datetimepickersgolf1').datetimepicker({
-                widgetParent: '#hora1'
-                , format: 'HH:mm'
-                , ignoreReadonly: true,
+                 $('.datetimepickercarup1').datetimepicker({
+                    widgetParent: '#datacarup1'
+                    , format: 'DD/MM/YYYY'
+                    , ignoreReadonly: true,
+                });
 
-            });
+                $('.datetimepickerscarup1').datetimepicker({
+                    widgetParent: '#horacarup1'
+                    , format: 'HH:mm'
+                    , ignoreReadonly: true,
+                });
 
-            $('.datecar').datetimepicker({
-                // widgetParent: '#datacar',
-                format: 'DD/MM/YYYY'
-                , ignoreReadonly: true
-            , });
+                $('.datetimepickercaroff1').datetimepicker({
+                    widgetParent: '#datacaroff1'
+                    , format: 'DD/MM/YYYY'
+                    , ignoreReadonly: true,
+                });
 
-            $('.hourcar').datetimepicker({
-                //    widgetParent: '#hourcar',
-                format: 'HH:mm'
-                , ignoreReadonly: true,
+                $('.datetimepickerscaroff1').datetimepicker({
+                    widgetParent: '#horacaroff1'
+                    , format: 'HH:mm'
+                    , ignoreReadonly: true,
 
-            });
+                });
+            }
 
-            $('.datecar2').datetimepicker({
-                // widgetParent: '#datecar2',
-                format: 'DD/MM/YYYY'
-                , ignoreReadonly: true,
+            if($("form .w3-container div#transfer").is(":visible") == true){
+                $('.datetimepickertransfer1').datetimepicker({
+                    widgetParent: '#datatransfer1'
+                    , format: 'DD/MM/YYYY HH:mm'
+                    , ignoreReadonly: true
+                    , defaultDate: moment({
+                        h: 0
+                        , m: 0
+                        , s: 0
+                    })
+                , });
+                var d = new Date();
+                var month = d.getMonth();
+                var day = d.getDate();
+                var year = d.getFullYear();
+                $(".datetimepickertransfer1").data('datetimepicker').setLocalDate(new Date(year, month, day, 00, 00));
 
+                $('.datetimepickerstransfer1').datetimepicker({
+                    widgetParent: '#horatransfer1'
+                    , format: 'HH:mm'
+                    , ignoreReadonly: true,
+                });
+            }
 
-            });
+            if($("form .w3-container div#transfer").is(":visible") == true){
+                $('.datetimepickerticket1').datetimepicker({
+                    widgetParent: '#dataticket1'
+                    , format: 'DD/MM/YYYY'
+                    , ignoreReadonly: true,
+                });
 
-            $('.hourcar2').datetimepicker({
-                //    widgetParent: '#hourcar2',
-                format: 'HH:mm'
-                , ignoreReadonly: true,
-
-            });
-
-            $('.datetimepickertransfer1').datetimepicker({
-                widgetParent: '#datatransfer1'
-                , format: 'DD/MM/YYYY HH:mm'
-                , ignoreReadonly: true
-                , defaultDate: moment({
-                    h: 0
-                    , m: 0
-                    , s: 0
-                })
-            , });
-            var d = new Date();
-            var month = d.getMonth();
-            var day = d.getDate();
-            var year = d.getFullYear();
-            $(".datetimepickertransfer1").data('datetimepicker').setLocalDate(new Date(year, month, day, 00, 00));
-
-            $('.datetimepickerstransfer1').datetimepicker({
-                widgetParent: '#horatransfer1'
-                , format: 'HH:mm'
-                , ignoreReadonly: true,
-
-            });
-
-            $('.datetimepickercarup1').datetimepicker({
-                widgetParent: '#datacarup1'
-                , format: 'DD/MM/YYYY'
-                , ignoreReadonly: true,
-
-
-            });
-
-            $('.datetimepickerscarup1').datetimepicker({
-                widgetParent: '#horacarup1'
-                , format: 'HH:mm'
-                , ignoreReadonly: true,
-
-            });
-
-            $('.datetimepickercaroff1').datetimepicker({
-                widgetParent: '#datacaroff1'
-                , format: 'DD/MM/YYYY'
-                , ignoreReadonly: true,
-
-
-            });
-
-            $('.datetimepickerscaroff1').datetimepicker({
-                widgetParent: '#horacaroff1'
-                , format: 'HH:mm'
-                , ignoreReadonly: true,
-
-            });
-
-            $('.datetimepickerticket1').datetimepicker({
-                widgetParent: '#dataticket1'
-                , format: 'DD/MM/YYYY'
-                , ignoreReadonly: true,
-
-
-            });
-
-            $('.datetimepickersticket1').datetimepicker({
-                widgetParent: '#horaticket1'
-                , format: 'HH:mm'
-                , ignoreReadonly: true,
-
-            });
+                $('.datetimepickersticket1').datetimepicker({
+                    widgetParent: '#horaticket1'
+                    , format: 'HH:mm'
+                    , ignoreReadonly: true,
+                });
+            }
         } catch (error) {
             console.log(error);
         }
-
-
-
     });
-
 </script>
-
-
 
 <style>
     [type="checkbox"] {
@@ -585,15 +564,11 @@ color: #fff;
 
 <input type="hidden" name="formulario" value="{{$produto->id}}">
 <div class="w3-white w3-padding-16 w3-container" style="padding:0!important;">
-
-
-
     <div class="w3-col l12 w3-white">
 
     </div>
 
     <!----------------------------------------------------MENU-------------->
-
     <style>
         body {
             min-width: 275px !important

@@ -64,13 +64,7 @@
           var channel = pusher.subscribe('{{ config("app.pusherChannel") }}');
 
           channel.bind('get-proform-pendenting', function(data) {
-
-            console.log('ESTOU AQUI');
-            console.log(data);
-
-
             $(".iconsNavebar a i").css("padding-top", '0px');
-
             $("#insertPusherNotification").html('');
 
             $("#insertPusherNotification").append("<ul><li>"+data.message+"</li></ul>");

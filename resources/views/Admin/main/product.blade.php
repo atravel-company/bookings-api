@@ -177,7 +177,6 @@ function currentDiv(n) {
 function showDivs(n) {
   var x = document.getElementById("mySlides"+n);
   var dots = document.getElementById("demo"+n);
-  console.log(x, dots, n);
   if(guarda!=null){
     guarda.style.display= 'none';
   }
