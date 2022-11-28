@@ -2,8 +2,8 @@
     <button class="accordion"><span><b>Cars</b></span></button>
     <div class="panel" style="overflow-y: auto;">
         <!-- RENT-A-CAR - RESERVAS -->
-        <p>
-            <div class="w3-row w3-padding" style="overflow-x: scroll;">
+        <div class="w3-row w3-padding" style="overflow-x: scroll;">
+            <p>
                 {{ Form::open(array('id'=>'form_cars_'.$key.'_'.$key1, 'name'=>'form_cars_'.$key.'_'.$key1, 'method'=>'GET')) }}
                     <input type="hidden" name="produto_id_{{$key1}}" value="{{$produto[$key][$key1]->id}}">
                     <input type="hidden" name="key_max_{{$key1}}" value="{{ count($cars[$key][$key1]) }}">
@@ -328,8 +328,8 @@
                     @endif
                 </table>
                 {{ Form::close() }}
-            </div>
-        </p>
+            </p>
+        </div>
         <!-- RENT-A-CAR - EXTRAS -->
         <!-- RENT-A-CAR - CALCULOS -->
         <div class="w3-row w3-padding">

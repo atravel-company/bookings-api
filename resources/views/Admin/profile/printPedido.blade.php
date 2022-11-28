@@ -352,7 +352,8 @@
 
                             @if (($old_produto_id != 0 && $old_produto_id != $carro->pedido_produto_id) || $loop->last)
                                 @foreach ($extras_carros as $extra_carro)
-                                    @if ($extra_carro->pedido_produto_id == $carro->pedido_produto_id)
+                                
+                                    @if ($extra_carro->pedido_produto_id == $carro->pedido_produto_id and $extra_carro->amount != null )
                                         <tr>
                                             <td colspan="2"><b>Extra name:</b> {{ $extra_carro->name }}</td>
                                             <td><b>Qty:</b> {{ $extra_carro->amount }}</td>

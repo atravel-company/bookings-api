@@ -60,7 +60,7 @@ Route::group(["prefix" => "admin", 'middleware' => ['auth']], function () {
 	    Route::post('cancelar_booking_api',['as'=>'profile.cancelar_booking_api', 'uses'=>'ProfilesController@apagarBookingApi']);
 
 	    Route::post('salvar/quartos',['as'=>' new.profile.confirm', 'uses'=>'ProfilesController@confirm']);
-		Route::match(['get', 'post'], 'createProduct',['as'=>'profile.createProduct', 'uses'=>'ProfilesController@createProduct']);
+			Route::match(['get', 'post'], 'createProduct',['as'=>'profile.createProduct', 'uses'=>'ProfilesController@createProduct']);
 	    Route::match(['get', 'post'], 'createProductRooms',['as'=>'profile.createProductRooms', 'uses'=>'ProfilesController@createProductRooms']);
 	    Route::match(['get', 'post'], 'createProductRoomsEsp',['as'=>'profile.createProductRoomsEsp', 'uses'=>'ProfilesController@createProductRoomsEsp']);
 	    Route::match(['get', 'post'], 'createProductGolfs',['as'=>'profile.createProductGolfs', 'uses'=>'ProfilesController@createProductGolfs']);

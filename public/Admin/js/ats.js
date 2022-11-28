@@ -563,6 +563,11 @@ $(document).ready(function () {
 
     //Edita os remarks
     window.sendRemark = function (remark, pedido_quarto_id, type, operador) {
+
+        if (remark == null || remark == '' || pedido_quarto_id == null || pedido_quarto_id == '') {
+            return;
+        }
+
         $.ajax({
             type: 'POST',
             url: assetBaseUrl + "profile/sendremark",
@@ -589,11 +594,20 @@ $(document).ready(function () {
 
     //SendRemark
     $(".sendremark_button").click(function () {
-        var remark = $(this).closest('div').find('.remark_geral').val();
+
+        const inputRemark = $(this).closest('div').find('.remark_geral');
+        var remark = inputRemark.val();
+        inputRemark.val("");
+
+        if (remark == "" || remark == null) {
+            return;
+        }
+
         var remark_operador = $(this).closest('div').find('.remark_operador').val();
-        var pedido_quarto_id = $(this).closest('div').find('.remark_geral_id').val();
+        var remark_geral_id = $(this).closest('div').find('.remark_geral_id').val();
         var type = $(this).closest('div').find('.type_remark').val();
         var remark_box_div = $(this).closest('section').find('.remark-box');
+
         if (remark_operador == "ats") {
             remark_box_div.append("<b class='ats_b'>ATS: </b>" + remark + " </b> <br>");
         } else {
@@ -607,7 +621,7 @@ $(document).ready(function () {
         height += '';
         $(remark_box_div).animate({ scrollTop: height }, 500);
 
-        sendRemark(remark, pedido_quarto_id, type, remark_operador);
+        sendRemark(remark, remark_geral_id, type, remark_operador);
     });
 
     // $('.room_pax_save').click(function(event) {

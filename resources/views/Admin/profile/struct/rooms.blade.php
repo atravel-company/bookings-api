@@ -3,8 +3,8 @@
     <button class="accordion"><span><b>Rooms </b></span></button>
     <div class="panel" style="overflow-y: auto;">
         <!-- ROOMS - RESERVA -->
-        <p>
-            <div class="w3-row w3-padding" style="overflow-x: scroll;">
+        <div class="w3-row w3-padding" style="overflow-x: scroll;">
+            <p>
                 {{ Form::open(array('id'=>'form_rooms_'.$key.'_'.$key1, 'name'=>'form_rooms_'.$key.'_'.$key1, 'method'=>'GET')) }}
                     <input type="hidden" class="produto_id" name="produto_id_{{$key1}}" value="{{$produto[$key][$key1]->id}}">
                     <input type="hidden" class="key_max" name="key_max_{{$key1}}" value="{{ count($quartos[$key][$key1]) }}">
@@ -361,8 +361,8 @@
                         @endif
                     </table>
                 {{ Form::close() }}
-            </div>
-        </p>
+            </p>
+        </div>
         <!-- ROOMS - RESERVA -->
 
         <!-- ROOMS - CALCULOS -->

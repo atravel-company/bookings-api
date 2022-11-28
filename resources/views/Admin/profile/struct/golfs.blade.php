@@ -10,8 +10,8 @@
     <button class="accordion"><span><b>Golfs </b></span></button>
     <div class="panel" style="overflow-y: auto;">
         <!-- GOLF - RESERVA -->
-        <p>
-            <div class="w3-row w3-padding" style="overflow-y: scroll;">
+        <div class="w3-row w3-padding" style="overflow-y: scroll;">
+            <p>
                 {{ Form::open(array('id'=>'form_golf_'.$key.'_'.$key1, 'name'=>'form_golf_'.$key.'_'.$key1, 'method'=>'GET')) }}
                     <input type="hidden" class="produto_id" name="produto_id_{{$key1}}" value="{{$produto[$key][$key1]->id}}">
                     <input type="hidden" class="key_max" name="key_max_{{$key1}}" value="{{ count($golfs[$key][$key1]) }}">
@@ -209,8 +209,8 @@
                         @endif
                     </table>
                 {{ Form::close() }}
-            </div>
-        </p>
+            </p>
+        </div>
         <!-- GOLF - EXTRAS -->
         <!-- GOLF - CALCULOS -->
         <div class="w3-row w3-padding">

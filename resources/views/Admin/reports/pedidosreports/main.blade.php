@@ -159,7 +159,7 @@
                 <div class="col-lg-2 col-sm-6 col-md-2">
                     <label class="ats-label">Start</label>
                     <div class="form-group">
-                        <div class="input-group" style="position: relative;">
+                        <div class="input-group" style="position: relative;" id="datepicker">
                             @if (request('start') != null and request('start') != '' and request('start') != 'null')
                                 @php
                                     $data = request('start');
@@ -170,14 +170,14 @@
                                     }
                                 @endphp
                                 <input autocomplete="off" value="{{ $data }}" type="text"
-                                    class="form-control ats-border-color datepicker2" id="start" name="start"
+                                    class="form-control ats-border-color" id="start" name="start"
                                     placeholder="Check-in">
                             @else
                                 <input autocomplete="off" value="{{ Carbon\Carbon::now()->format('d/m/Y') }}" type="text"
-                                    class="form-control ats-border-color datepicker2" id="start" name="start"
+                                    class="form-control ats-border-color" id="start" name="start"
                                     placeholder="Check-In">
                             @endif
-                            <span class="input-group-addon ats-border-color">
+                             <span class="input-group-addon ats-border-color" style="cursor: pointer !important;">
                                 <span class="w3-large ats-text-color fa fa-calendar"></span>
                             </span>
                         </div>
@@ -186,7 +186,7 @@
                 <div class="col-lg-2 col-sm-6 col-md-2">
                     <label class="ats-label">End</label>
                     <div class="form-group">
-                        <div class="input-group" style="position: relative;">
+                        <div class="input-group" style="position: relative;" id="datepicker2">
                             @if (request('end') !== null and request('end') !== '')
                                 @php
                                     $data = request('end');
@@ -197,14 +197,14 @@
                                     }
                                 @endphp
                                 <input autocomplete="off" value="{{ $data }}" type="text"
-                                    class="form-control ats-border-color datepicker2" id="end" name="end"
+                                    class="form-control ats-border-color" id="end" name="end"
                                     placeholder="Check-Out">
                             @else
                                 <input autocomplete="off" value="{{ Carbon\Carbon::now()->format('d/m/Y') }}" type="text"
-                                    class="form-control ats-border-color datepicker2" id="end" name="end"
+                                    class="form-control ats-border-color" id="end" name="end"
                                     placeholder="Check-Out">
                             @endif
-                            <span class="input-group-addon ats-border-color">
+                            <span class="input-group-addon ats-border-color" style="cursor: pointer !important;">
                                 <span class="w3-large ats-text-color fa fa-calendar"></span>
                             </span>
                         </div>
@@ -251,11 +251,17 @@
                 $.fn.dataTable.moment('DD/MM/YYYY');
                 geraTabela();
 
-                $(".datepicker").datepicker({
-                    dateFormat: 'dd/mm/yy'
+                $("#datepicker").datetimepicker({
+                    format: 'DD/MM/YYYY',
+                    ignoreReadonly: true,
+                }).on("dp.change", function(e) {
+                    console.log(e.date);
+                    $('#datepicker2').data("DateTimePicker").minDate(e.date);
                 });
-                $(".datepicker2").datepicker({
-                    dateFormat: 'dd/mm/yy'
+
+                $("#datepicker2").datetimepicker({
+                    format: 'DD/MM/YYYY',
+                    ignoreReadonly: true,
                 });
 
                 $("select").select2({
@@ -404,11 +410,17 @@
                         "zeroRecords": "Nenhum dado encontrado"
                     },
                     footerCallback: function(row, data, start, end, display) {
-                        $(".datepicker").datepicker({
-                            dateFormat: 'dd/mm/yy'
+
+                        $("#datepicker").datetimepicker({
+                            format: 'DD/MM/YYYY',
+                            ignoreReadonly: true,
+                        }).on("dp.change", function(e) {
+                            $('#datepicker2').data("DateTimePicker").minDate(e.date);
                         });
-                        $(".datepicker2").datepicker({
-                            dateFormat: 'dd/mm/yy'
+
+                        $("#datepicker2").datetimepicker({
+                            format: 'DD/MM/YYYY',
+                            ignoreReadonly: true,
                         });
 
                         var api = this.api(),
@@ -618,8 +630,6 @@
                     var valor_kickback = pedidos[relacao] != null ? pedidos[relacao].ValorKick : 0;
                     var valorMarkup = pedidos[relacao] != null ? pedidos[relacao].ValorMarkup : 0;
 
-                    console.log(adr, valor_quarto, valor_golf, valor_car, valor_transfer, valor_extras);
-
                     html += "<tr>";
                     html += "<td> # </td>";
                     html += "<td> " + moment(pedidos.FirstCheckin).format("DD/MM/YYYY") + "</td>";
@@ -627,7 +637,11 @@
                     html += "<td> " + rnts + "</td>";
                     html += "<td> " + parseFloat(bednight).toFixed(2) + "</td>";
                     html += "<td> " + parseFloat(adr).toFixed(2) + "</td>";
-                    html += "<td> " + pedidos.produto.nome + "</td>";
+                    if(pedidos.produto != null && pedidos.produto != "" && typeof pedidos.produto != undefined){
+                        html += "<td> " + pedidos.produto.nome  + "</td>";
+                    }else{
+                        html += "<td>Produto Nao encontrado</td>";
+                    }
                     html += "<td> " + json.user.name + "</td>";
                     html += "<td align='right'> " + parseFloat(valor_quarto).toFixed(2) + "</td>";
                     html += "<td align='right'> " + parseFloat(valor_golf).toFixed(2) + "</td>";

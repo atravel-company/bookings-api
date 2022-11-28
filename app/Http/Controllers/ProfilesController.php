@@ -921,11 +921,11 @@ class ProfilesController extends Controller
                     // dd($geral[$key]->produtoss);
                     unset($produtoss->descricao);
                     $prod[$key][$key1] = $produtoss;
+
                     $pedido_prod_id = $prod[$key][$key1]['pivot']['id'];
 
                     $PedidoQuartos = PedidoQuarto::where([['pedido_produto_id', '=', $pedido_prod_id]])->get();
                     $ValorQuartos = ValorQuarto::where([['pedido_produto_id', '=', $pedido_prod_id]])->get();
-
                     foreach ($ValorQuartos as $key2 => $ValorQuarto) {
                         $valor[$key][$key1] = $ValorQuarto;
                     }
@@ -949,9 +949,9 @@ class ProfilesController extends Controller
                         $quarto[$key][$key1][$key2]['ini'] = $ini;
                         $quarto[$key][$key1][$key2]['out'] = $saida;
                     }
+
                     $PedidoGames = PedidoGame::where([['pedido_produto_id', '=', $pedido_prod_id]])->get();
                     $ValorGos = ValorGolf::where([['pedido_produto_id', '=', $pedido_prod_id]])->get();
-
                     foreach ($ValorGos as $key2 => $ValorGo) {
                         $valorGolf[$key][$key1] = $ValorGo;
                     }
@@ -960,16 +960,15 @@ class ProfilesController extends Controller
                     }
                     $PedidoTransfers = PedidoTransfer::where([['pedido_produto_id', '=', $pedido_prod_id]])->get();
                     $ValorTrans = ValorTransfer::where([['pedido_produto_id', '=', $pedido_prod_id]])->get();
-
                     foreach ($ValorTrans as $key2 => $ValorTran) {
                         $valorTransfer[$key][$key1] = $ValorTran;
                     }
                     foreach ($PedidoTransfers as $key2 => $PedidoTransfer) {
                         $transfer[$key][$key1][$key2] = $PedidoTransfer;
                     }
+
                     $PedidoCars = PedidoCar::where([['pedido_produto_id', '=', $pedido_prod_id]])->get();
                     $ValorCas = ValorCar::where([['pedido_produto_id', '=', $pedido_prod_id]])->get();
-
                     foreach ($ValorCas as $key2 => $ValorCa) {
                         $valorCar[$key][$key1] = $ValorCa;
                     }
@@ -977,17 +976,16 @@ class ProfilesController extends Controller
                         $car[$key][$key1][$key2] = $PedidoCar;
                     }
 
+                    if ($produtoss->ticket == 1) {
+                        $PedidoTickets = PedidoTicket::where('pedido_produto_id', $pedido_prod_id)->get();
+                        $ValorTics = ValorTicket::where('pedido_produto_id', $pedido_prod_id)->get();
 
-                    $PedidoTickets = PedidoTicket::where([['pedido_produto_id', '=', $pedido_prod_id]])->get();
-
-                    $ValorTics = ValorTicket::where([['pedido_produto_id', '=', $pedido_prod_id]])->get();
-                    // dd($PedidoTickets, $ValorTics);
-
-                    foreach ($ValorTics as $key2 => $ValorTic) {
-                        $valorTicket[$key][$key1] = $ValorTic;
-                    }
-                    foreach ($PedidoTickets as $key2 => $PedidoTicket) {
-                        $ticket[$key][$key1][$key2] = $PedidoTicket;
+                        foreach ($ValorTics as $key2 => $ValorTic) {
+                            $valorTicket[$key][$key1] = $ValorTic;
+                        }
+                        foreach ($PedidoTickets as $key2 => $PedidoTicket) {
+                            $ticket[$key][$key1][$key2] = $PedidoTicket;
+                        }
                     }
                 }
             }
@@ -1550,8 +1548,10 @@ class ProfilesController extends Controller
 
     public function createProduct(Request $request)
     {
-
-        DB::table('pedido_produto')->where([['id', '=', $request->id]])->update(['valor' => $request->total, 'profit' => $request->profit]);
+        $pedidoProduct = DB::table('pedido_produto')->where([['id', '=', $request->id]]);
+        if ($pedidoProduct) {
+            $pedidoProduct->update(['valor' => $request->total, 'profit' => $request->profit]);
+        }
         return response()->json(['result' => ['valor' => 'nada'], 'dataRequest' => $request->all()]);
     }
 
@@ -1564,7 +1564,11 @@ class ProfilesController extends Controller
     public function createProductRoomsEsp(Request $request)
     {
 
-        PedidoQuarto::find($request->id)->update(['days' => $request->days, 'night' => $request->night, 'offer_name' => $request->offer_name, 'offer' => $request->offer, 'price' => $request->price, 'total' => $request->total, 'ats_rate' => $request->ats_rate, 'ats_total_rate' => $request->ats_total_rate, 'profit' => $request->profit]);
+        $pedidoQuarto = PedidoQuarto::find($request->id);
+        if ($pedidoQuarto) {
+            $pedidoQuarto->update(['days' => $request->days, 'night' => $request->night, 'offer_name' => $request->offer_name, 'offer' => $request->offer, 'price' => $request->price, 'total' => $request->total, 'ats_rate' => $request->ats_rate, 'ats_total_rate' => $request->ats_total_rate, 'profit' => $request->profit]);
+        }
+
         return response()->json(['result' => ['valor' => 'nada']]);
     }
 
@@ -1882,41 +1886,27 @@ class ProfilesController extends Controller
             ->select(DB::raw("pedido_produto_extra.*"), DB::raw("extras.*"), DB::raw("pedido_produto_extra.deleted_at as ExtraDeleted"))
             ->join('extras', 'extras.id', '=', 'pedido_produto_extra.extra_id');
 
-        $i = 0;
-        foreach ($pedidos_produtos as $pedido) {
-            if ($i == 0) {
-                $quartos->where('pedido_produto_id', $pedido->id);
-                $extras_quartos->where('pedido_produto_id', $pedido->id)->where('tipo', 'alojamento');
+        $pedidosId = $pedidos_produtos->pluck("id")->toArray();
 
-                $golfes->where('pedido_produto_id', $pedido->id);
-                $extras_golfes->where('pedido_produto_id', $pedido->id)->where('tipo', 'golf');
+        $quartos->whereIn('pedido_produto_id', $pedidosId);
+        $extras_quartos->whereIn('pedido_produto_id', $pedidosId)
+            ->where('tipo', 'alojamento');
 
-                $transfers->where('pedido_produto_id', $pedido->id);
-                $extras_transfers->where('pedido_produto_id', $pedido->id)->where('tipo', 'transfer');
+        $golfes->whereIn('pedido_produto_id', $pedidosId);
+        $extras_golfes->whereIn('pedido_produto_id', $pedidosId)
+            ->where('tipo', 'golf');
 
-                $carros->where('pedido_produto_id', $pedido->id);
-                $extras_carros->where('pedido_produto_id', $pedido->id)->where('tipo', 'car');
+        $transfers->whereIn('pedido_produto_id', $pedidosId);
+        $extras_transfers->whereIn('pedido_produto_id', $pedidosId)
+            ->where('tipo', 'transfer');
 
-                $bilhetes->where('pedido_produto_id', $pedido->id);
-                $extras_bilhetes->where('pedido_produto_id', $pedido->id)->where('tipo', 'tickets');
-            } else {
-                $quartos->orWhere('pedido_produto_id', $pedido->id);
-                $extras_quartos->orWhere('pedido_produto_id', $pedido->id)->where('tipo', 'alojamento');
+        $carros->whereIn('pedido_produto_id', $pedidosId);
+        $extras_carros->whereIn('pedido_produto_id', $pedidosId)
+            ->whereIn('tipo', ['car', 'cars']);
 
-                $golfes->orWhere('pedido_produto_id', $pedido->id);
-                $extras_golfes->orWhere('pedido_produto_id', $pedido->id)->where('tipo', 'golf');
-
-                $transfers->orWhere('pedido_produto_id', $pedido->id);
-                $extras_transfers->orWhere('pedido_produto_id', $pedido->id)->where('tipo', 'transfer');
-
-                $carros->orWhere('pedido_produto_id', $pedido->id);
-                $extras_carros->orWhere('pedido_produto_id', $pedido->id)->where('tipo', 'car');
-
-                $bilhetes->orWhere('pedido_produto_id', $pedido->id);
-                $extras_bilhetes->orWhere('pedido_produto_id', $pedido->id)->where('tipo', 'tickets');
-            }
-            $i++;
-        }
+        $bilhetes->whereIn('pedido_produto_id', $pedidosId);
+        $extras_bilhetes->whereIn('pedido_produto_id', $pedidosId)
+            ->where('tipo', 'tickets');
 
         $quartos = $quartos->orderBy('checkin')->orderBy('checkout')->orderBy('pedido_produto_id')->get();
         $extras_quartos = $extras_quartos->whereNull('pedido_produto_extra.deleted_at')->get();

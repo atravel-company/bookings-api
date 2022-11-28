@@ -25,27 +25,21 @@ $users_api_transfergest = [
 
     <script>
         var assetBaseUrl = "{{ asset('').'admin/' }}";
-
-    function formatMonetario(nr) {
-
-        var negativo = false;
-        if(Math.sign(parseFloat(nr)) == '-1' || Math.sign(parseFloat(nr)) == '-0'){
-            negativo = true;
-            nr = nr * -1;
+        function formatMonetario(nr) {
+            var negativo = false;
+            if(Math.sign(parseFloat(nr)) == '-1' || Math.sign(parseFloat(nr)) == '-0'){
+                negativo = true;
+                nr = nr * -1;
+            }
+            numeroFormatado = nr.toString();
+            if (numeroFormatado.indexOf(',') != -1){ numeroFormatado = numeroFormatado.replace(',', '.'); }
+            numeroFormatado = parseFloat(numeroFormatado) * 100;
+            numeroFormatado =  Math.floor(numeroFormatado) / 100;
+            if(negativo ==  true){
+                numeroFormatado = numeroFormatado * -(1);
+            }
+            return numeroFormatado;
         }
-
-        numeroFormatado = nr.toString();
-
-        if (numeroFormatado.indexOf(',') != -1){ numeroFormatado = numeroFormatado.replace(',', '.'); }
-        numeroFormatado = parseFloat(numeroFormatado) * 100;
-        numeroFormatado =  Math.floor(numeroFormatado) / 100;
-
-        if(negativo ==  true){
-            numeroFormatado = numeroFormatado * -(1);
-        }
-
-        return numeroFormatado;
-    }
     </script>
 
     <div class="w3-row-padding" style="font-family: arial!important;">
@@ -66,6 +60,7 @@ $users_api_transfergest = [
                 </div>
             </div>
         </div>
+
         <div class="w3-col l2 m2 s5" style="padding-right: 10px;">
             <label class="ats-label">End</label>
             <div class="form-group">
@@ -79,6 +74,7 @@ $users_api_transfergest = [
                 </div>
             </div>
         </div>
+
         <div class="w3-col l2 m2 s12" style="padding-right: 10px;">
             <label class="ats-label">Request type</label>
             <div class="form-group">
@@ -163,6 +159,8 @@ $users_api_transfergest = [
         </div>
         {!! Form::close() !!}
         <!-- FORNMULÁRIO DE PESQUISA -->
+
+
         {{-- @endif --}}
         @if(!empty($pedidos))
 
@@ -171,54 +169,44 @@ $users_api_transfergest = [
         </div>
 
         @foreach($pedidos as $key => $pedido)
-
         @php $pedido = (object) $pedido; @endphp
-
         <div class="w3-row">
-
-
             @php $fontButtonSize = "15px"; @endphp
             @if($pedido->status=='In Progress')
-            @php $button_color = "#2196f3"; @endphp
-
+                @php $button_color = "#2196f3"; @endphp
             @elseif($pedido->status=='Waiting Client Confirmation')
-            @php $button_color = "#f39305"; @endphp
-
+                @php $button_color = "#f39305"; @endphp
             @elseif($pedido->status=='Waiting Confirmation')
-            @php $button_color = "#f39305"; @endphp
-            @php $fontButtonSize = "12px"; @endphp
-
+                @php $button_color = "#f39305"; @endphp
+                @php $fontButtonSize = "12px"; @endphp
             @elseif($pedido->status=='Confirmed')
-            @php $button_color = "green"; @endphp
+                @php $button_color = "green"; @endphp
             @elseif($pedido->status=='Edited')
-            @php $button_color = "#F5AA3B"; @endphp
-
+                @php $button_color = "#F5AA3B"; @endphp
             @elseif($pedido->status=='Cancelled')
-            @php $button_color = "red"; @endphp
-
+                @php $button_color = "red"; @endphp
             @else
-            @php $button_color = "red"; @endphp
+                @php $button_color = "red"; @endphp
             @endif
 
             @if(in_array(Auth::user()->email, $users_array))
-            @if($pedido->status != 'Cancelled')
-            <div class="add-product">
-                <i data-agency="{{$geral[$key]['nome']}}" data-id="{{$pedido->id}}"
-                    data-referency="{{$pedido->referencia}}" data-leadname="{{$pedido->lead_name}}" data-toggle="modal"
-                    data-target="#modal-add-product" aria-hidden="true" class="fa fa-plus-circle fa-2x"
-                    aria-hidden="true"></i>
-            </div>
-            <div class="edit-pedidogeral">
-                <i data-agency="{{$geral[$key]['nome']}}" data-id="{{$pedido->id}}"
-                    data-referency="{{$pedido->referencia}}" data-leadname="{{$pedido->lead_name}}" data-toggle="modal"
-                    data-target="#modal-edit-pedidogeral" aria-hidden="true" class="fa fa-pencil-square fa-2x"
-                    aria-hidden="true"></i>
-            </div>
-            @endif
+                @if($pedido->status != 'Cancelled')
+                    <div class="add-product">
+                        <i data-agency="{{$geral[$key]['nome']}}" data-id="{{$pedido->id}}"
+                            data-referency="{{$pedido->referencia}}" data-leadname="{{$pedido->lead_name}}" data-toggle="modal"
+                            data-target="#modal-add-product" aria-hidden="true" class="fa fa-plus-circle fa-2x"
+                            aria-hidden="true"></i>
+                    </div>
+                    <div class="edit-pedidogeral">
+                        <i data-agency="{{$geral[$key]['nome']}}" data-id="{{$pedido->id}}"
+                            data-referency="{{$pedido->referencia}}" data-leadname="{{$pedido->lead_name}}" data-toggle="modal"
+                            data-target="#modal-edit-pedidogeral" aria-hidden="true" class="fa fa-pencil-square fa-2x"
+                            aria-hidden="true"></i>
+                    </div>
+                @endif
             @endif
             <!-- MENU DE INFORMAÇÃO -->
-            <button class="accordion accordion-agency {{$pedido->id}}"
-                style="background-color: #24AEC9; color: white; font-size:15px; font-weight: bold">
+            <button class="accordion accordion-agency {{$pedido->id}}" style="background-color: #24AEC9; color: white; font-size:15px; font-weight: bold">
                 <div class="w3-col l3 m6 s12">
                     <div class="info-agency">
                         <b style="color: #333; font-size:15px; font-weight: bold"> Agency: </b>
@@ -262,7 +250,6 @@ $users_api_transfergest = [
                         </span>
                     </div>
                 </div>
-
                 <div class="w3-col l3 m6 s12">
                     <div class="info-agency">
                         @if(in_array(Auth::user()->email, $users_array))
@@ -289,10 +276,8 @@ $users_api_transfergest = [
 
             <!-- MENU DE INFORMAÇÃO -->
 
-            <div id="panel{{$key}}" class="panel"
-                style="overflow-y: auto; background-color:#333; font-size:15px; font-weight: bold">
-                <p>
-                <div class="w3-row w3-padding">
+            <div id="panel{{$key}}" class="panel" style="overflow-y: auto; background-color:#333; font-size:15px; font-weight: bold">
+                <div class="w3-row w3-padding unclosed">
                     <div class="w3-col l12">
                         @php $i = 0; @endphp
 
@@ -318,7 +303,8 @@ $users_api_transfergest = [
                             <span style=" color: white;">
                                 <div class="w3-col l3"><b><i style="color:#333;" class="fa fa-university fa-1x"
                                             aria-hidden="true" title="Product"></i>
-                                    </b>{{$produto[$key][$key1]->nome}} </div>
+                                    </b>{{$produto[$key][$key1]->nome}} 
+                                </div>
 
                                 @php
                                 $suppliers = App\SupplierContact::where('supplier_id', '=',
@@ -326,8 +312,10 @@ $users_api_transfergest = [
                                 @endphp
 
                                 <div class="w3-col l4 m8">
-                                    <b><i style="color:#333; font-weight: bold; font-size: 18px"
-                                            class="fa fa-envelope fa-1x" aria-hidden="true"></i> </b>
+                                    <b>
+                                        <i style="color:#333; font-weight: bold; font-size: 18px"
+                                        class="fa fa-envelope fa-1x" aria-hidden="true"></i>
+                                    </b>
                                     <select id="email_{{$produto[$key][$key1]->id}}_{{$pedido->id}}"
                                         style="width: 362px; color:#000!important;">
                                         <option value="{{$produto[$key][$key1]->email ? $produto[$key][$key1]->email : "
@@ -344,10 +332,13 @@ $users_api_transfergest = [
                                     </select>
                                 </div>
 
-                                <div class="w3-col l1 m4"><b><i style="color:#333;"
-                                            class="fa fa-exclamation-triangle fa-1x" aria-hidden="true"></i>
-                                    </b>{{$produto[$key][$key1]->pivot->email_check ?
-                                    $produto[$key][$key1]->pivot->email_check : " - "}}
+                                <div class="w3-col l1 m4">
+                                    <b>
+                                    <i style="color:#333;"
+                                            class="fa fa-exclamation-triangle fa-1x" aria-hidden="true">
+                                        </i>
+                                    </b>
+                                    {{$produto[$key][$key1]->pivot->email_check ? $produto[$key][$key1]->pivot->email_check : " - "}}
                                 </div>
                                 <div class="w3-col l2 m4">
                                     <b style="color:#333; font-weight: bold; font-size: 18px ">Total
@@ -396,7 +387,6 @@ $users_api_transfergest = [
                         <!-- MENU DE INFORMAÇÃO GERAL DE PRODUTO -->
 
                         <div class="panel" style="overflow-y: auto;">
-                            <p>
                             <div class="w3-row w3-padding">
                                 <div class="w3-col l12">
                                     @include('Admin.profile.struct.rooms')
@@ -410,10 +400,6 @@ $users_api_transfergest = [
                                     @include('Admin.profile.struct.tickets')
                                     <!-- TICKETS -->
                                 </div>
-
-
-
-
                                 <div class="w3-row w3-padding">
                                     <div class="w3-col l2">&nbsp;</div>
 
@@ -422,183 +408,177 @@ $users_api_transfergest = [
                                             <table frame="box">
                                                 <tr>
                                                     <script type="text/javascript">
-                                                        /* $('.accordion-agency').click(function(){
-                                                                                $('this').closest('button').
-                                                                            }); */
+                                                        $('#finalAcc{{$key}}_{{$key1}}').bind("DOMSubtreeModified",function(){
+                                                            var finalAcc=$('#finalAcc{{$key}}_{{$key1}}').html();
+                                                            if(isNaN(finalAcc)){
+                                                                var finalAcc=0;
+                                                            }
+                                                            var finalGolf=$('#finalGolf{{$key}}_{{$key1}}').html();
+                                                            if(isNaN(finalGolf)){
+                                                                var finalGolf=0;
+                                                            }
+                                                            var finalTransfer=$('#finalTransfer{{$key}}_{{$key1}}').html();
+                                                            if(isNaN(finalTransfer)){
+                                                                var finalTransfer=0;
+                                                            }
+                                                            var finalCar=$('#finalCar{{$key}}_{{$key1}}').html();
+                                                            if(isNaN(finalCar)){
+                                                                var finalCar=0;
+                                                            }
+                                                            var finalTicket=$('#finalTicket{{$key}}_{{$key1}}').html();
+                                                            if(isNaN(finalTicket)){
+                                                                var finalTicket=0;
+                                                            }
+                                                            indiv=$('#totalProduct{{$key}}_{{$key1}}').html();
+                                                            var totalProduct = (+finalAcc)+(+finalGolf)+(+finalTransfer)+(+finalCar)+(+finalTicket);
+                                                            $('#totalProduct{{$key}}_{{$key1}}').html(parseFloat(totalProduct).toFixed(2));
 
-                                                                            $('#finalAcc{{$key}}_{{$key1}}').bind("DOMSubtreeModified",function(){
-                                                                                var finalAcc=$('#finalAcc{{$key}}_{{$key1}}').html();
-                                                                                if(isNaN(finalAcc)){
-                                                                                    var finalAcc=0;
-                                                                                }
-                                                                                var finalGolf=$('#finalGolf{{$key}}_{{$key1}}').html();
-                                                                                if(isNaN(finalGolf)){
-                                                                                    var finalGolf=0;
-                                                                                }
-                                                                                var finalTransfer=$('#finalTransfer{{$key}}_{{$key1}}').html();
-                                                                                if(isNaN(finalTransfer)){
-                                                                                    var finalTransfer=0;
-                                                                                }
-                                                                                var finalCar=$('#finalCar{{$key}}_{{$key1}}').html();
-                                                                                if(isNaN(finalCar)){
-                                                                                    var finalCar=0;
-                                                                                }
-                                                                                var finalTicket=$('#finalTicket{{$key}}_{{$key1}}').html();
-                                                                                if(isNaN(finalTicket)){
-                                                                                    var finalTicket=0;
-                                                                                }
-                                                                                indiv=$('#totalProduct{{$key}}_{{$key1}}').html();
-                                                                                var totalProduct = (+finalAcc)+(+finalGolf)+(+finalTransfer)+(+finalCar)+(+finalTicket);
-                                                                                $('#totalProduct{{$key}}_{{$key1}}').html(parseFloat(totalProduct).toFixed(2));
+                                                            var grand=$('.grandTotal{{$key}}').html();
+                                                            grand= grand-indiv;
+                                                            grand=(+grand)+(+totalProduct);
 
-                                                                                var grand=$('.grandTotal{{$key}}').html();
-                                                                                grand= grand-indiv;
-                                                                                grand=(+grand)+(+totalProduct);
+                                                            $('.grandTotal{{$key}}').html(parseFloat(grand).toFixed(2));
+                                                        });
 
-                                                                                $('.grandTotal{{$key}}').html(parseFloat(grand).toFixed(2));
-                                                                            });
-
-                                                                            $('#finalGolf{{$key}}_{{$key1}}').bind("DOMSubtreeModified",function(){
-                                                                                finalAcc=$('#finalAcc{{$key}}_{{$key1}}').html();
-                                                                                if(isNaN(finalAcc)){
-                                                                                    finalAcc=0;
-                                                                                }
-                                                                                finalGolf=$('#finalGolf{{$key}}_{{$key1}}').html();
-                                                                                if(isNaN(finalGolf)){
-                                                                                    finalGolf=0;
-                                                                                }
-                                                                                finalTransfer=$('#finalTransfer{{$key}}_{{$key1}}').html();
-                                                                                if(isNaN(finalTransfer)){
-                                                                                    finalTransfer=0;
-                                                                                }
-                                                                                finalCar=$('#finalCar{{$key}}_{{$key1}}').html();
-                                                                                if(isNaN(finalCar)){
-                                                                                    finalCar=0;
-                                                                                }
-                                                                                finalTicket=$('#finalTicket{{$key}}_{{$key1}}').html();
-                                                                                if(isNaN(finalTicket)){
-                                                                                    finalTicket=0;
-                                                                                }
-                                                                                indiv=$('#totalProduct{{$key}}_{{$key1}}').html();
-                                                                                totalProduct = (+finalAcc)+(+finalGolf)+(+finalTransfer)+(+finalCar)+(+finalTicket)
-                                                                                $('#totalProduct{{$key}}_{{$key1}}').html(parseFloat(totalProduct).toFixed(2));
+                                                        $('#finalGolf{{$key}}_{{$key1}}').bind("DOMSubtreeModified",function(){
+                                                            finalAcc=$('#finalAcc{{$key}}_{{$key1}}').html();
+                                                            if(isNaN(finalAcc)){
+                                                                finalAcc=0;
+                                                            }
+                                                            finalGolf=$('#finalGolf{{$key}}_{{$key1}}').html();
+                                                            if(isNaN(finalGolf)){
+                                                                finalGolf=0;
+                                                            }
+                                                            finalTransfer=$('#finalTransfer{{$key}}_{{$key1}}').html();
+                                                            if(isNaN(finalTransfer)){
+                                                                finalTransfer=0;
+                                                            }
+                                                            finalCar=$('#finalCar{{$key}}_{{$key1}}').html();
+                                                            if(isNaN(finalCar)){
+                                                                finalCar=0;
+                                                            }
+                                                            finalTicket=$('#finalTicket{{$key}}_{{$key1}}').html();
+                                                            if(isNaN(finalTicket)){
+                                                                finalTicket=0;
+                                                            }
+                                                            indiv=$('#totalProduct{{$key}}_{{$key1}}').html();
+                                                            totalProduct = (+finalAcc)+(+finalGolf)+(+finalTransfer)+(+finalCar)+(+finalTicket)
+                                                            $('#totalProduct{{$key}}_{{$key1}}').html(parseFloat(totalProduct).toFixed(2));
 
 
-                                                                                grand=$('.grandTotal{{$key}}').html();
-                                                                                grand= grand-indiv;
-                                                                                grand=(+grand)+(+totalProduct);
+                                                            grand=$('.grandTotal{{$key}}').html();
+                                                            grand= grand-indiv;
+                                                            grand=(+grand)+(+totalProduct);
 
-                                                                                $('.grandTotal{{$key}}').html(parseFloat(grand).toFixed(2));
-                                                                            });
+                                                            $('.grandTotal{{$key}}').html(parseFloat(grand).toFixed(2));
+                                                        });
 
-                                                                            $('#finalTransfer{{$key}}_{{$key1}}').bind("DOMSubtreeModified",function(){
-                                                                                finalAcc=$('#finalAcc{{$key}}_{{$key1}}').html();
-                                                                                if(isNaN(finalAcc)){
-                                                                                    finalAcc=0;
-                                                                                }
-                                                                                finalGolf=$('#finalGolf{{$key}}_{{$key1}}').html();
-                                                                                if(isNaN(finalGolf)){
-                                                                                    finalGolf=0;
-                                                                                }
-                                                                                finalTransfer=$('#finalTransfer{{$key}}_{{$key1}}').html();
-                                                                                if(isNaN(finalTransfer)){
-                                                                                    finalTransfer=0;
-                                                                                }
-                                                                                finalCar=$('#finalCar{{$key}}_{{$key1}}').html();
-                                                                                if(isNaN(finalCar)){
-                                                                                    finalCar=0;
-                                                                                }
-                                                                                finalTicket=$('#finalTicket{{$key}}_{{$key1}}').html();
-                                                                                if(isNaN(finalTicket)){
-                                                                                    finalTicket=0;
-                                                                                }
-                                                                                indiv=$('#totalProduct{{$key}}_{{$key1}}').html();
-                                                                                totalProduct = (+finalAcc)+(+finalGolf)+(+finalTransfer)+(+finalCar)+(+finalTicket)
-                                                                                $('#totalProduct{{$key}}_{{$key1}}').html(parseFloat(totalProduct).toFixed(2));
+                                                        $('#finalTransfer{{$key}}_{{$key1}}').bind("DOMSubtreeModified",function(){
+                                                            finalAcc=$('#finalAcc{{$key}}_{{$key1}}').html();
+                                                            if(isNaN(finalAcc)){
+                                                                finalAcc=0;
+                                                            }
+                                                            finalGolf=$('#finalGolf{{$key}}_{{$key1}}').html();
+                                                            if(isNaN(finalGolf)){
+                                                                finalGolf=0;
+                                                            }
+                                                            finalTransfer=$('#finalTransfer{{$key}}_{{$key1}}').html();
+                                                            if(isNaN(finalTransfer)){
+                                                                finalTransfer=0;
+                                                            }
+                                                            finalCar=$('#finalCar{{$key}}_{{$key1}}').html();
+                                                            if(isNaN(finalCar)){
+                                                                finalCar=0;
+                                                            }
+                                                            finalTicket=$('#finalTicket{{$key}}_{{$key1}}').html();
+                                                            if(isNaN(finalTicket)){
+                                                                finalTicket=0;
+                                                            }
+                                                            indiv=$('#totalProduct{{$key}}_{{$key1}}').html();
+                                                            totalProduct = (+finalAcc)+(+finalGolf)+(+finalTransfer)+(+finalCar)+(+finalTicket)
+                                                            $('#totalProduct{{$key}}_{{$key1}}').html(parseFloat(totalProduct).toFixed(2));
 
-                                                                                console.log("Valro do total do produto", totalProduct);
+                                                            console.log("Valro do total do produto", totalProduct);
 
-                                                                                grand=$('.grandTotal{{$key}}').html();
-                                                                                grand= grand-indiv;
-                                                                                grand=(+grand)+(+totalProduct);
+                                                            grand=$('.grandTotal{{$key}}').html();
+                                                            grand= grand-indiv;
+                                                            grand=(+grand)+(+totalProduct);
 
-                                                                                $('.grandTotal{{$key}}').html(parseFloat(grand).toFixed(2));
-                                                                            });
+                                                            $('.grandTotal{{$key}}').html(parseFloat(grand).toFixed(2));
+                                                        });
 
-                                                                            $('#finalCar{{$key}}_{{$key1}}').bind("DOMSubtreeModified",function(){
-                                                                                finalAcc=$('#finalAcc{{$key}}_{{$key1}}').html();
-                                                                                if(isNaN(finalAcc)){
-                                                                                    finalAcc=0;
-                                                                                }
-                                                                                finalGolf=$('#finalGolf{{$key}}_{{$key1}}').html();
-                                                                                if(isNaN(finalGolf)){
-                                                                                    finalGolf=0;
-                                                                                }
-                                                                                finalTransfer=$('#finalTransfer{{$key}}_{{$key1}}').html();
-                                                                                if(isNaN(finalTransfer)){
-                                                                                    finalTransfer=0;
-                                                                                }
-                                                                                finalCar=$('#finalCar{{$key}}_{{$key1}}').html();
-                                                                                if(isNaN(finalCar)){
-                                                                                    finalCar=0;
-                                                                                }
-                                                                                finalTicket=$('#finalTicket{{$key}}_{{$key1}}').html();
-                                                                                if(isNaN(finalTicket)){
-                                                                                    finalTicket=0;
-                                                                                }
-                                                                                indiv=$('#totalProduct{{$key}}_{{$key1}}').html();
-                                                                                totalProduct = (+finalAcc)+(+finalGolf)+(+finalTransfer)+(+finalCar)+(+finalTicket)
-                                                                                $('#totalProduct{{$key}}_{{$key1}}').html(parseFloat(totalProduct).toFixed(2));
-
-
-                                                                                grand=$('.grandTotal{{$key}}').html();
-                                                                                grand= grand-indiv;
-                                                                                grand=(+grand)+(+totalProduct);
-
-                                                                                $('.grandTotal{{$key}}').html(parseFloat(grand).toFixed(2));
-                                                                            });
-
-                                                                            $('#finalTicket{{$key}}_{{$key1}}').bind("DOMSubtreeModified",function(){
-
-                                                                                finalAcc=$('#finalAcc{{$key}}_{{$key1}}').html();
-                                                                                if(isNaN(finalAcc)){
-                                                                                    finalAcc=0;
-                                                                                }
-                                                                                finalGolf=$('#finalGolf{{$key}}_{{$key1}}').html();
-                                                                                if(isNaN(finalGolf)){
-                                                                                    finalGolf=0;
-                                                                                }
-                                                                                finalTransfer=$('#finalTransfer{{$key}}_{{$key1}}').html();
-                                                                                if(isNaN(finalTransfer)){
-                                                                                    finalTransfer=0;
-                                                                                }
-                                                                                finalCar=$('#finalCar{{$key}}_{{$key1}}').html();
-                                                                                if(isNaN(finalCar)){
-                                                                                    finalCar=0;
-                                                                                }
-                                                                                finalTicket=$('#finalTicket{{$key}}_{{$key1}}').html();
-                                                                                if(isNaN(finalTicket)){
-                                                                                    finalTicket=0;
-                                                                                }
-                                                                                indiv=$('#totalProduct{{$key}}_{{$key1}}').html();
-                                                                                totalProduct = (+finalAcc)+(+finalGolf)+(+finalTransfer)+(+finalCar)+(+finalTicket)
-                                                                                $('#totalProduct{{$key}}_{{$key1}}').html(parseFloat(totalProduct).toFixed(2));
+                                                        $('#finalCar{{$key}}_{{$key1}}').bind("DOMSubtreeModified",function(){
+                                                            finalAcc=$('#finalAcc{{$key}}_{{$key1}}').html();
+                                                            if(isNaN(finalAcc)){
+                                                                finalAcc=0;
+                                                            }
+                                                            finalGolf=$('#finalGolf{{$key}}_{{$key1}}').html();
+                                                            if(isNaN(finalGolf)){
+                                                                finalGolf=0;
+                                                            }
+                                                            finalTransfer=$('#finalTransfer{{$key}}_{{$key1}}').html();
+                                                            if(isNaN(finalTransfer)){
+                                                                finalTransfer=0;
+                                                            }
+                                                            finalCar=$('#finalCar{{$key}}_{{$key1}}').html();
+                                                            if(isNaN(finalCar)){
+                                                                finalCar=0;
+                                                            }
+                                                            finalTicket=$('#finalTicket{{$key}}_{{$key1}}').html();
+                                                            if(isNaN(finalTicket)){
+                                                                finalTicket=0;
+                                                            }
+                                                            indiv=$('#totalProduct{{$key}}_{{$key1}}').html();
+                                                            totalProduct = (+finalAcc)+(+finalGolf)+(+finalTransfer)+(+finalCar)+(+finalTicket)
+                                                            $('#totalProduct{{$key}}_{{$key1}}').html(parseFloat(totalProduct).toFixed(2));
 
 
-                                                                                grand=$('.grandTotal{{$key}}').html();
-                                                                                grand= grand-indiv;
-                                                                                grand=(+grand)+(+totalProduct);
+                                                            grand=$('.grandTotal{{$key}}').html();
+                                                            grand= grand-indiv;
+                                                            grand=(+grand)+(+totalProduct);
 
-                                                                                $('.grandTotal{{$key}}').html(parseFloat(grand).toFixed(2));
-                                                                                // var prev = $('grandTotal{{$key}}').data('val');
-                                                                            });
+                                                            $('.grandTotal{{$key}}').html(parseFloat(grand).toFixed(2));
+                                                        });
+
+                                                        $('#finalTicket{{$key}}_{{$key1}}').bind("DOMSubtreeModified",function(){
+
+                                                            finalAcc=$('#finalAcc{{$key}}_{{$key1}}').html();
+                                                            if(isNaN(finalAcc)){
+                                                                finalAcc=0;
+                                                            }
+                                                            finalGolf=$('#finalGolf{{$key}}_{{$key1}}').html();
+                                                            if(isNaN(finalGolf)){
+                                                                finalGolf=0;
+                                                            }
+                                                            finalTransfer=$('#finalTransfer{{$key}}_{{$key1}}').html();
+                                                            if(isNaN(finalTransfer)){
+                                                                finalTransfer=0;
+                                                            }
+                                                            finalCar=$('#finalCar{{$key}}_{{$key1}}').html();
+                                                            if(isNaN(finalCar)){
+                                                                finalCar=0;
+                                                            }
+                                                            finalTicket=$('#finalTicket{{$key}}_{{$key1}}').html();
+                                                            if(isNaN(finalTicket)){
+                                                                finalTicket=0;
+                                                            }
+                                                            indiv=$('#totalProduct{{$key}}_{{$key1}}').html();
+                                                            totalProduct = (+finalAcc)+(+finalGolf)+(+finalTransfer)+(+finalCar)+(+finalTicket)
+                                                            $('#totalProduct{{$key}}_{{$key1}}').html(parseFloat(totalProduct).toFixed(2));
+
+
+                                                            grand=$('.grandTotal{{$key}}').html();
+                                                            grand= grand-indiv;
+                                                            grand=(+grand)+(+totalProduct);
+
+                                                            $('.grandTotal{{$key}}').html(parseFloat(grand).toFixed(2));
+                                                            // var prev = $('grandTotal{{$key}}').data('val');
+                                                        });
                                                     </script>
                                                 </tr>
                                             </table>
                                         </span>
                                     </div>
-
-
 
                                     <div class="w3-col l2">
                                         @if(in_array(Auth::user()->email, $users_array))
@@ -607,206 +587,206 @@ $users_api_transfergest = [
                                                 <tr>
                                                     <script type="text/javascript">
                                                         var valorKickback;
-                                                                                var valorMarkup;
+                                                        var valorMarkup;
 
-                                                                                $('#totalProfitAcc{{$key}}_{{$key1}}, #kickbackAcc{{$key}}_{{$key1}}, #markupAcc{{$key}}_{{$key1}}').bind("DOMSubtreeModified",function(){
-                                                                                    totalProfitAcc=$('#totalProfitAcc{{$key}}_{{$key1}}').html();
-                                                                                    var totalProfitAcc = (+totalProfitAcc)-(valorKickback)+(+valorMarkup);
-                                                                                        if(isNaN(totalProfitAcc)){
-                                                                                            totalProfitAcc=0;
-                                                                                        }
-                                                                                    totalProfitGolf=$('#totalProfitGolf{{$key}}_{{$key1}}').html();
-                                                                                    var totalProfitGolf = (+totalProfitGolf)-(valorKickback)+(+valorMarkup);
-                                                                                    if(isNaN(totalProfitGolf)){
-                                                                                        totalProfitGolf=0;
-                                                                                    }
-                                                                                    totalProfitTransfer=$('#totalProfitTransfer{{$key}}_{{$key1}}').html();
-                                                                                    var totalProfitTransfer = (+totalProfitTransfer)-(valorKickback)+(+valorMarkup);
-                                                                                    if(isNaN(totalProfitTransfer)){
-                                                                                        totalProfitTransfer=0;
-                                                                                    }
-                                                                                    totalProfitCar=$('#totalProfitCar{{$key}}_{{$key1}}').html();
-                                                                                    var totalProfitCar = (+totalProfitCar)-(valorKickback)+(+valorMarkup);
-                                                                                    if(isNaN(totalProfitCar)){
-                                                                                        totalProfitCar=0;
-                                                                                    }
-                                                                                    totalProfitTicket=$('#totalProfitTicket{{$key}}_{{$key1}}').html();
-                                                                                    var totalProfitTicket = (+totalProfitTicket)-(valorKickback)+(+valorMarkup);
-                                                                                    if(isNaN(totalProfitTicket)){
-                                                                                        totalProfitTicket=0;
-                                                                                    }
+                                                        $('#totalProfitAcc{{$key}}_{{$key1}}, #kickbackAcc{{$key}}_{{$key1}}, #markupAcc{{$key}}_{{$key1}}').bind("DOMSubtreeModified",function(){
+                                                            totalProfitAcc=$('#totalProfitAcc{{$key}}_{{$key1}}').html();
+                                                            var totalProfitAcc = (+totalProfitAcc)-(valorKickback)+(+valorMarkup);
+                                                                if(isNaN(totalProfitAcc)){
+                                                                    totalProfitAcc=0;
+                                                                }
+                                                            totalProfitGolf=$('#totalProfitGolf{{$key}}_{{$key1}}').html();
+                                                            var totalProfitGolf = (+totalProfitGolf)-(valorKickback)+(+valorMarkup);
+                                                            if(isNaN(totalProfitGolf)){
+                                                                totalProfitGolf=0;
+                                                            }
+                                                            totalProfitTransfer=$('#totalProfitTransfer{{$key}}_{{$key1}}').html();
+                                                            var totalProfitTransfer = (+totalProfitTransfer)-(valorKickback)+(+valorMarkup);
+                                                            if(isNaN(totalProfitTransfer)){
+                                                                totalProfitTransfer=0;
+                                                            }
+                                                            totalProfitCar=$('#totalProfitCar{{$key}}_{{$key1}}').html();
+                                                            var totalProfitCar = (+totalProfitCar)-(valorKickback)+(+valorMarkup);
+                                                            if(isNaN(totalProfitCar)){
+                                                                totalProfitCar=0;
+                                                            }
+                                                            totalProfitTicket=$('#totalProfitTicket{{$key}}_{{$key1}}').html();
+                                                            var totalProfitTicket = (+totalProfitTicket)-(valorKickback)+(+valorMarkup);
+                                                            if(isNaN(totalProfitTicket)){
+                                                                totalProfitTicket=0;
+                                                            }
 
-                                                                                    indiv2 = $('#profitProduct{{$key}}_{{$key1}}').html();
+                                                            indiv2 = $('#profitProduct{{$key}}_{{$key1}}').html();
 
-                                                                                    profitProduct = (totalProfitAcc+totalProfitGolf+totalProfitTransfer+totalProfitCar+totalProfitTicket);
+                                                            profitProduct = (totalProfitAcc+totalProfitGolf+totalProfitTransfer+totalProfitCar+totalProfitTicket);
 
-                                                                                    $('#profitProduct{{$key}}_{{$key1}}').html(parseFloat(profitProduct).toFixed(2));
-                                                                                    //$('#profitProduct{{$key}}_{{$key1}}').html( formatMonetario(parseFloat(profitProduct) ) );
+                                                            $('#profitProduct{{$key}}_{{$key1}}').html(parseFloat(profitProduct).toFixed(2));
+                                                            //$('#profitProduct{{$key}}_{{$key1}}').html( formatMonetario(parseFloat(profitProduct) ) );
 
-                                                                                    grand2 = $('#grandProfit{{$key}}').html();
-                                                                                    grand2= grand2-indiv2;
-                                                                                    grand2=(+grand2)+(+profitProduct);
+                                                            grand2 = $('#grandProfit{{$key}}').html();
+                                                            grand2= grand2-indiv2;
+                                                            grand2=(+grand2)+(+profitProduct);
 
-                                                                                    $('#grandProfit{{$key}}').html(parseFloat(grand2).toFixed(2));
-                                                                                });
+                                                            $('#grandProfit{{$key}}').html(parseFloat(grand2).toFixed(2));
+                                                        });
 
-                                                                                $('#totalProfitGolf{{$key}}_{{$key1}}, #kickbackGolf{{$key}}_{{$key1}}, #markupGolf{{$key}}_{{$key1}}').bind("DOMSubtreeModified",function(){
-                                                                                    totalProfitAcc=$('#totalProfitAcc{{$key}}_{{$key1}}').html();
-                                                                                    var totalProfitAcc = (+totalProfitAcc)-(valorKickback)+(+valorMarkup);
-                                                                                    if(isNaN(totalProfitAcc)){
-                                                                                        totalProfitAcc=0;
-                                                                                    }
-                                                                                    totalProfitGolf=$('#totalProfitGolf{{$key}}_{{$key1}}').html();
-                                                                                    var totalProfitGolf = (+totalProfitGolf)-(valorKickback)+(+valorMarkup);
-                                                                                    if(isNaN(totalProfitGolf)){
-                                                                                        totalProfitGolf=0;
-                                                                                    }
-                                                                                    totalProfitTransfer=$('#totalProfitTransfer{{$key}}_{{$key1}}').html();
-                                                                                    var totalProfitTransfer = (+totalProfitTransfer)-(valorKickback)+(+valorMarkup);
-                                                                                    if(isNaN(totalProfitTransfer)){
-                                                                                        totalProfitTransfer=0;
-                                                                                    }
-                                                                                    totalProfitCar=$('#totalProfitCar{{$key}}_{{$key1}}').html();
-                                                                                    var totalProfitCar = (+totalProfitCar)-(valorKickback)+(+valorMarkup);
-                                                                                    if(isNaN(totalProfitCar)){
-                                                                                        totalProfitCar=0;
-                                                                                    }
-                                                                                    totalProfitTicket=$('#totalProfitTicket{{$key}}_{{$key1}}').html();
-                                                                                    var totalProfitTicket = (+totalProfitTicket)-(valorKickback)+(+valorMarkup);
-                                                                                    if(isNaN(totalProfitTicket)){
-                                                                                        totalProfitTicket=0;
-                                                                                    }
-                                                                                    indiv2=$('#profitProduct{{$key}}_{{$key1}}').html();
-                                                                                    profitProduct = (+totalProfitAcc)+(+totalProfitGolf)+(+totalProfitTransfer)+(+totalProfitCar)+(+totalProfitTicket)
-                                                                                    $('#profitProduct{{$key}}_{{$key1}}').html(parseFloat(profitProduct).toFixed(2));
-                                                                                    //$('#profitProduct{{$key}}_{{$key1}}').html( formatMonetario(parseFloat(profitProduct) ) );
-
-
-                                                                                    grand2=$('#grandProfit{{$key}}').html();
-                                                                                    grand2= grand2-indiv2;
-                                                                                    grand2=(+grand2)+(+profitProduct);
-
-                                                                                    $('#grandProfit{{$key}}').html(parseFloat(grand2).toFixed(2));
-                                                                                });
-
-                                                                                $('#totalProfitTransfer{{$key}}_{{$key1}}, #kickbackTransfer{{$key}}_{{$key1}}, #markupTransfer{{$key}}_{{$key1}}').bind("DOMSubtreeModified",function(){
-                                                                                    totalProfitAcc=$('#totalProfitAcc{{$key}}_{{$key1}}').html();
-                                                                                    var totalProfitAcc = (+totalProfitAcc)-(valorKickback)+(+valorMarkup);
-                                                                                    if(isNaN(totalProfitAcc)){
-                                                                                        totalProfitAcc=0;
-                                                                                    }
-                                                                                    totalProfitGolf=$('#totalProfitGolf{{$key}}_{{$key1}}').html();
-                                                                                    var totalProfitGolf = (+totalProfitGolf)-(valorKickback)+(+valorMarkup);
-                                                                                    if(isNaN(totalProfitGolf)){
-                                                                                        totalProfitGolf=0;
-                                                                                    }
-                                                                                    totalProfitTransfer=$('#totalProfitTransfer{{$key}}_{{$key1}}').html();
-                                                                                    var totalProfitTransfer = (+totalProfitTransfer)-(valorKickback)+(+valorMarkup);
-                                                                                    if(isNaN(totalProfitTransfer)){
-                                                                                        totalProfitTransfer=0;
-                                                                                    }
-                                                                                    totalProfitCar=$('#totalProfitCar{{$key}}_{{$key1}}').html();
-                                                                                    var totalProfitCar = (+totalProfitCar)-(valorKickback)+(+valorMarkup);
-                                                                                    if(isNaN(totalProfitCar)){
-                                                                                        totalProfitCar=0;
-                                                                                    }
-                                                                                    totalProfitTicket=$('#totalProfitTicket{{$key}}_{{$key1}}').html();
-                                                                                    var totalProfitTicket = (+totalProfitTicket)-(valorKickback)+(+valorMarkup);
-                                                                                    if(isNaN(totalProfitTicket)){
-                                                                                        totalProfitTicket=0;
-                                                                                    }
-                                                                                    indiv2=$('#profitProduct{{$key}}_{{$key1}}').html();
-                                                                                    profitProduct = (+totalProfitAcc)+(+totalProfitGolf)+(+totalProfitTransfer)+(+totalProfitCar)+(+totalProfitTicket)
-                                                                                    $('#profitProduct{{$key}}_{{$key1}}').html(parseFloat(profitProduct).toFixed(2));
-                                                                                    //$('#profitProduct{{$key}}_{{$key1}}').html( formatMonetario(parseFloat(profitProduct) ) );
+                                                        $('#totalProfitGolf{{$key}}_{{$key1}}, #kickbackGolf{{$key}}_{{$key1}}, #markupGolf{{$key}}_{{$key1}}').bind("DOMSubtreeModified",function(){
+                                                            totalProfitAcc=$('#totalProfitAcc{{$key}}_{{$key1}}').html();
+                                                            var totalProfitAcc = (+totalProfitAcc)-(valorKickback)+(+valorMarkup);
+                                                            if(isNaN(totalProfitAcc)){
+                                                                totalProfitAcc=0;
+                                                            }
+                                                            totalProfitGolf=$('#totalProfitGolf{{$key}}_{{$key1}}').html();
+                                                            var totalProfitGolf = (+totalProfitGolf)-(valorKickback)+(+valorMarkup);
+                                                            if(isNaN(totalProfitGolf)){
+                                                                totalProfitGolf=0;
+                                                            }
+                                                            totalProfitTransfer=$('#totalProfitTransfer{{$key}}_{{$key1}}').html();
+                                                            var totalProfitTransfer = (+totalProfitTransfer)-(valorKickback)+(+valorMarkup);
+                                                            if(isNaN(totalProfitTransfer)){
+                                                                totalProfitTransfer=0;
+                                                            }
+                                                            totalProfitCar=$('#totalProfitCar{{$key}}_{{$key1}}').html();
+                                                            var totalProfitCar = (+totalProfitCar)-(valorKickback)+(+valorMarkup);
+                                                            if(isNaN(totalProfitCar)){
+                                                                totalProfitCar=0;
+                                                            }
+                                                            totalProfitTicket=$('#totalProfitTicket{{$key}}_{{$key1}}').html();
+                                                            var totalProfitTicket = (+totalProfitTicket)-(valorKickback)+(+valorMarkup);
+                                                            if(isNaN(totalProfitTicket)){
+                                                                totalProfitTicket=0;
+                                                            }
+                                                            indiv2=$('#profitProduct{{$key}}_{{$key1}}').html();
+                                                            profitProduct = (+totalProfitAcc)+(+totalProfitGolf)+(+totalProfitTransfer)+(+totalProfitCar)+(+totalProfitTicket)
+                                                            $('#profitProduct{{$key}}_{{$key1}}').html(parseFloat(profitProduct).toFixed(2));
+                                                            //$('#profitProduct{{$key}}_{{$key1}}').html( formatMonetario(parseFloat(profitProduct) ) );
 
 
-                                                                                    grand2=$('#grandProfit{{$key}}').html();
-                                                                                    grand2= grand2-indiv2;
-                                                                                    grand2=(+grand2)+(+profitProduct);
+                                                            grand2=$('#grandProfit{{$key}}').html();
+                                                            grand2= grand2-indiv2;
+                                                            grand2=(+grand2)+(+profitProduct);
 
-                                                                                    $('#grandProfit{{$key}}').html(parseFloat(grand2).toFixed(2));
-                                                                                });
+                                                            $('#grandProfit{{$key}}').html(parseFloat(grand2).toFixed(2));
+                                                        });
 
-                                                                                $('#totalProfitCar{{$key}}_{{$key1}}, #kickbackCar{{$key}}_{{$key1}}, #markupCar{{$key}}_{{$key1}}').bind("DOMSubtreeModified",function(){
-                                                                                    totalProfitAcc=$('#totalProfitAcc{{$key}}_{{$key1}}').html();
-                                                                                    var totalProfitAcc = (+totalProfitAcc)-(valorKickback)+(+valorMarkup);
-                                                                                    if(isNaN(totalProfitAcc)){
-                                                                                        totalProfitAcc=0;
-                                                                                    }
-                                                                                    totalProfitGolf=$('#totalProfitGolf{{$key}}_{{$key1}}').html();
-                                                                                    var totalProfitGolf = (+totalProfitGolf)-(valorKickback)+(+valorMarkup);
-                                                                                    if(isNaN(totalProfitGolf)){
-                                                                                        totalProfitGolf=0;
-                                                                                    }
-                                                                                    totalProfitTransfer=$('#totalProfitTransfer{{$key}}_{{$key1}}').html();
-                                                                                    var totalProfitTransfer = (+totalProfitTransfer)-(valorKickback)+(+valorMarkup);
-                                                                                    if(isNaN(totalProfitTransfer)){
-                                                                                        totalProfitTransfer=0;
-                                                                                    }
-                                                                                    totalProfitCar=$('#totalProfitCar{{$key}}_{{$key1}}').html();
-                                                                                    var totalProfitCar = (+totalProfitCar)-(valorKickback)+(+valorMarkup);
-                                                                                    if(isNaN(totalProfitCar)){
-                                                                                        totalProfitCar=0;
-                                                                                    }
-                                                                                    totalProfitTicket=$('#totalProfitTicket{{$key}}_{{$key1}}').html();
-                                                                                    var totalProfitTicket = (+totalProfitTicket)-(valorKickback)+(+valorMarkup);
-                                                                                    if(isNaN(totalProfitTicket)){
-                                                                                        totalProfitTicket=0;
-                                                                                    }
-                                                                                    indiv2=$('#profitProduct{{$key}}_{{$key1}}').html();
-                                                                                    profitProduct = (+totalProfitAcc)+(+totalProfitGolf)+(+totalProfitTransfer)+(+totalProfitCar)+(+totalProfitTicket)
-                                                                                    $('#profitProduct{{$key}}_{{$key1}}').html(parseFloat(profitProduct).toFixed(2));
-                                                                                    //$('#profitProduct{{$key}}_{{$key1}}').html( formatMonetario(parseFloat(profitProduct) ) );
+                                                        $('#totalProfitTransfer{{$key}}_{{$key1}}, #kickbackTransfer{{$key}}_{{$key1}}, #markupTransfer{{$key}}_{{$key1}}').bind("DOMSubtreeModified",function(){
+                                                            totalProfitAcc=$('#totalProfitAcc{{$key}}_{{$key1}}').html();
+                                                            var totalProfitAcc = (+totalProfitAcc)-(valorKickback)+(+valorMarkup);
+                                                            if(isNaN(totalProfitAcc)){
+                                                                totalProfitAcc=0;
+                                                            }
+                                                            totalProfitGolf=$('#totalProfitGolf{{$key}}_{{$key1}}').html();
+                                                            var totalProfitGolf = (+totalProfitGolf)-(valorKickback)+(+valorMarkup);
+                                                            if(isNaN(totalProfitGolf)){
+                                                                totalProfitGolf=0;
+                                                            }
+                                                            totalProfitTransfer=$('#totalProfitTransfer{{$key}}_{{$key1}}').html();
+                                                            var totalProfitTransfer = (+totalProfitTransfer)-(valorKickback)+(+valorMarkup);
+                                                            if(isNaN(totalProfitTransfer)){
+                                                                totalProfitTransfer=0;
+                                                            }
+                                                            totalProfitCar=$('#totalProfitCar{{$key}}_{{$key1}}').html();
+                                                            var totalProfitCar = (+totalProfitCar)-(valorKickback)+(+valorMarkup);
+                                                            if(isNaN(totalProfitCar)){
+                                                                totalProfitCar=0;
+                                                            }
+                                                            totalProfitTicket=$('#totalProfitTicket{{$key}}_{{$key1}}').html();
+                                                            var totalProfitTicket = (+totalProfitTicket)-(valorKickback)+(+valorMarkup);
+                                                            if(isNaN(totalProfitTicket)){
+                                                                totalProfitTicket=0;
+                                                            }
+                                                            indiv2=$('#profitProduct{{$key}}_{{$key1}}').html();
+                                                            profitProduct = (+totalProfitAcc)+(+totalProfitGolf)+(+totalProfitTransfer)+(+totalProfitCar)+(+totalProfitTicket)
+                                                            $('#profitProduct{{$key}}_{{$key1}}').html(parseFloat(profitProduct).toFixed(2));
+                                                            //$('#profitProduct{{$key}}_{{$key1}}').html( formatMonetario(parseFloat(profitProduct) ) );
 
 
-                                                                                    grand2=$('#grandProfit{{$key}}').html();
-                                                                                    grand2= grand2-indiv2;
-                                                                                    grand2=(+grand2)+(+profitProduct);
+                                                            grand2=$('#grandProfit{{$key}}').html();
+                                                            grand2= grand2-indiv2;
+                                                            grand2=(+grand2)+(+profitProduct);
 
-                                                                                    $('#grandProfit{{$key}}').html(parseFloat(grand2).toFixed(2));
-                                                                                });
+                                                            $('#grandProfit{{$key}}').html(parseFloat(grand2).toFixed(2));
+                                                        });
 
-                                                                                $('#totalProfitTicket{{$key}}_{{$key1}}, #kickbackTicket{{$key}}_{{$key1}}, #markupTicket{{$key}}_{{$key1}}').bind("DOMSubtreeModified",function(){
+                                                        $('#totalProfitCar{{$key}}_{{$key1}}, #kickbackCar{{$key}}_{{$key1}}, #markupCar{{$key}}_{{$key1}}').bind("DOMSubtreeModified",function(){
+                                                            totalProfitAcc=$('#totalProfitAcc{{$key}}_{{$key1}}').html();
+                                                            var totalProfitAcc = (+totalProfitAcc)-(valorKickback)+(+valorMarkup);
+                                                            if(isNaN(totalProfitAcc)){
+                                                                totalProfitAcc=0;
+                                                            }
+                                                            totalProfitGolf=$('#totalProfitGolf{{$key}}_{{$key1}}').html();
+                                                            var totalProfitGolf = (+totalProfitGolf)-(valorKickback)+(+valorMarkup);
+                                                            if(isNaN(totalProfitGolf)){
+                                                                totalProfitGolf=0;
+                                                            }
+                                                            totalProfitTransfer=$('#totalProfitTransfer{{$key}}_{{$key1}}').html();
+                                                            var totalProfitTransfer = (+totalProfitTransfer)-(valorKickback)+(+valorMarkup);
+                                                            if(isNaN(totalProfitTransfer)){
+                                                                totalProfitTransfer=0;
+                                                            }
+                                                            totalProfitCar=$('#totalProfitCar{{$key}}_{{$key1}}').html();
+                                                            var totalProfitCar = (+totalProfitCar)-(valorKickback)+(+valorMarkup);
+                                                            if(isNaN(totalProfitCar)){
+                                                                totalProfitCar=0;
+                                                            }
+                                                            totalProfitTicket=$('#totalProfitTicket{{$key}}_{{$key1}}').html();
+                                                            var totalProfitTicket = (+totalProfitTicket)-(valorKickback)+(+valorMarkup);
+                                                            if(isNaN(totalProfitTicket)){
+                                                                totalProfitTicket=0;
+                                                            }
+                                                            indiv2=$('#profitProduct{{$key}}_{{$key1}}').html();
+                                                            profitProduct = (+totalProfitAcc)+(+totalProfitGolf)+(+totalProfitTransfer)+(+totalProfitCar)+(+totalProfitTicket)
+                                                            $('#profitProduct{{$key}}_{{$key1}}').html(parseFloat(profitProduct).toFixed(2));
+                                                            //$('#profitProduct{{$key}}_{{$key1}}').html( formatMonetario(parseFloat(profitProduct) ) );
 
-                                                                                    totalProfitAcc=$('#totalProfitAcc{{$key}}_{{$key1}}').html();
-                                                                                    var totalProfitAcc = (+totalProfitAcc)-(valorKickback)+(+valorMarkup);
-                                                                                    if(isNaN(totalProfitAcc)){
-                                                                                        totalProfitAcc=0;
-                                                                                    }
-                                                                                    totalProfitGolf=$('#totalProfitGolf{{$key}}_{{$key1}}').html();
-                                                                                    var totalProfitGolf = (+totalProfitGolf)-(valorKickback)+(+valorMarkup);
-                                                                                    if(isNaN(totalProfitGolf)){
-                                                                                        totalProfitGolf=0;
-                                                                                    }
-                                                                                    totalProfitTransfer=$('#totalProfitTransfer{{$key}}_{{$key1}}').html();
-                                                                                    var totalProfitTransfer = (+totalProfitTransfer)-(valorKickback)+(+valorMarkup);
-                                                                                    if(isNaN(totalProfitTransfer)){
-                                                                                        totalProfitTransfer=0;
-                                                                                    }
-                                                                                    totalProfitCar=$('#totalProfitCar{{$key}}_{{$key1}}').html();
-                                                                                    var totalProfitCar = (+totalProfitCar)-(valorKickback)+(+valorMarkup);
-                                                                                    if(isNaN(totalProfitCar)){
-                                                                                        totalProfitCar=0;
-                                                                                    }
-                                                                                    totalProfitTicket=$('#totalProfitTicket{{$key}}_{{$key1}}').html();
-                                                                                    var totalProfitTicket = (+totalProfitTicket)-(valorKickback)+(+valorMarkup);
-                                                                                    if(isNaN(totalProfitTicket)){
-                                                                                        totalProfitTicket=0;
-                                                                                    }
-                                                                                    indiv2=$('#profitProduct{{$key}}_{{$key1}}').html();
-                                                                                    profitProduct = (+totalProfitAcc)+(+totalProfitGolf)+(+totalProfitTransfer)+(+totalProfitCar)+(+totalProfitTicket);
 
-                                                                                    $('#profitProduct{{$key}}_{{$key1}}').html(parseFloat(profitProduct).toFixed(2));
-                                                                                    //$('#profitProduct{{$key}}_{{$key1}}').html( formatMonetario(parseFloat(profitProduct) ) );
+                                                            grand2=$('#grandProfit{{$key}}').html();
+                                                            grand2= grand2-indiv2;
+                                                            grand2=(+grand2)+(+profitProduct);
 
-                                                                                    grand2=$('#grandProfit{{$key}}').html();
-                                                                                    grand2= grand2-indiv2;
-                                                                                    grand2=(+grand2)+(+profitProduct);
+                                                            $('#grandProfit{{$key}}').html(parseFloat(grand2).toFixed(2));
+                                                        });
 
-                                                                                    $('#grandProfit{{$key}}').html(parseFloat(grand2).toFixed(2));
+                                                        $('#totalProfitTicket{{$key}}_{{$key1}}, #kickbackTicket{{$key}}_{{$key1}}, #markupTicket{{$key}}_{{$key1}}').bind("DOMSubtreeModified",function(){
 
-                                                                                });
+                                                            totalProfitAcc=$('#totalProfitAcc{{$key}}_{{$key1}}').html();
+                                                            var totalProfitAcc = (+totalProfitAcc)-(valorKickback)+(+valorMarkup);
+                                                            if(isNaN(totalProfitAcc)){
+                                                                totalProfitAcc=0;
+                                                            }
+                                                            totalProfitGolf=$('#totalProfitGolf{{$key}}_{{$key1}}').html();
+                                                            var totalProfitGolf = (+totalProfitGolf)-(valorKickback)+(+valorMarkup);
+                                                            if(isNaN(totalProfitGolf)){
+                                                                totalProfitGolf=0;
+                                                            }
+                                                            totalProfitTransfer=$('#totalProfitTransfer{{$key}}_{{$key1}}').html();
+                                                            var totalProfitTransfer = (+totalProfitTransfer)-(valorKickback)+(+valorMarkup);
+                                                            if(isNaN(totalProfitTransfer)){
+                                                                totalProfitTransfer=0;
+                                                            }
+                                                            totalProfitCar=$('#totalProfitCar{{$key}}_{{$key1}}').html();
+                                                            var totalProfitCar = (+totalProfitCar)-(valorKickback)+(+valorMarkup);
+                                                            if(isNaN(totalProfitCar)){
+                                                                totalProfitCar=0;
+                                                            }
+                                                            totalProfitTicket=$('#totalProfitTicket{{$key}}_{{$key1}}').html();
+                                                            var totalProfitTicket = (+totalProfitTicket)-(valorKickback)+(+valorMarkup);
+                                                            if(isNaN(totalProfitTicket)){
+                                                                totalProfitTicket=0;
+                                                            }
+                                                            indiv2=$('#profitProduct{{$key}}_{{$key1}}').html();
+                                                            profitProduct = (+totalProfitAcc)+(+totalProfitGolf)+(+totalProfitTransfer)+(+totalProfitCar)+(+totalProfitTicket);
+
+                                                            $('#profitProduct{{$key}}_{{$key1}}').html(parseFloat(profitProduct).toFixed(2));
+                                                            //$('#profitProduct{{$key}}_{{$key1}}').html( formatMonetario(parseFloat(profitProduct) ) );
+
+                                                            grand2=$('#grandProfit{{$key}}').html();
+                                                            grand2= grand2-indiv2;
+                                                            grand2=(+grand2)+(+profitProduct);
+
+                                                            $('#grandProfit{{$key}}').html(parseFloat(grand2).toFixed(2));
+
+                                                        });
                                                     </script>
                                                 </tr>
                                             </table>
@@ -816,11 +796,9 @@ $users_api_transfergest = [
 
 
                                     <div class="w3-col l12">
-                                        @if($pedido->status=='Edited' || $pedido->status=='Waiting
-                                        Confirmation')
+                                        @if($pedido->status=='Edited' || $pedido->status=='Waiting Confirmation')
                                         @if(in_array(Auth::user()->email, $users_array))
                                         <span class="w3-right">
-
                                             <span class="w3-button w3-gray"
                                                 onclick="mail('{{ collect($produto[$key][$key1]) }}', {{$produto[$key][$key1]->id}}, {{$pedido->id}})">
                                                 Send email
@@ -830,10 +808,8 @@ $users_api_transfergest = [
                                         @endif
                                     </div>
 
-
                                     <div class="w3-col l12">
-                                        @if($pedido->status=='Edited' || $pedido->status=='Waiting
-                                        Confirmation')
+                                        @if($pedido->status=='Edited' || $pedido->status=='Waiting Confirmation')
                                         @if(in_array(Auth::user()->email, $users_array))
                                         @if($produto[$key][$key1]->pivot->email_check=='wait')
                                         <span class="w3-right">
@@ -842,7 +818,8 @@ $users_api_transfergest = [
                                                     <td>
                                                         <span class="w3-button w3-green"
                                                             onclick="mailConf({{ collect($produto[$key][$key1]) }})">Confirmed
-                                                            email</span>
+                                                            email
+                                                        </span>
                                                     </td>
                                                 </tr>
                                             </table>
@@ -852,7 +829,6 @@ $users_api_transfergest = [
                                         @endif
                                     </div>
 
-
                                     <div class="w3-col l12">
                                         @if($pedido->status=='Confirmed')
                                         @if(in_array(Auth::user()->email, $users_array))
@@ -860,29 +836,28 @@ $users_api_transfergest = [
                                             <a data-url="{{ route('profile.download.excel.roomlist', $pedido->id) }}"
                                                 href="{{ route('profile.download.excel.roomlist', $pedido->id) }}"
                                                 data-pedido="{{$pedido->id}}" data-button="downloadExcelRoomList"
-                                                class="btn btn-danger btn-xs" target="_blank">Excel Print RoomList</a>
+                                                class="btn btn-danger btn-xs" target="_blank">
+                                                Excel Print RoomList
+                                            </a>
                                         </span>
                                         @endif
 
                                         <span class="w3-right">
                                             <a href="{{ route('profile.voucher',['pedido_produto_id'=>$produto[$key][$key1]->pivot->id,'pedido_id'=>$pedido->id]) }}"
-                                                class="btn btn-info btn-xs">Voucher</a>
+                                                class="btn btn-info btn-xs">
+                                                Voucher
+                                            </a>
                                         </span>
                                         @endif
                                     </div>
 
                                 </div>
                             </div>
-                            </p>
                         </div>
 
-
                         @php $i++; @endphp
-
                         @endforeach
                     </div>
-
-
 
                     @php $total_payments = 0; @endphp
 
@@ -917,15 +892,20 @@ $users_api_transfergest = [
                     $total_payments = (float) $total_payments;
                     $total_pedido = (float) $total_pedido;
 
-                    if($total_pedido < $total_payments){ $background_button="#green" ; $color_button="#333" ;
-                        }elseif($total_pedido==$total_payments){ $background_button="#4CAF50" ; $color_button="#333" ; }
-                        else{ $background_button="#eee" ; $color_button="#333" ; } @endphp <div
-                        class="w3-row w3-padding">
+                    if($total_pedido < $total_payments){
+                         $background_button="#green" ; $color_button="#333" ;
+                        }elseif($total_pedido==$total_payments){
+                             $background_button="#4CAF50" ; $color_button="#333" ; 
+                        }else{
+                             $background_button="#eee" ; $color_button="#333" ; }
+                    @endphp 
+                    <div class="w3-row w3-padding">
                         <div class="w3-col l12 pull-right">
                             @if(in_array(Auth::user()->email, $users_array))
                             <div class="w3-left col-lg-3">
                                 <label style="color:#fff; font-size:20px; font-weight: bold "><b>Total Paid:
-                                    </b></label>
+                                    </b>
+                                </label>
                                 <div class="input-group">
                                     <input
                                         style="background-color:{{$background_button}};color:{{$color_button}}; font-size:20px; font-weight: bold"
@@ -936,8 +916,9 @@ $users_api_transfergest = [
                                         <button data-agency="{{$geral[$key]['nome']}}" data-id="{{$pedido->id}}"
                                             data-total="{{$pedido->valor}}" data-leadname="{{$pedido->lead_name}}"
                                             class="payments-modal-btn btn btn-default" data-toggle="modal"
-                                            data-target="#payments-modal" aria-hidden="true" type="button">See
-                                            all</button>
+                                            data-target="#payments-modal" aria-hidden="true" type="button">
+                                            See all
+                                        </button>
                                     </span>
                                 </div><!-- /input-group -->
                             </div>
@@ -1094,13 +1075,14 @@ $users_api_transfergest = [
                                 </table>
                             </span>
                         </div>
+                    </div>
+
                 </div>
             </div>
             <!-- MENU DE INFORMAÇÃO DE PRODUTO -->
-            </p>
         </div>
+        @endforeach
     </div>
-    @endforeach
 
     @else
     @php
@@ -1361,11 +1343,8 @@ $key = 0;
 
 @push('javascript')
 <script type="text/javascript" src="{{ URL::asset('Admin/js/profile.js') }}" defer></script>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 @endpush
-
-
 
 
 @include("Admin.profile.modalValidarPagamentoTransfergest")
@@ -1373,7 +1352,6 @@ $key = 0;
 @include("Admin.profile.modalValidarCamposEnviarTransferUniApi")
 
 @endsection
-
 
 @push("css")
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">

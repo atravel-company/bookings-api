@@ -2,8 +2,8 @@
     <button class="accordion"><span style="color: #24AEC9;"><b>Transfers </b></span></button>
     <div class="panel" style="overflow-y: auto;">
         <!-- TRANSFERS - RESERVA -->
-        <p>
-            <div class="w3-row w3-padding" style="overflow-y: scroll;">
+        <div class="w3-row w3-padding" style="overflow-y: scroll;">
+            <p>
                 {{ Form::open(array('id'=>'form_transfers_'.$key.'_'.$key1, 'name'=>'form_transfers_'.$key.'_'.$key1, 'method'=>'GET')) }}
                     <div>
                         <i class="fa fa-arrow-circle-left arrow-left"></i>
@@ -224,8 +224,8 @@
                     @endif
                 </table>
                 {{ Form::close() }}
-            </div>
-        </p>
+            </p>
+        </div>
         <!-- TRANSFERS - EXTRAS -->
 
         <!-- TRANSFERS - CALCULOS -->
