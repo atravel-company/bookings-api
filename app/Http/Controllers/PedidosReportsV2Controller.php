@@ -3,40 +3,36 @@
 namespace App\Http\Controllers;
 
 use App\PedidoGeral;
-use App\PedidoReport;
 use App\Produto;
 use App\Supplier;
 use App\User;
 use Carbon\Carbon;
-use DateTime;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\URL;
-
-class PedidosReportsController extends Controller
+class PedidosReportsV2Controller extends Controller
 {
 
-    public function newIndex(Request $request, $name, $debug = false)
+    public function index(Request $request)
     {
-
-        ini_set('memory_limit', '-1');
         $produtos = Produto::orderBy('nome')->get();
         $utilizadores = User::orderBy('name')->get();
         $suppliers = Supplier::get();
         $request->merge(['start' =>  Carbon::now()->format("Y-m-d")]);
         $pedidos = PedidoGeral::ViewWithAllProd($request->all());
 
-        return view('Admin.reports.pedidosreports.main', [
-            'pedidos' => $pedidos, 'suppliers' => $suppliers, 'utilizadores' => $utilizadores, 'produtos' => $produtos
+        return view('Admin.reports.pedidosreportsv2.main', [
+            'pedidos' => $pedidos,
+            'suppliers' => $suppliers,
+            'utilizadores' => $utilizadores,
+            'produtos' => $produtos
         ]);
     }
 
     public function applyFilter(Request $request)
     {
         try {
+
             $produtos = Produto::orderBy('nome')->get();
             $utilizadores = User::orderBy('name')->get();
             $suppliers = Supplier::get();
@@ -105,7 +101,7 @@ class PedidosReportsController extends Controller
             if ($request->wantsJson()) {
                 return response()->json($pedidos->toArray());
             } else {
-                return view('Admin.reports.pedidosreports.main', [
+                return view('Admin.reports.pedidosreportsv2.main', [
                     'pedidos' => $pedidos, 'suppliers' => $suppliers, 'utilizadores' => $utilizadores, 'produtos' => $produtos
                 ]);
             }

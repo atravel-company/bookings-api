@@ -116,7 +116,8 @@ $users_array = ['sales@atravel.pt', 'incoming@atravel.pt', 'transfers@atravel.pt
             <a href="{{ url('/admin/produtos') }}" class="w3-bar-item w3-button">Products</a>
             <a href="{{ url('/admin/users') }}" class="w3-bar-item w3-button">Users</a>
             <a href="{{ url('/admin/groups') }}" class="w3-bar-item w3-button">Groups</a>
-            <a href="{{ route('pedidos.reports.index') }}" class="w3-bar-item w3-button">Reports ADV</a>
+            <a href="{{ route('pedidos.reports.index') }}" class="w3-bar-item w3-button">Reports</a>
+            <a href="{{ route('pedidos.v2.reports.index') }}" class="w3-bar-item w3-button">Reports 2</a>
             @endif
             <a href="{{ url('/admin/profile') }}" class="w3-bar-item w3-button">Profile</a>
             <a href="{{ url('/admin/main') }}" class="w3-bar-item w3-button">Search Products</a>
