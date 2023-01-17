@@ -261,12 +261,9 @@ $(document).ready(function() {
     });
 
     $('#print-prof').on('click', function(){
-
       var start = $("#start").val();
       var end = $("#end").val();
-
-      window.open('/admin/reports/pedidosreports/print/dados?start='+start+'&end='+end, "Voucher", "width=1000,height=800","_blank");
-     /*  window.open('/reports/pedidosreports/print/'+vid + "&modal=true", "Voucher","width=1000,height=800","_blank"); */
+      window.open('/admin/pedidos/reports/pedidosreports/print/dados?start='+start+'&end='+end, "Voucher", "width=1000,height=800","_blank");
    });
 } );
 
