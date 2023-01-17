@@ -36,7 +36,6 @@ class PedidosReportsV2Controller extends Controller
             $produtos = Produto::orderBy('nome')->get();
             $utilizadores = User::orderBy('name')->get();
             $suppliers = Supplier::get();
-
             $pedidos = PedidoGeral::ViewWithAllProd($request->all());
 
 
@@ -52,6 +51,28 @@ class PedidosReportsV2Controller extends Controller
                 $pedidos = $pedidos->whereHas('pedidoprodutos', function ($q) use ($request) {
                     $q->where('produto_id', $request->get('hotel'));
                 });
+            }
+
+
+            /** usado no AJAX para a tabela de info dentro dos produtos */
+            if ($request->has('suplier_id') and $request->get('suplier_id') !== null and $request->get('suplier_id') !== '0') {
+                $pedidos = $pedidos->whereHas('pedidoprodutos', function ($q) use ($request) {
+                    $q->where('produto_id', $request->get('suplier_id'));
+                })->with(['pedidoprodutos' => function ($sql) use ($request) {
+                    $sql->where('produto_id', $request->get('suplier_id'));
+                    $sql->with('extras');
+                    $sql->with('valorquarto');
+                    $sql->with('pedidoquarto');
+                    $sql->with('valortransfer');
+                    $sql->with('pedidotransfer');
+                    $sql->with('valorgame');
+                    $sql->with('pedidogame');
+                    $sql->with('valorcar');
+                    $sql->with('pedidocar');
+                    $sql->with('valorticket');
+                    $sql->with('pedidoticket');
+                    $sql->with('produto');
+                }]);
             }
 
             if ($request->has('operator') and $request->get('operator') !== null and $request->get('operator') !== '0') {
@@ -113,13 +134,7 @@ class PedidosReportsV2Controller extends Controller
     public function PrintPedido(Request $request)
     {
         try {
-
-            $produtos = Produto::orderBy('nome')->get();
-            $utilizadores = User::orderBy('name')->get();
-            $suppliers = Supplier::get();
-
             $pedidos = PedidoGeral::ViewWithAllProd($request->all());
-
 
             if ($request->has('pedidoid') and $request->get('pedidoid') !== null) {
                 $pedidos->where('id', $request->get('pedidoid'));
@@ -146,8 +161,6 @@ class PedidosReportsV2Controller extends Controller
             $pedidos = $pedidos->get()->filter(function ($value, $key) {
                 return $value->status != 'Cancelled';
             });
-
-
 
             if ($request->get("start") != null and $request->get("end") == null) {
                 $pedidos = $pedidos->filter(function ($value, $key) use ($request) {
@@ -191,7 +204,6 @@ class PedidosReportsV2Controller extends Controller
         if (count(explode("/", $data)) > 1) {
             return implode("-", array_reverse(explode("/", $data)));
         }
-
 
         if ($onlyEua == false) {
             if (count(explode("-", $data)) > 1) {
