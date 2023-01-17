@@ -9,12 +9,11 @@
         var assetBaseUrl = "{{ asset('') }}";
     </script>
 
-    <script>
-
-    </script>
+    <script></script>
 @endpush
 
 @push('css')
+    @routes
     <style>
         .dataTables_filter input {
             font-weight: bold;

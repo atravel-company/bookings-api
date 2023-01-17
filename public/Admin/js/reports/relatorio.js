@@ -409,13 +409,14 @@ Reports.prototype.formatTable = function (json, rowsTable) {
 
   return html;
 }
-Reports.prototype.ajaxToHiddenData = function () {
 
+
+Reports.prototype.ajaxToHiddenData = function () {
   return $.ajax({
     type: 'post',
     dataType: 'JSON',
     async: false,
-    url: "{{ route('pedidos.reports.buscar') }}",
+    url: route('pedidos.v2.reports.buscar'),
     data: {
       'pedidoid': this.pedidogeral_id,
     }
