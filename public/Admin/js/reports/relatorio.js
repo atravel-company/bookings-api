@@ -346,75 +346,78 @@ Reports.prototype.formatTable = function (json, rowsTable) {
   $(thead).children('tr:last-child').children('th:last-child').remove();
   $(thead).children('tr:first-child').find("th:last-child").removeAttr("colspan").attr("colspan", "9");
 
-  $.each(json.pedidoprodutos, function (indice, pedidos) {
-
-    var rnts = 0;
-    var bednight = 0;
-
-    var relacaoP = "pedido" + pedidos.tipoproduto;
-    var relacao = "valor" + pedidos.tipoproduto;
-    var field = "valor_" + relacao;
-
-    if (pedidos.pedidoquarto.length > 0) {
-      $.each(pedidos.pedidoquarto, function (index, value) {
-        rnts += parseInt(value.rnts);
-        bednight += parseInt(value.bednight);
-      });
-    } else {
-
-      $.each(pedidos[relacaoP], function (index, value) {
-        rnts += parseInt(value.TotalPax);
-      });
-
-      rnts += " pax";
-    }
-
-    var extraAtsRate = 0;
-    $.each(pedidos.extras, function (index, value) {
-      extraAtsRate += value.ats_total_rate;
-    });
-
-    var adr = (pedidos.valorquarto != null ? pedidos.valorquarto.valor_quarto / rnts : 0);
-    var valor_quarto = pedidos.valorquarto != null ? pedidos.valorquarto.valor_quarto : 0;
-    var valor_golf = pedidos.valorgame != null ? pedidos.valorgame.valor_golf : 0;
-    var valor_car = pedidos.valorcar != null ? pedidos.valorcar.valor_car : 0;
-    var valor_transfer = pedidos.valortransfer != null ? pedidos.valortransfer.valor_transfer : 0;
-    var valor_extras = pedidos[relacao] != null ? pedidos[relacao].valor_extra : 0;
-    var valor_kickback = pedidos[relacao] != null ? pedidos[relacao].ValorKick : 0;
-    var valorMarkup = pedidos[relacao] != null ? pedidos[relacao].ValorMarkup : 0;
-
+  if (typeof json.pedidoprodutos == undefined || json.pedidoprodutos.length == 0) {
+    /**  */
     html += "<tr>";
-    html += "<td> # </td>";
-    html += "<td> " + moment(pedidos.FirstCheckin).format("DD/MM/YYYY") + "</td>";
-    html += "<td> " + json.lead_name + "</td>";
-    html += "<td> " + rnts + "</td>";
-    html += "<td> " + parseFloat(bednight).toFixed(2) + "</td>";
-    html += "<td> " + parseFloat(adr).toFixed(2) + "</td>";
-    if (pedidos.produto != null && pedidos.produto != "" && typeof pedidos.produto != undefined) {
-      html += "<td> " + pedidos.produto.nome + "</td>";
-    } else {
-      html += "<td>Produto Nao encontrado</td>";
-    }
-    html += "<td> " + json.user.name + "</td>";
-    html += "<td align='right'> " + parseFloat(valor_quarto).toFixed(2) + "</td>";
-    html += "<td align='right'> " + parseFloat(valor_golf).toFixed(2) + "</td>";
-    html += "<td align='right'> " + parseFloat(valor_transfer).toFixed(2) + "</td>";
-    html += "<td align='right'> " + parseFloat(valor_car).toFixed(2) + "</td>";
-    html += "<td align='right'> " + valor_extras + "</td>";
-    html += "<td align='right'> " + valor_kickback + " € </td>";
-    html += "<td align='right'> " + parseFloat(pedidos.valor).toFixed(2) + "</td>";
-    html += "<td align='right'> " + rowsTable[15] + "</td>";
-    html += "<td align='right'> " + rowsTable[16] + "</td>";
-    html += "<td style='width:50px' align='right' data-teste=true> " + valorMarkup + "</td>";
-
-    if ($('#ats_profit').data('condition') == true) {
-      html += "<td align='right'> " + parseFloat(extraAtsRate).toFixed(2) + "</td>";
-      html += "<td align='right'> " + parseFloat(pedidos.profit).toFixed(2) + "</td>";
-    }
-
     html += "</tr>";
-  });
+  } else {
+    $.each(json.pedidoprodutos, function (indice, pedidos) {
 
+      var rnts = 0;
+      var bednight = 0;
+
+      var relacaoP = "pedido" + pedidos.tipoproduto;
+      var relacao = "valor" + pedidos.tipoproduto;
+      var field = "valor_" + relacao;
+
+      if (pedidos.pedidoquarto.length > 0) {
+        $.each(pedidos.pedidoquarto, function (index, value) {
+          rnts += parseInt(value.rnts);
+          bednight += parseInt(value.bednight);
+        });
+      } else {
+        $.each(pedidos[relacaoP], function (index, value) {
+          rnts += parseInt(value.TotalPax);
+        });
+        rnts += " pax";
+      }
+
+      var extraAtsRate = 0;
+      $.each(pedidos.extras, function (index, value) {
+        extraAtsRate += value.ats_total_rate;
+      });
+
+      var adr = (pedidos.valorquarto != null ? pedidos.valorquarto.valor_quarto / rnts : 0);
+      var valor_quarto = pedidos.valorquarto != null ? pedidos.valorquarto.valor_quarto : 0;
+      var valor_golf = pedidos.valorgame != null ? pedidos.valorgame.valor_golf : 0;
+      var valor_car = pedidos.valorcar != null ? pedidos.valorcar.valor_car : 0;
+      var valor_transfer = pedidos.valortransfer != null ? pedidos.valortransfer.valor_transfer : 0;
+      var valor_extras = pedidos[relacao] != null ? pedidos[relacao].valor_extra : 0;
+      var valor_kickback = pedidos[relacao] != null ? pedidos[relacao].ValorKick : 0;
+      var valorMarkup = pedidos[relacao] != null ? pedidos[relacao].ValorMarkup : 0;
+
+      html += "<tr>";
+      html += "<td> # </td>";
+      html += "<td> " + moment(pedidos.FirstCheckin).format("DD/MM/YYYY") + "</td>";
+      html += "<td> " + json.lead_name + "</td>";
+      html += "<td> " + rnts + "</td>";
+      html += "<td> " + parseFloat(bednight).toFixed(2) + "</td>";
+      html += "<td> " + parseFloat(adr).toFixed(2) + "</td>";
+      if (pedidos.produto != null && pedidos.produto != "" && typeof pedidos.produto != undefined) {
+        html += "<td> " + pedidos.produto.nome + "</td>";
+      } else {
+        html += "<td>Produto Nao encontrado</td>";
+      }
+      html += "<td> " + json.user.name + "</td>";
+      html += "<td align='right'> " + parseFloat(valor_quarto).toFixed(2) + "</td>";
+      html += "<td align='right'> " + parseFloat(valor_golf).toFixed(2) + "</td>";
+      html += "<td align='right'> " + parseFloat(valor_transfer).toFixed(2) + "</td>";
+      html += "<td align='right'> " + parseFloat(valor_car).toFixed(2) + "</td>";
+      html += "<td align='right'> " + valor_extras + "</td>";
+      html += "<td align='right'> " + valor_kickback + " € </td>";
+      html += "<td align='right'> " + parseFloat(pedidos.valor).toFixed(2) + "</td>";
+      html += "<td align='right'> " + rowsTable[15] + "</td>";
+      html += "<td align='right'> " + rowsTable[16] + "</td>";
+      html += "<td style='width:50px' align='right' data-teste=true> " + valorMarkup + "</td>";
+
+      if ($('#ats_profit').data('condition') == true) {
+        html += "<td align='right'> " + parseFloat(extraAtsRate).toFixed(2) + "</td>";
+        html += "<td align='right'> " + parseFloat(pedidos.profit).toFixed(2) + "</td>";
+      }
+
+      html += "</tr>";
+    });
+  }
   html += "</tbody>";
   html += "</table>";
   return html;
