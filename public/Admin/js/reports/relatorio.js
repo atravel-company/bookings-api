@@ -27,7 +27,13 @@ $(document).ready(function () {
   $('#print-prof').on('click', function () {
     var start = $("#start").val();
     var end = $("#end").val();
-    window.open('/admin/pedidos/reports/pedidosreports/print/dados?start=' + start + '&end=' + end, "Voucher", "width=1000,height=800", "_blank");
+
+    const urlOpen = route('reports.pedidosreports.print.new', {
+      start: start,
+      end: end,
+    });
+
+    window.open(urlOpen, "Voucher", "width=1000,height=800", "_blank");
   });
 });
 
@@ -325,15 +331,20 @@ function Reports(pedidoid) {
 }
 
 Reports.prototype.formatTable = function (json, rowsTable) {
-  var thead = $("#reports-table").find("thead").get(0);
+  var thead = $("table#reports-table").find("thead").get(0);
+  $(thead).children('tr:first-child').find("th:nth-child(7)").after(`<th rowspan="2" style="text-align: center; vertical-align: inherit; width: 100.5px;"> Suplier </th`);
   $(thead).children('tr:last-child').append('<th style="background-color:yellow; width:50px">MKP</th>');
+  $(thead).children('tr:first-child').find("th:last-child").removeAttr("colspan").attr("colspan", "10");
+
   var html = "<table class='table hiddenTable display compact table-striped table-bordered nowrap'>";
   html += "<thead>";
   html += thead.innerHTML;
   html += "</thead>";
   html += "<tbody>";
 
+  $(thead).children('tr:first-child').find("th:nth-child(8)").remove();
   $(thead).children('tr:last-child').children('th:last-child').remove();
+  $(thead).children('tr:first-child').find("th:last-child").removeAttr("colspan").attr("colspan", "9");
 
   $.each(json.pedidoprodutos, function (indice, pedidos) {
 
@@ -392,8 +403,8 @@ Reports.prototype.formatTable = function (json, rowsTable) {
     html += "<td align='right'> " + valor_extras + "</td>";
     html += "<td align='right'> " + valor_kickback + " € </td>";
     html += "<td align='right'> " + parseFloat(pedidos.valor).toFixed(2) + "</td>";
+    html += "<td align='right'> " + rowsTable[15] + "</td>";
     html += "<td align='right'> " + rowsTable[16] + "</td>";
-    html += "<td align='right'> " + rowsTable[17] + "</td>";
     html += "<td style='width:50px' align='right' data-teste=true> " + valorMarkup + "</td>";
 
     if ($('#ats_profit').data('condition') == true) {
@@ -406,7 +417,6 @@ Reports.prototype.formatTable = function (json, rowsTable) {
 
   html += "</tbody>";
   html += "</table>";
-
   return html;
 }
 
@@ -419,6 +429,7 @@ Reports.prototype.ajaxToHiddenData = function () {
     url: route('pedidos.v2.reports.buscar'),
     data: {
       'pedidoid': this.pedidogeral_id,
+      'suplier_id': $('select[name=hotel]').val()
     }
   });
 }
