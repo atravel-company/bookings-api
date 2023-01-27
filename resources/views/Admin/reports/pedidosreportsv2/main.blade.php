@@ -103,119 +103,144 @@
             </h1>
         </span>
         <div class="container-fluid">
-            <div class="row" style="padding:30px 0;">
-                @if (Route::current()->getName() != 'pedidos.v2.reports.index.ats' and
-                        Route::current()->getName() != 'pedidos.v2.reports.buscar.ats')
-                    {{ Form::open(['route' => 'pedidos.v2.reports.buscar', 'method' => 'post', 'id' => 'search']) }}
-                @else
-                    {{ Form::open(['route' => 'pedidos.v2.reports.buscar.ats', 'method' => 'post', 'id' => 'search']) }}
-                @endif
+            @if (Route::current()->getName() != 'pedidos.v2.reports.index.ats' and
+                    Route::current()->getName() != 'pedidos.v2.reports.buscar.ats')
+                {{ Form::open(['route' => 'pedidos.v2.reports.buscar', 'method' => 'post', 'id' => 'search']) }}
+            @else
+                {{ Form::open(['route' => 'pedidos.v2.reports.buscar.ats', 'method' => 'post', 'id' => 'search']) }}
+            @endif
 
-                <div class="col-lg-2 col-sm-6 col-md-2">
-                    <label class="ats-label">Operator</label>
-                    <select width="100%" id="operator" name="operator"
-                        class="form-control ats-border-color select-simple">
-                        <option value="0">Select</option>
-                        @foreach ($utilizadores as $operadores)
-                            @if (request('operator') == $operadores->id)
-                                <option selected value="{{ $operadores->id }}">{{ $operadores->name }}</option>
-                            @else
-                                <option value="{{ $operadores->id }}">{{ $operadores->name }}</option>
-                            @endif
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="col-lg-2 col-sm-6 col-md-2">
-                    <label class="ats-label">Supplier</label>
-                    <select width="100%" class="form-control ats-border-color select-simple" id="hotel"
-                        name="hotel">
-                        <option value="0">Select</option>
-                        @foreach ($produtos as $produto)
-                            @if (request('hotel') == $produto->id)
-                                <option selected value="{{ $produto->id }}">{{ $produto->nome }}</option>
-                            @else
-                                <option value="{{ $produto->id }}">{{ $produto->nome }}</option>
-                            @endif
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-lg-2 col-sm-6 col-md-2">
-                    <label class="ats-label">Client</label>
-                    <div class="form-group">
-                        <div class="input-group" style="position: relative;width: 100%">
-                            <input value="{{ request('client') }}" type="text" class="form-control ats-border-color"
-                                id="client" name="client" width="100%">
+            <div class="row">
+                <div class="col-lg-10 col-lg-offset-1">
+                    <div class="row" style="padding:30px 0;">
+                        <div class="col-lg-4 col-md-4 col-sm-4">
+                            <label class="ats-label">Operator</label>
+                            <select width="100%" id="operator" name="operator"
+                                class="form-control ats-border-color select-simple">
+                                <option value="0">Select</option>
+                                @foreach ($utilizadores as $operadores)
+                                    @if (request('operator') == $operadores->id)
+                                        <option selected value="{{ $operadores->id }}">{{ $operadores->name }}</option>
+                                    @else
+                                        <option value="{{ $operadores->id }}">{{ $operadores->name }}</option>
+                                    @endif
+                                @endforeach
+                            </select>
                         </div>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-sm-6 col-md-2">
-                    <label class="ats-label">Start</label>
-                    <div class="form-group">
-                        <div class="input-group" style="position: relative;" id="datepicker">
-                            @if (request('start') != null and request('start') != '' and request('start') != 'null')
-                                @php
-                                    $data = request('start');
-                                    if (preg_match('/-/i', $data)) {
-                                        $data = \Carbon\Carbon::parse($data)->format('d/m/Y');
-                                    } else {
-                                        $data = \Carbon\Carbon::createFromFormat('d/m/Y', $data)->format('d/m/Y');
-                                    }
-                                @endphp
-                                <input autocomplete="off" value="{{ $data }}" type="text"
-                                    class="form-control ats-border-color" id="start" name="start"
-                                    placeholder="Check-in">
-                            @else
-                                <input autocomplete="off" value="{{ Carbon\Carbon::now()->format('d/m/Y') }}"
-                                    type="text" class="form-control ats-border-color" id="start" name="start"
-                                    placeholder="Check-In">
-                            @endif
-                            <span class="input-group-addon ats-border-color" style="cursor: pointer !important;">
-                                <span class="w3-large ats-text-color fa fa-calendar"></span>
-                            </span>
+                        <div class="col-lg-4 col-md-4 col-sm-4">
+                            <label class="ats-label">Supplier</label>
+                            <select width="100%" class="form-control ats-border-color select-simple" id="hotel"
+                                name="hotel">
+                                <option value="0">Select</option>
+                                @foreach ($produtos as $produto)
+                                    @if (request('hotel') == $produto->id)
+                                        <option selected value="{{ $produto->id }}">{{ $produto->nome }}</option>
+                                    @else
+                                        <option value="{{ $produto->id }}">{{ $produto->nome }}</option>
+                                    @endif
+                                @endforeach
+                            </select>
                         </div>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-sm-6 col-md-2">
-                    <label class="ats-label">End</label>
-                    <div class="form-group">
-                        <div class="input-group" style="position: relative;" id="datepicker2">
-                            @if (request('end') !== null and request('end') !== '')
-                                @php
-                                    $data = request('end');
-                                    if (preg_match('/-/i', $data)) {
-                                        $data = \Carbon\Carbon::parse($data)->format('d/m/Y');
-                                    } else {
-                                        $data = \Carbon\Carbon::createFromFormat('d/m/Y', $data)->format('d/m/Y');
-                                    }
-                                @endphp
-                                <input autocomplete="off" value="{{ $data }}" type="text"
-                                    class="form-control ats-border-color" id="end" name="end"
-                                    placeholder="Check-Out">
-                            @else
-                                <input autocomplete="off" value="{{ Carbon\Carbon::now()->format('d/m/Y') }}"
-                                    type="text" class="form-control ats-border-color" id="end" name="end"
-                                    placeholder="Check-Out">
-                            @endif
-                            <span class="input-group-addon ats-border-color" style="cursor: pointer !important;">
-                                <span class="w3-large ats-text-color fa fa-calendar"></span>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-sm-6 col-md-2">
-                    <label class="ats-label"></label>
-                    <div class="form-group">
-                        <div class="input-group pull-right" style="position: relative; margin-top:4px;">
-                            <button class="btn btn-primary"><i class="fa fa-search" aria-hidden="true"></i></button>
-                            <div class="btn btn-primary" id="print-prof"><i class="fa fa-print" aria-hidden="true"></i>
+                        <div class="col-lg-4 col-md-4 col-sm-4">
+                            <label class="ats-label">Client</label>
+                            <div class="form-group">
+                                <div class="input-group" style="position: relative;width: 100%">
+                                    <input value="{{ request('client') }}" type="text"
+                                        class="form-control ats-border-color" id="client" name="client" width="100%">
+                                </div>
                             </div>
-                            <div class="btn btn-primary reset"><i class="fa fa-eraser" aria-hidden="true"></i></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sm-4">
+                            <label class="ats-label">Start</label>
+                            <div class="form-group">
+                                <div class="input-group" style="position: relative;" id="datepicker">
+                                    @if (request('start') != null and request('start') != '' and request('start') != 'null')
+                                        @php
+                                            $data = request('start');
+                                            if (preg_match('/-/i', $data)) {
+                                                $data = \Carbon\Carbon::parse($data)->format('d/m/Y');
+                                            } else {
+                                                $data = \Carbon\Carbon::createFromFormat('d/m/Y', $data)->format('d/m/Y');
+                                            }
+                                        @endphp
+                                        <input autocomplete="off" value="{{ $data }}" type="text"
+                                            class="form-control ats-border-color" id="start" name="start"
+                                            placeholder="Check-in">
+                                    @else
+                                        <input autocomplete="off" value="{{ Carbon\Carbon::now()->format('d/m/Y') }}"
+                                            type="text" class="form-control ats-border-color" id="start"
+                                            name="start" placeholder="Check-In">
+                                    @endif
+                                    <span class="input-group-addon ats-border-color" style="cursor: pointer !important;">
+                                        <span class="w3-large ats-text-color fa fa-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4">
+                            <label class="ats-label">End</label>
+                            <div class="form-group">
+                                <div class="input-group" style="position: relative;" id="datepicker2">
+                                    @if (request('end') !== null and request('end') !== '')
+                                        @php
+                                            $data = request('end');
+                                            if (preg_match('/-/i', $data)) {
+                                                $data = \Carbon\Carbon::parse($data)->format('d/m/Y');
+                                            } else {
+                                                $data = \Carbon\Carbon::createFromFormat('d/m/Y', $data)->format('d/m/Y');
+                                            }
+                                        @endphp
+                                        <input autocomplete="off" value="{{ $data }}" type="text"
+                                            class="form-control ats-border-color" id="end" name="end"
+                                            placeholder="Check-Out">
+                                    @else
+                                        <input autocomplete="off" value="{{ Carbon\Carbon::now()->format('d/m/Y') }}"
+                                            type="text" class="form-control ats-border-color" id="end"
+                                            name="end" placeholder="Check-Out">
+                                    @endif
+                                    <span class="input-group-addon ats-border-color" style="cursor: pointer !important;">
+                                        <span class="w3-large ats-text-color fa fa-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4"
+                            style="display: flex; flex-wrap: nowrap; align-content: center; justify-content: space-evenly; align-items: center; vertical-align: middle; position: relative; flex-direction: row; padding-top: 22px;">
+                            <div class="form-group">
+                                <div class="input-group" style="position: relative; margin-top:4px;">
+                                    <button class="btn btn-primary" type="submit" title="Pesquisar">
+                                        <i class="fa fa-search" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group" style="position: relative; margin-top:4px;">
+                                    <button class="btn btn-danger reset" type="button" title="Limpar campos">
+                                        <i class="fa fa-eraser" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group" style="position: relative; margin-top:4px;">
+                                    <button class="btn btn-warning" id="print-prof" type="button" title="Gerar PDF">
+                                        <i class="fa fa-print" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group" style="position: relative; margin-top:4px;">
+                                    <button class="btn btn-success" type="button" title="Gerar excel" onclick="gerarRelatorioExcel()">
+                                        <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                {{ Form::close() }}
             </div>
+            {{ Form::close() }}
         </div>
 
         <div class="w3-row-padding" style="margin-top:50px">

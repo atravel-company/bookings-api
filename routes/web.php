@@ -42,7 +42,8 @@ Route::group(["prefix" => "admin", 'middleware' => ['auth']], function () {
 		Route::get('reports/ats', ['as' => 'pedidos.v2.reports.index.ats', 'uses' => 'PedidosReportsV2Controller@index']);
 		Route::post('reports', ['as' => 'pedidos.v2.reports.buscar', 'uses' => 'PedidosReportsV2Controller@applyFilter']);
 		Route::post('reports/ats', ['as' => 'pedidos.v2.reports.buscar.ats', 'uses' => 'PedidosReportsV2Controller@applyFilter']);
-		Route::get('reports/pedidosreports/print/dados', ['as' => 'reports.pedidosreports.print.new', 'uses' => 'PedidosReportsV2Controller@PrintPedido']);
+		Route::get('reports/pedidosreports/pdf', ['as' => 'pedidos.v2.reports.export.pdf', 'uses' => 'PedidosReportsV2Controller@reportPDF']);
+		Route::get('reports/pedidosreports/excel', ['as' => 'pedidos.v2.reports.export.excel', 'uses' => 'PedidosReportsV2Controller@reportExcel']);
 	});
 
 

@@ -52,9 +52,11 @@ function renderPrintSubTotalSection($ValoresPedidosProduto, $campo, $total = 0, 
         $profit = 0;
         $markupKick = 0;
 
+
         foreach ($ValoresPedidosProduto as $valor) {
             $subtotal += $valor->$campo;
         }
+
 
         foreach ($ValoresPedidosProduto as $valor) {
             $valorKick += $valor->kick > 0 ? calcPercentage($valor->$campo, $valor->kick) : 0;
@@ -64,6 +66,7 @@ function renderPrintSubTotalSection($ValoresPedidosProduto, $campo, $total = 0, 
         }
 
         $subtotal += ($valorMarkup - $valorKick);
+
 
         if (isset($valorKick) && $valorKick > 0) {
             $valor = formatarDecimal($valorKick);
@@ -88,6 +91,7 @@ function renderPrintSubTotalSection($ValoresPedidosProduto, $campo, $total = 0, 
             </tr>";
             }
         }
+
 
         $valor = floor($subtotal * 100) / 100;
         if (($withAts == false && ($showTotal && $valorMarkup <= 0)) or $withAts == true) {

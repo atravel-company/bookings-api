@@ -9,7 +9,7 @@
          <th rowspan="2" style="text-align:center;vertical-align:inherit">ADR</th>
          <th rowspan="2" style="text-align:center;vertical-align:inherit">Supplier</th>
          <th rowspan="2" style="text-align:center;vertical-align:inherit">T.OPER</th>
-         <th style="background-color:yellow; text-align:center; border-left:1px solid #000;" colspan="10">Money Received
+         <th style="background-color:yellow; text-align:center; border-left:1px solid #000;" colspan="9">Money Received
          </th>
          @if (Route::current()->getName() == 'pedidos.reports.index.ats' or Route::current()->getName() == 'pedidos.reports.buscar.ats')
              <th style="background-color:yellow; text-align:center; color:red;" colspan="7">Money Paid</th>

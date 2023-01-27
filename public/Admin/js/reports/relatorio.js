@@ -17,6 +17,11 @@ $(document).ready(function () {
     ignoreReadonly: true,
   });
 
+  $("#datepicker").val(null);
+  $("#datepicker2").val(null);
+  $("#datepicker").val("");
+  $("#datepicker2").val("");
+
   $("select").select2();
 
 
@@ -25,17 +30,44 @@ $(document).ready(function () {
   });
 
   $('#print-prof').on('click', function () {
-    var start = $("#start").val();
-    var end = $("#end").val();
+    const start = $("#start").val();
+    const end = $("#end").val();
+    const hotel = $("select[name=hotel]").val();
+    const operator = $("select[name=operator]").val();
+    const client = $("input[name=client]").val();
 
-    const urlOpen = route('reports.pedidosreports.print.new', {
+    const urlOpen = route('pedidos.v2.reports.export.pdf', {
       start: start,
       end: end,
+      hotel: hotel,
+      operator: operator,
+      client: client,
     });
 
     window.open(urlOpen, "Voucher", "width=1000,height=800", "_blank");
   });
 });
+
+/**
+ * gera um relatorio em excel com todos os pedidos individualmente ( nao agrupados )
+ */
+const gerarRelatorioExcel = () => {
+  const start = $("#start").val();
+  const end = $("#end").val();
+  const hotel = $("select[name=hotel]").val();
+  const operator = $("select[name=operator]").val();
+  const client = $("input[name=client]").val();
+
+  const urlOpen = route('pedidos.v2.reports.export.excel', {
+    start: start,
+    end: end,
+    hotel: hotel,
+    operator: operator,
+    client: client,
+  });
+
+  window.open(urlOpen, "Relatorio excel", "width=1000,height=800", "_blank");
+}
 
 const formatExcelDecimal = (num) => {
   try {
@@ -84,6 +116,8 @@ const toFloat = (num) => {
 
 const geraTabela = () => {
   var table = $('#reports-table');
+
+
   /* Formatting function for row details */
   function fnFormatDetails(oTable, nTr) {
     var rowsTable = oTable.fnGetData(nTr);
@@ -101,50 +135,8 @@ const geraTabela = () => {
   });
 
   var oTable = table.dataTable({
-    dom: 'Bfrtip',
-    buttons: [{
-      extend: "colvis"
-    },
-    {
-      extend: "pdf",
-      titleAttr: "PDF",
-      exportOptions: {
-        columns: ":visible"
-      },
-      orientation: "landscape",
-      pageSize: "LEGAL"
-    }, {
-      extend: "print",
-      titleAttr: "Imprimir",
-      exportOptions: {
-        columns: ":visible"
-      }
-    },
-    {
-      extend: 'excel',
-      text: 'Excel',
-      exportOptions: {
-        columns: ':visible',
-        format: {
-          body: function (data, row, column, node) {
-            if (column == 0) {
-              return "";
-            }
-            if (column >= 8) {
-              if (data && data != null && data != "") {
-                return data;
-                var arr = data.replace(',', '-');
-                var arr = arr.replace('.', ',');
-                return arr.replace('-', '.');
-              }
-              return 0;
-            }
-            return data;
-          }
-        }
-      }
-    }
-    ],
+    dom: 'CBfrti<"bottom"p>',
+    buttons: [],
     format: 'dd/mm/yyyy',
     "order": [
       [2, 'asc'],
@@ -167,8 +159,6 @@ const geraTabela = () => {
       "zeroRecords": "Nenhum dado encontrado"
     },
     footerCallback: function (row, data, start, end, display) {
-
-
       var api = this.api(), data;
       var intVal = function (i) {
 
@@ -246,44 +236,47 @@ const geraTabela = () => {
       }
 
       if ($('#ats_profit').data('condition') == true) {
-        room_ats = api.column(18).data().reduce(function (a, b) {
+        room_ats = api.column(17).data().reduce(function (a, b) {
           return toFloat(a) + toFloat(b);
         }, 0);
         // unpaid nights total
-        golf_ats = api.column(19).data().reduce(function (a, b) {
+        golf_ats = api.column(18).data().reduce(function (a, b) {
           return toFloat(a) + toFloat(b);
         }, 0);
         // unpaid nights total
-        transfer_ats = api.column(20).data().reduce(function (a, b) {
+        transfer_ats = api.column(19).data().reduce(function (a, b) {
           return toFloat(a) + toFloat(b);
         }, 0);
         // unpaid nights total
-        car_ats = api.column(21).data().reduce(function (a, b) {
+        car_ats = api.column(20).data().reduce(function (a, b) {
           return toFloat(a) + toFloat(b);
         }, 0);
         // unpaid nights total
-        extras_ats = api.column(22).data().reduce(function (a, b) {
+        extras_ats = api.column(21).data().reduce(function (a, b) {
           return toFloat(a) + toFloat(b);
         }, 0);
         // unpaid nights total
-        total_ats = api.column(23).data().reduce(function (a, b) {
+        total_ats = api.column(22).data().reduce(function (a, b) {
           return toFloat(a) + toFloat(b);
         }, 0);
         // unpaid nights total
-        profit_ats = api.column(24).data().reduce(function (a, b) {
+        profit_ats = api.column(23).data().reduce(function (a, b) {
           return toFloat(a) + toFloat(b);
         }, 0);
 
-        $(api.column(17).footer()).html(formatExcelDecimal(room_ats));
-        $(api.column(18).footer()).html(formatExcelDecimal(golf_ats));
-        $(api.column(19).footer()).html(formatExcelDecimal(transfer_ats));
-        $(api.column(20).footer()).html(formatExcelDecimal(car_ats));
-        $(api.column(21).footer()).html(formatExcelDecimal(extras_ats));
-        $(api.column(22).footer()).html(formatExcelDecimal(total_ats));
-        $(api.column(23).footer()).html(formatExcelDecimal(profit_ats));
+        $(api.column(16).footer()).html(formatExcelDecimal(room_ats));
+        $(api.column(17).footer()).html(formatExcelDecimal(golf_ats));
+        $(api.column(18).footer()).html(formatExcelDecimal(transfer_ats));
+        $(api.column(19).footer()).html(formatExcelDecimal(car_ats));
+        $(api.column(20).footer()).html(formatExcelDecimal(extras_ats));
+        $(api.column(21).footer()).html(formatExcelDecimal(total_ats));
+        $(api.column(22).footer()).html(formatExcelDecimal(profit_ats));
       }
     } /* end footer callback */
   });
+
+
+  $("div.dataTables_filter label input").addClass("form-control").attr("style", "display:inline; margin-left: 10px !important; height: 35px; width: auto");
 
   var tableWrapper = $('#tableReports_wrapper');
   tableWrapper.find('.dataTables_length select').select2();
@@ -303,11 +296,10 @@ const geraTabela = () => {
       $(".hiddenTable thead th").removeAttr('searchable');
       $(".hiddenTable thead tr").removeAttr('aria-controls');
       $(".hiddenTable thead tr").removeAttr('style');
-      //$(".hiddenTable thead tr").removeAttr('class');
 
       $(".hiddenTable th").filter(function () {
         var t = $(this);
-        t.text() == "Money Paid" ? t.attr("colspan", 2) : null;
+        t.text() == "Money Paid" ? t.attr("colspan", 3) : null;
         t.text() == "Money Received" ? t.attr("colspan", 10) : null;
       }).closest("th");
 
@@ -320,6 +312,13 @@ const geraTabela = () => {
         h.get(3).remove();
         h.get(4).remove();
       }
+
+      $(".hiddenTable thead tr > th").removeAttr('style');
+      $(".hiddenTable thead tr > th").removeAttr('tabindex');
+      $(".hiddenTable thead tr > th").removeAttr('aria-controls');
+      $(".hiddenTable thead tr > th").removeAttr('aria-label');
+      $(".hiddenTable thead tr > th").attr('style', "width: 1px !important; white-space: nowrap !important; text-align: center; vertical-align: inherit;");
+      $(".hiddenTable tbody td").attr('style', "width: 1px; white-space: nowrap; vertical-align: inherit;");
     }
   });
   $.fn.dataTable.moment('d M Y');
@@ -330,9 +329,16 @@ function Reports(pedidoid) {
   this.pedidogeral_id = pedidoid;
 }
 
+/**
+ * gera a tabela de informacoes  ,contendo os produtos do pedido geral
+ * @param {object} json
+ * @param {object} rowsTable
+ * @returns
+ */
 Reports.prototype.formatTable = function (json, rowsTable) {
+
   var thead = $("table#reports-table").find("thead").get(0);
-  $(thead).children('tr:first-child').find("th:nth-child(7)").after(`<th rowspan="2" style="text-align: center; vertical-align: inherit; width: 100.5px;"> Suplier </th`);
+  $(thead).children('tr:first-child').find("th:nth-child(7)").after(`<th rowspan="2" style="text-align: center; vertical-align: inherit; width:1px"> Suplier </th`);
   $(thead).children('tr:last-child').append('<th style="background-color:yellow; width:50px">MKP</th>');
   $(thead).children('tr:first-child').find("th:last-child").removeAttr("colspan").attr("colspan", "10");
 
@@ -388,33 +394,32 @@ Reports.prototype.formatTable = function (json, rowsTable) {
 
       html += "<tr>";
       html += "<td> # </td>";
-      html += "<td> " + moment(pedidos.FirstCheckin).format("DD/MM/YYYY") + "</td>";
-      html += "<td> " + json.lead_name + "</td>";
-      html += "<td> " + rnts + "</td>";
-      html += "<td> " + parseFloat(bednight).toFixed(2) + "</td>";
-      html += "<td> " + parseFloat(adr).toFixed(2) + "</td>";
+      html += "<td>" + moment(pedidos.FirstCheckin).format("DD/MM/YYYY") + "</td>";
+      html += "<td>" + json.lead_name + "</td>";
+      html += "<td>" + rnts + "</td>";
+      html += "<td>" + parseFloat(bednight).toFixed(2) + "</td>";
+      html += "<td>" + parseFloat(adr).toFixed(2) + "</td>";
       if (pedidos.produto != null && pedidos.produto != "" && typeof pedidos.produto != undefined) {
-        html += "<td> " + pedidos.produto.nome + "</td>";
+        html += "<td>" + pedidos.produto.nome + "</td>";
       } else {
         html += "<td>Produto Nao encontrado</td>";
       }
-      html += "<td> " + json.user.name + "</td>";
-      html += "<td align='right'> " + parseFloat(valor_quarto).toFixed(2) + "</td>";
-      html += "<td align='right'> " + parseFloat(valor_golf).toFixed(2) + "</td>";
-      html += "<td align='right'> " + parseFloat(valor_transfer).toFixed(2) + "</td>";
-      html += "<td align='right'> " + parseFloat(valor_car).toFixed(2) + "</td>";
-      html += "<td align='right'> " + valor_extras + "</td>";
-      html += "<td align='right'> " + valor_kickback + " € </td>";
-      html += "<td align='right'> " + parseFloat(pedidos.valor).toFixed(2) + "</td>";
-      html += "<td align='right'> " + rowsTable[15] + "</td>";
-      html += "<td align='right'> " + rowsTable[16] + "</td>";
-      html += "<td style='width:50px' align='right' data-teste=true> " + valorMarkup + "</td>";
+      html += "<td>" + json.user.name + "</td>";
+      html += "<td align='right'>" + parseFloat(valor_quarto).toFixed(2) + "</td>";
+      html += "<td align='right'>" + parseFloat(valor_golf).toFixed(2) + "</td>";
+      html += "<td align='right'>" + parseFloat(valor_transfer).toFixed(2) + "</td>";
+      html += "<td align='right'>" + parseFloat(valor_car).toFixed(2) + "</td>";
+      html += "<td align='right'>" + valor_extras + "</td>";
+      html += "<td align='right'>" + valor_kickback + " € </td>";
+      html += "<td align='right'>" + parseFloat(pedidos.valor).toFixed(2) + "</td>";
+      html += "<td align='right'>" + rowsTable[15] + "</td>";
+      html += "<td align='right'>" + rowsTable[16] + "</td>";
+      html += "<td style='width:50px' align='right' data-teste=true>" + valorMarkup + "</td>";
 
       if ($('#ats_profit').data('condition') == true) {
-        html += "<td align='right'> " + parseFloat(extraAtsRate).toFixed(2) + "</td>";
-        html += "<td align='right'> " + parseFloat(pedidos.profit).toFixed(2) + "</td>";
+        html += "<td align='right'>" + parseFloat(extraAtsRate).toFixed(2) + "</td>";
+        html += "<td align='right'>" + parseFloat(pedidos.profit).toFixed(2) + "</td>";
       }
-
       html += "</tr>";
     });
   }

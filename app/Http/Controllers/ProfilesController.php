@@ -516,25 +516,17 @@ class ProfilesController extends Controller
 
     public function sendRemark(Request $request)
     {
-
         try {
 
             if ($request->type == "room") {
                 $remark_antigo = PedidoQuarto::where('id', '=', $request->pedido_quarto_id)->first()['remark'];
-            }
-            if ($request->type == "golf") {
+            } else if ($request->type == "golf") {
                 $remark_antigo = PedidoGame::where('id', '=', $request->pedido_quarto_id)->first()['remark'];
-            }
-
-            if ($request->type == "transfer") {
+            } else if ($request->type == "transfer") {
                 $remark_antigo = PedidoTransfer::where('id', '=', $request->pedido_quarto_id)->first()['remark'];
-            }
-
-            if ($request->type == "car") {
+            } else if ($request->type == "car") {
                 $remark_antigo = PedidoCar::where('id', '=', $request->pedido_quarto_id)->first()['remark'];
-            }
-
-            if ($request->type == "ticket") {
+            } else if ($request->type == "ticket") {
                 $remark_antigo = PedidoTicket::where('id', '=', $request->pedido_quarto_id)->first()['remark'];
             }
 
@@ -547,20 +539,13 @@ class ProfilesController extends Controller
 
             if ($request->type == "room") {
                 PedidoQuarto::where([['id', '=', $request->pedido_quarto_id]])->update(['remark' => $remark]);
-            }
-            if ($request->type == "golf") {
+            } else if ($request->type == "golf") {
                 PedidoGame::where([['id', '=', $request->pedido_quarto_id]])->update(['remark' => $remark]);
-            }
-
-            if ($request->type == "transfer") {
+            } else if ($request->type == "transfer") {
                 PedidoTransfer::where([['id', '=', $request->pedido_quarto_id]])->update(['remark' => $remark]);
-            }
-
-            if ($request->type == "car") {
+            } else if ($request->type == "car") {
                 PedidoCar::where([['id', '=', $request->pedido_quarto_id]])->update(['remark' => $remark]);
-            }
-
-            if ($request->type == "ticket") {
+            } else if ($request->type == "ticket") {
                 PedidoTicket::where([['id', '=', $request->pedido_quarto_id]])->update(['remark' => $remark]);
             }
         } catch (\Throwable $th) {
@@ -570,9 +555,7 @@ class ProfilesController extends Controller
 
     public function editRemark(Request $request)
     {
-
         $id = $request->pedido_id;
-
         if ($request->type == "room") {
             $arr = PedidoQuarto::find($id);
             $arr->update(['remark' => $request->remark]);
@@ -584,9 +567,7 @@ class ProfilesController extends Controller
                     $pedido->update();
                 }
             }
-        }
-
-        if ($request->type == "golf") {
+        }else if ($request->type == "golf") {
             $arr = App\PedidoGame::find($id);
             $arr->update(['remark' => $request->remark]);
             $pedidos = App\PedidoGame::where('pedido_produto_id', $arr->pedido_produto_id)->get();
@@ -596,9 +577,7 @@ class ProfilesController extends Controller
                     $pedido->update();
                 }
             }
-        }
-
-        if ($request->type == "transfer") {
+        }else if ($request->type == "transfer") {
             $arr = PedidoTransfer::find($id);
             $arr->update(['remark' => $request->remark]);
             $pedidos = App\PedidoTransfer::where('pedido_produto_id', $arr->pedido_produto_id)->get();
@@ -608,9 +587,7 @@ class ProfilesController extends Controller
                     $pedido->update();
                 }
             }
-        }
-
-        if ($request->type == "car") {
+        }else if ($request->type == "car") {
             $arr = PedidoCar::find($id);
             $arr->update(['remark' => $request->remark]);
             $pedidos = App\PedidoCar::where('pedido_produto_id', $arr->pedido_produto_id)->get();
@@ -620,9 +597,7 @@ class ProfilesController extends Controller
                     $pedido->update();
                 }
             }
-        }
-
-        if ($request->type == "ticket") {
+        }else if ($request->type == "ticket") {
             $arr = PedidoTicket::find($id);
             $arr->update(['remark' => $request->remark]);
             $pedidos = App\PedidoTicket::where('pedido_produto_id', $arr->pedido_produto_id)->get();
@@ -633,7 +608,6 @@ class ProfilesController extends Controller
                 }
             }
         }
-
         return response()->json('ok');
     }
 

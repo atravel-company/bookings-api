@@ -559,7 +559,7 @@
 
                         $(".hiddenTable th").filter(function() {
                             var t = $(this);
-                            t.text() == "Money Paid" ? t.attr("colspan", 2) : null;
+                            t.text() == "Money Paid" ? t.attr("colspan", 3) : null;
                             t.text() == "Money Received" ? t.attr("colspan", 10) : null;
                         }).closest("th");
 
