@@ -17,7 +17,7 @@
                     <th class="th-number">Total</th>
                     {{-- <th class="th-string">Remark</th> --}}
 
-                    @if (in_array(Auth::user()->email, $users_array))
+                    @if (in_array($authUser->email, $users_array))
                         <th class="th-ats-rate">ATS Rate</th>
                         {{-- <th class="th-ats-rate"></th> --}}
                         <th class="th-ats-rate">Total Profit</th>
@@ -82,7 +82,7 @@
                                 name="ticket_babie{{ $key }}_{{ $key1 }}_{{ $key2 }}">
                         </td>
 
-                        @if (in_array(Auth::user()->email, $users_array))
+                        @if (in_array($authUser->email, $users_array))
                             <td>
                                 <input value="{{ $ticket['total'] }}"
                                     id="realTicket{{ $key }}_{{ $key1 }}_{{ $key2 }}"
@@ -96,7 +96,7 @@
                         @endif
                         {{-- <td>{{$ticket['remark']}}</td> --}}
 
-                        @if (in_array(Auth::user()->email, $users_array))
+                        @if (in_array($authUser->email, $users_array))
                             <td>
                                 <input value="{{ $ticket['ats_rate'] }}"
                                     id="atsRateTicket{{ $key }}_{{ $key1 }}_{{ $key2 }}"
@@ -133,7 +133,7 @@
                         <input type="hidden" name="remark_geral_id" class="remark_geral_id"
                             value="{{ $ticket['id'] }}">
                         <input type="hidden" name="type_remark" class="type_remark" value="ticket">
-                        @if (in_array(Auth::user()->email, $users_array))
+                        @if (in_array($authUser->email, $users_array))
                             <input type="hidden" class="remark_operador" value="ats">
                         @else
                             <input type="hidden" class="remark_operador" value="agency">
@@ -143,7 +143,7 @@
                         </span>
                     </div><!-- /input-group -->
                     <label style="margin-top:10px">Remarks:</label>
-                    @if (in_array(Auth::user()->email, $users_array))
+                    @if (in_array($authUser->email, $users_array))
                         <button style="float: right; margin-top: 4px;" data-pedido_id='{{ $ticket['id'] }}'
                             data-type="ticket" data-toggle="modal" data-target="#modal-edit-remark" aria-hidden="true"
                             class="editremark_button btn btn-default" type="button">Edit Remark</button>
@@ -165,7 +165,7 @@
                     <div class="col-md-1"><b>Total:</b></div>
                     <div class="col-md-11">
                         <div class="col-xs-5" style="text-align: right">
-                            @if (in_array(Auth::user()->email, $users_array))
+                            @if (in_array($authUser->email, $users_array))
                                 + <span id="totalTicket{{ $key }}_{{ $key1 }}">0.00</span> €
                             @else
                                 + {{ $valorTicket[$key][$key1]->valor_ticket }} €
@@ -175,7 +175,7 @@
                             <b>Total Ticket</b>
                         </div>
                         <div class="col-xs-5" style="text-align: right">
-                            @if (in_array(Auth::user()->email, $users_array))
+                            @if (in_array($authUser->email, $users_array))
                                 + <span id="totalTicketExtra{{ $key }}_{{ $key1 }}">0.00</span> €
                             @else
                                 + {{ $valorTicket[$key][$key1]->valor_extra }} €
@@ -186,7 +186,7 @@
                         </div>
 
                         @php
-                            if (isset($valorGolf[$key][$key1]->kick) || in_array(Auth::user()->email, $users_array)) {
+                            if (isset($valorGolf[$key][$key1]->kick) || in_array($authUser->email, $users_array)) {
                                 $hidden = 'block';
                             } else {
                                 $hidden = 'none';
@@ -195,7 +195,7 @@
                         @endphp
 
                         <div class="col-xs-5" style="text-align: right; display:{{ $hidden }};">
-                            @if (in_array(Auth::user()->email, $users_array))
+                            @if (in_array($authUser->email, $users_array))
                                 - <span id="kickbackTicket{{ $key }}_{{ $key1 }}">0.00</span> €
                             @else
                                 - {{ $valorTicket[$key][$key1]->kick }} €R
@@ -203,7 +203,7 @@
                         </div>
                         <div class="col-xs-7" style="display:{{ $hidden }};">
                             <b>Kick-back</b>
-                            @if (in_array(Auth::user()->email, $users_array))
+                            @if (in_array($authUser->email, $users_array))
                                 <input value="{{ $valorTicket[$key][$key1]->kick }}" class="loaddd"
                                     id="kickbackTicketInput{{ $key }}_{{ $key1 }}"
                                     onchange="kickbackTicket({{ $key }},{{ $key1 }})" type="number"
@@ -211,7 +211,7 @@
                                 <b>%</b>
                             @endif
                         </div>
-                        @if (in_array(Auth::user()->email, $users_array))
+                        @if (in_array($authUser->email, $users_array))
                             <div class="col-xs-5" style="text-align: right">
                                 + <span id="markupTicket{{ $key }}_{{ $key1 }}">0.00</span> €
                             </div>
@@ -226,7 +226,7 @@
                         @endif
 
                         <div class="col-xs-5" style="border-top: 1px solid black;text-align: right;"">
-                             @if (in_array(Auth::user()->email, $users_array))
+                             @if (in_array($authUser->email, $users_array))
                             <span id="finalTicket{{ $key }}_{{ $key1 }}">0.00</span> €
                         @else
                             {{ $valorTicket[$key][$key1]->total }} €
@@ -240,5 +240,17 @@
 </div>
 </div>
 <!-- TICKETS - CALCULOS -->
+
+ @if ($authUser->id == 2)
+    <div class="w3-row w3-padding">
+        @include('Admin.profile.struct.remark_internal', [
+            'users_array' => $users_array,
+            'user' => $authUser,
+            'model' => $ticket,
+            'modelAll' => $tickets,
+            'modelType' => 'ticket',
+        ])
+    </div>
+@endif
 </div>
 @endif

@@ -561,13 +561,14 @@ class ProfilesController extends Controller
             $arr->update(['remark' => $request->remark]);
 
             $pedidos = App\PedidoQuarto::where('pedido_produto_id', $arr->pedido_produto_id)->get();
+
             foreach ($pedidos as $pedido) {
                 if ($pedido->id != $id) {
-                    $pedido->remark = null;
+                    $pedido->remark = '';
                     $pedido->update();
                 }
             }
-        }else if ($request->type == "golf") {
+        } else if ($request->type == "golf") {
             $arr = App\PedidoGame::find($id);
             $arr->update(['remark' => $request->remark]);
             $pedidos = App\PedidoGame::where('pedido_produto_id', $arr->pedido_produto_id)->get();
@@ -577,33 +578,34 @@ class ProfilesController extends Controller
                     $pedido->update();
                 }
             }
-        }else if ($request->type == "transfer") {
+        } else if ($request->type == "transfer") {
             $arr = PedidoTransfer::find($id);
             $arr->update(['remark' => $request->remark]);
             $pedidos = App\PedidoTransfer::where('pedido_produto_id', $arr->pedido_produto_id)->get();
+
             foreach ($pedidos as $pedido) {
                 if ($pedido->id != $id) {
-                    $pedido->remark = "nulo";
+                    $pedido->remark = "";
                     $pedido->update();
                 }
             }
-        }else if ($request->type == "car") {
+        } else if ($request->type == "car") {
             $arr = PedidoCar::find($id);
             $arr->update(['remark' => $request->remark]);
             $pedidos = App\PedidoCar::where('pedido_produto_id', $arr->pedido_produto_id)->get();
             foreach ($pedidos as $pedido) {
                 if ($pedido->id != $id) {
-                    $pedido->remark = "nulo";
+                    $pedido->remark = "";
                     $pedido->update();
                 }
             }
-        }else if ($request->type == "ticket") {
+        } else if ($request->type == "ticket") {
             $arr = PedidoTicket::find($id);
             $arr->update(['remark' => $request->remark]);
             $pedidos = App\PedidoTicket::where('pedido_produto_id', $arr->pedido_produto_id)->get();
             foreach ($pedidos as $pedido) {
                 if ($pedido->id != $id) {
-                    $pedido->remark = "nulo";
+                    $pedido->remark = "";
                     $pedido->update();
                 }
             }
@@ -694,6 +696,11 @@ class ProfilesController extends Controller
         $extras = DB::table('pedido_produto_extra')->where('pedido_produto_extra.deleted_at', null)->join('extras', 'pedido_produto_extra.extra_id', '=', 'extras.id')->select('*', 'pedido_produto_extra.tipo as tipo', 'pedido_produto_extra.id as id')->orderBy('extras.name', 'ASC')->get();
 
         $pedidos = PedidoGeralProfile::query();
+
+        $from = Carbon::now()->format("Y-m-d");
+        $till = Carbon::now()->add(1, 'year')->format("Y-m-d");
+        $pedidos = $pedidos->whereBetween('dataCheckin', [$from, $till]);
+
         $pedidos = $pedidos->distinct();
         $pedidos = $pedidos->groupBy("id");
         $pedidos = $pedidos->orderByRaw("FIELD(status , 'In Progress', 'Waiting Confirmation', 'Edited', 'Confirmed', 'Cancelled') ASC")->orderBy("dataCheckin", 'DESC');
@@ -794,7 +801,32 @@ class ProfilesController extends Controller
         $tipos_extras = DB::table('extras')->where('produto_extra.deleted_at', null)->join('produto_extra', 'produto_extra.extra_id', '=', 'extras.id')->select('*', 'extras.id as id')->orderBy('extras.name')->get();
         $tipos_extras = $tipos_extras->sortBy("name")->all();
 
-        return view('Admin.profile.index', ['geral' => $geral, 'in' => null, 'out' => null, 'tipo' => "-1", 'lead' => null, 'operador_id' => null, 'produtos' => $produtos, 'utilizadores' => $utilizadores, 'categorias' => $categorias, 'destinos' => $destinos, 'pedidos' => $data, 'produto' => $prod, 'quartos' => $quarto, 'valor' => $valor, 'valorGolf' => $valorGolf, 'valorTransfer' => $valorTransfer, 'valorCar' => $valorCar, 'valorTicket' => $valorTicket, 'golfs' => $game, 'transfers' => $transfer, 'cars' => $car, 'tickets' => $ticket, 'extras' => $extras, 'tipos_extras' => $tipos_extras]);
+        return view('Admin.profile.index', [
+            'geral' => $geral,
+            'in' => null,
+            'out' => null,
+            'tipo' => "-1",
+            'lead' => null,
+            'operador_id' => null,
+            'produtos' => $produtos,
+            'utilizadores' => $utilizadores,
+            'categorias' => $categorias,
+            'destinos' => $destinos,
+            'pedidos' => $data,
+            'produto' => $prod,
+            'quartos' => $quarto,
+            'valor' => $valor,
+            'valorGolf' => $valorGolf,
+            'valorTransfer' => $valorTransfer,
+            'valorCar' => $valorCar,
+            'valorTicket' => $valorTicket,
+            'golfs' => $game,
+            'transfers' => $transfer,
+            'cars' => $car,
+            'tickets' => $ticket,
+            'extras' => $extras,
+            'tipos_extras' => $tipos_extras
+        ]);
     }
 
     public function search(Request $request)
@@ -836,7 +868,6 @@ class ProfilesController extends Controller
 
         if ($request->get("tipo") != "-1" && $request->get("tipo") != "0") {
             $tipo = str_replace("+", " ", $request->get("tipo"));
-
             $pedidos = $pedidos->where('status', '=', $tipo);
         }
 
@@ -849,12 +880,12 @@ class ProfilesController extends Controller
         }
 
         $pedidos = $pedidos->distinct();
+        $pedidos = $pedidos->with("user", 'produtoss');
         $pedidos = $pedidos->groupBy("id");
 
         $pedidos = $pedidos->orderByRaw("FIELD(status , 'In Progress', 'Waiting Confirmation', 'Edited', 'Confirmed', 'Cancelled') ASC")->orderBy("dataCheckin", 'DESC');
 
         if ($request->get("debug")) {
-
             return response()->json($pedidos->get());
         }
 
@@ -885,15 +916,12 @@ class ProfilesController extends Controller
             foreach ($pedidos as $key => $pedido) {
 
                 $geral[] = $pedido;
-
-                $user = User::find($pedido['user_id']);
-
+                $user = $pedido["user"];
                 $geral[$key]['nome'] = $user['name'];
 
-
                 foreach ($geral[$key]['produtoss'] as $key1 => $produtoss) {
-                    // dd($geral[$key]->produtoss);
                     unset($produtoss->descricao);
+
                     $prod[$key][$key1] = $produtoss;
 
                     $pedido_prod_id = $prod[$key][$key1]['pivot']['id'];
@@ -2463,6 +2491,70 @@ class ProfilesController extends Controller
             return response()->json("Email enviado com sucesso");
         } catch (Exception | ModelNotFoundException $th) {
             dd($th);
+        }
+    }
+
+
+    public function salvarRemarkInterno(Request $request)
+    {
+
+        try {
+            $pedidoProdutoId = $request->get("pedidoProdutoId");
+            $type = $request->get("tipoPedido");
+
+            $remark = str_replace("\n", "", trim($request->get("remark")));
+
+            if (!$pedidoProdutoId) {
+                throw new \Exception("Falha ao identificar o produto", 500);
+            }
+            if (!$type) {
+                throw new \Exception("Falha ao identificar o tipo de produto", 500);
+            }
+            if (!$remark or $remark == "") {
+                throw new \Exception("Remark is empty", 500);
+            }
+
+            if ($type == "room") {
+                $pedidos = App\PedidoQuarto::where('pedido_produto_id', $pedidoProdutoId)->get();
+            } else if ($type == "golf") {
+                $pedidos = App\PedidoGame::where('pedido_produto_id', $pedidoProdutoId)->get();
+            } else if ($type == "transfer") {
+                $pedidos = App\PedidoTransfer::where('pedido_produto_id', $pedidoProdutoId)->get();
+            } else if ($type == "car") {
+                $pedidos = App\PedidoCar::where('pedido_produto_id', $pedidoProdutoId)->get();
+            } else if ($type == "ticket") {
+                $pedidos = App\PedidoTicket::where('pedido_produto_id', $pedidoProdutoId)->get();
+            }
+
+            if (!$pedidos) {
+                throw new \Exception("Falha ao identificar o produto", 500);
+            }
+
+            if ($request->get("isUpdate") == true) {
+                foreach ($pedidos as $i => $pedido) {
+                    $pedido->update(['remark_internal' => '']);
+                }
+            }
+
+            foreach ($pedidos as $i => $pedido) {
+                if ($pedido->remark_internal != null and $pedido->remark_internal != "") {
+                    $remark .= "<br>" . $pedido->remark_internal;
+                    $pedido->update(['remark_internal' => '']);
+                }
+            }
+
+            $pedidos->first()->update(['remark_internal' => $remark]);
+
+            return response()->json([
+                'error' => false,
+                'message' => 'remarks atualizados com sucesso',
+                'remark' => $remark
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                "error" => true,
+                "message" => $th->getMessage(),
+            ], 500);
         }
     }
 }

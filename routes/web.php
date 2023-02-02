@@ -50,7 +50,7 @@ Route::group(["prefix" => "admin", 'middleware' => ['auth']], function () {
 	Route::group(['prefix' => 'profile'], function () {
 
 		Route::get('', ['as' => 'profile', 'uses' => 'ProfilesController@index']);
-		Route::get('search', ['as' => 'profile', 'uses' => 'ProfilesController@search']);
+		Route::get('search', ['as' => 'profile.search', 'uses' => 'ProfilesController@search']);
 		Route::match(["get", "post"], 'create', ['as' => 'profile.create', 'uses' => 'ProfilesController@create']);
 		Route::get('confirm', ['as' => 'profile.confirm', 'uses' => 'ProfilesController@confirm']);
 		Route::post('confirm', ['as' => 'profile.confirm', 'uses' => 'ProfilesController@confirm']);
@@ -83,13 +83,7 @@ Route::group(["prefix" => "admin", 'middleware' => ['auth']], function () {
 		Route::post('editroomnames', ['as' => 'profile.editroomnames', 'uses' => 'ProfilesController@editRoomNames']);
 		Route::post('editar/rooms', ['as' => 'profile.editroomnew', 'uses' => 'ProfilesController@newEditRoomNames']);
 		Route::post('delete/empty/rooms', ['as' => 'profile.delete.empty.rooms', 'uses' => 'ProfilesController@removeEmptyRooms']);
-
-
 		Route::match(['get', 'post'], 'download/excel/roomslist/{id}', ['as' => 'profile.download.excel.roomlist', 'uses' => 'ProfilesController@export']);
-		//Route::get('excel/{id?}',['as'=>'export.excel', 'uses' => 'ProfilesController@export']);
-
-
-
 		Route::post('new/update/rooms', ['as' => 'profile.update.room.qtds', 'uses' => 'ProfilesController@updateRoomQtdAndPaxQtd']);
 		/* felix */
 
@@ -104,6 +98,10 @@ Route::group(["prefix" => "admin", 'middleware' => ['auth']], function () {
 		Route::get('printpedido/{id}', ['as' => 'profile.printpedido', 'uses' => 'ProfilesController@PrintPedido']);
 		Route::get('printpedido/{id}/{ats}', ['as' => 'profile.printpedido.ats', 'uses' => 'ProfilesController@PrintPedido']);
 		Route::get('printpedidomarkup/{id}', ['as' => 'profile.printpedidomarkup', 'uses' => 'ProfilesController@PrintPedidoMarkup']);
+
+		Route::group(['prefix' => 'remarks'], function () {
+			Route::post('interno/salvar', ['as' => 'profile.remarks.interno.salvar', 'uses' => 'ProfilesController@salvarRemarkInterno']);
+		});
 	});
 
 	Route::group(['prefix' => 'groups'], function () {

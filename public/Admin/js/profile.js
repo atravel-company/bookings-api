@@ -1,6 +1,6 @@
 assetBaseUrl = window.location.origin + "/admin/";
 
-$(function() {
+$(function () {
     $('.datetimepicker1').datetimepicker({
         widgetParent: '#checkin1',
         format: 'DD/MM/YYYY',
@@ -8,7 +8,7 @@ $(function() {
         debug: false,
 
 
-    }).on("dp.change", function(e) {
+    }).on("dp.change", function (e) {
         $('.datetimepickers1').data("DateTimePicker").minDate(e.date);
     });
 
@@ -25,7 +25,7 @@ $('.select-simple').select2({
     placeholder: 'Select an option...',
 });
 
-window.initDateTimePicker = function() {
+window.initDateTimePicker = function () {
 
     $('.timepicker').datetimepicker({
         // minuteStepping: 5,
@@ -37,7 +37,7 @@ window.initDateTimePicker = function() {
             horizontal: "right",
             vertical: "bottom"
         },
-    }).on('dp.show', function(e) {
+    }).on('dp.show', function (e) {
         $(".bootstrap-datetimepicker-widget").css("position", "relative");
         $(".bootstrap-datetimepicker-widget").css("z-index", "9999");
     });
@@ -50,7 +50,7 @@ window.initDateTimePicker = function() {
             horizontal: "right",
             vertical: "bottom"
         },
-    }).on('dp.show', function(e) {
+    }).on('dp.show', function (e) {
         $(".bootstrap-datetimepicker-widget").css("position", "relative");
         $(".bootstrap-datetimepicker-widget").css("z-index", "9999");
     });
@@ -69,13 +69,13 @@ window.initDateTimePicker = function() {
 
 }
 
-$(document).ready(function() {
+$(document).ready(function () {
     initDateTimePicker();
-    $('#room-pax-names').on('shown.bs.modal', function() {
+    $('#room-pax-names').on('shown.bs.modal', function () {
         // $('#myInput').trigger('focus')
     })
 
-    $('[id^="imprimir-pedido"]').on('click', function() {
+    $('[id^="imprimir-pedido"]').on('click', function () {
         var vid = $(this).attr('data-id');
         var ats = $(this).attr('data-type');
 
@@ -88,14 +88,14 @@ $(document).ready(function() {
         /* window.open('/profile/printpedido/'+vid + "&modal=true", "Voucher","width=1000,height=800","_blank"); */
     });
 
-    $('[id^="imprimir-pedido-markup"]').on('click', function() {
+    $('[id^="imprimir-pedido-markup"]').on('click', function () {
         var vid = $(this).attr('data-id');
         window.open('/admin/profile/printpedidomarkup/' + vid + "&modal=true", "Voucher", "width=1000,height=800", "_blank");
         /* window.open('/profile/printpedidomarkup/'+vid + "&modal=true", "Voucher","width=1000,height=800","_blank"); */
     });
 });
 
-window.roomDateCalc = function(x, y, z) {
+window.roomDateCalc = function (x, y, z) {
 
     var checkin = '#checkin' + x + '_' + y + '_' + z + '';
     var checkout = '#checkout' + x + '_' + y + '_' + z + '';
@@ -119,7 +119,7 @@ window.roomDateCalc = function(x, y, z) {
         ignoreReadonly: true,
         debug: false,
         widgetPositioning: { vertical: 'bottom' },
-    }).on("dp.change", function(e) {
+    }).on("dp.change", function (e) {
         $('.datetimepickers' + x + '_' + y + '_' + z + '').data("DateTimePicker").minDate(e.date);
 
         mudadia(document.getElementById('init' + x + '_' + y + '_' + z + '').value, document.getElementById('find' + x + '_' + y + '_' + z + '').value, '' + x + '_' + y + '_' + z + '');
@@ -134,7 +134,7 @@ window.roomDateCalc = function(x, y, z) {
         widgetPositioning: {
             vertical: 'bottom'
         },
-    }).on("dp.change", function(e) {
+    }).on("dp.change", function (e) {
         mudadia(document.getElementById('init' + x + '_' + y + '_' + z + '').value, document.getElementById('find' + x + '_' + y + '_' + z + '').value, '' + x + '_' + y + '_' + z + '');
         soma(x, y, z);
     });
@@ -173,7 +173,7 @@ window.roomDateCalc = function(x, y, z) {
     parseDate(checkin, checkout);
 
 
-    if (typeof($(linhadeCimaCheckin).val()) != undefined && $(linhadeCimaCheckin).val() != null) {
+    if (typeof ($(linhadeCimaCheckin).val()) != undefined && $(linhadeCimaCheckin).val() != null) {
         $(CurrentCheckin).val('').trigger("change");
         //$(CurrentCheckout).val($(linhadeCimaCheckout).val());
     } else {
@@ -188,7 +188,7 @@ var i;
 
 
 for (i = 0; i < acc.length; i++) {
-    acc[i].onclick = function() {
+    acc[i].onclick = function () {
         this.classList.toggle("active");
         var panel = this.nextElementSibling;
         if (panel.style.maxHeight) {
@@ -342,15 +342,15 @@ function somaGolf(x, y, z) {
     $('#totalGolf' + x + '_' + y).html(parseFloat(montante).toFixed(2))
     totalGolf = $('#totalGolf' + x + '_' + y).html()
     totalGolfExtra = $('#totalGolfExtra' + x + '_' + y).html()
-        //kick-back
+    //kick-back
     percent = $('#kickbackGolfInput' + x + '_' + y).val() / 100;
     valorKickback = totalGolf * percent;
     $('#kickbackGolf' + x + '_' + y).html(parseFloat(valorKickback).toFixed(2))
-        //markup
+    //markup
     percentMarkup = $('#markupGolfInput' + x + '_' + y).val() / 100;
     valorMarkup = totalGolf * percentMarkup;
     $('#markupGolf' + x + '_' + y).html(parseFloat(valorMarkup).toFixed(2))
-        //final
+    //final
     finalGolf = (+totalGolf) + (+totalGolfExtra) - (valorKickback) + (+valorMarkup)
     $('#finalGolf' + x + '_' + y).html(parseFloat(finalGolf).toFixed(2))
 
@@ -433,15 +433,15 @@ function somaTransfer(x, y, z) {
     totalTransfer = $('#totalTransfer' + x + '_' + y).html()
 
     totalTransferExtra = $('#totalTransferExtra' + x + '_' + y).html()
-        //kick-back
+    //kick-back
     percent = document.getElementById('kickbackTransferInput' + x + '_' + y).value / 100;
     valorKickback = totalTransfer * percent;
     $('#kickbackTransfer' + x + '_' + y).html(parseFloat(valorKickback).toFixed(2))
-        //markup
+    //markup
     percentMarkup = document.getElementById('markupTransferInput' + x + '_' + y).value / 100;
     valorMarkup = totalTransfer * percentMarkup;
     $('#markupTransfer' + x + '_' + y).html(parseFloat(valorMarkup).toFixed(2))
-        //final
+    //final
     finalTransfer = (+totalTransfer) + (+totalTransferExtra) - (valorKickback) + (+valorMarkup)
     $('#finalTransfer' + x + '_' + y).html(parseFloat(finalTransfer).toFixed(2))
 
@@ -940,7 +940,7 @@ function mail(prod, produto_id, pedido_id) {
         data: val,
         dataType: 'Json',
         async: false,
-        success: function(data) {
+        success: function (data) {
             if (data.result == 1) {
                 alert('Dont exist reservation e-mail for this product, please check!');
             } else {
@@ -949,7 +949,7 @@ function mail(prod, produto_id, pedido_id) {
 
             location.reload();
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             console.log(jqXHR);
             console.log(textStatus);
             console.log(errorThrown);
@@ -965,10 +965,10 @@ function mailConf(prod) {
         url: assetBaseUrl + "profile/mailConf",
         data: val,
         async: false,
-        success: function(data) {
+        success: function (data) {
             location.reload();
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             console.log(jqXHR);
             console.log(textStatus);
             console.log(errorThrown);
@@ -978,7 +978,7 @@ function mailConf(prod) {
 
 function envia(id, key) {
 
-    $('.loader').show("fast", function() {
+    $('.loader').show("fast", function () {
 
         var total = $('.grandTotal' + key).html();
         var profit = $('#grandProfit' + key).html();
@@ -996,17 +996,17 @@ function envia(id, key) {
             data: val,
             dataType: 'JSON',
             async: false,
-            beforeSend: function() {
+            beforeSend: function () {
                 $('.loader').show();
             },
-            sucess: function(json) {
+            sucess: function (json) {
                 localStorage.setItem("callback_create", json);
             },
-            complete: function() {
+            complete: function () {
                 $(".buttonn" + key).click();
                 $(".mail" + key).click();
             },
-            error: function(jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR, textStatus, errorThrown) {
 
                 console.log(jqXHR);
                 console.log(textStatus);
@@ -1014,7 +1014,7 @@ function envia(id, key) {
 
                 var errors = jqXHR.responseJSON;
                 var errorsHtml = '';
-                $.each(errors, function(key, value) {
+                $.each(errors, function (key, value) {
                     errorsHtml += '<li>' + value[0] + '</li>';
                 });
                 $('#contactediterror').html('<ul class="alert alert-warning">' + errorsHtml + '</ul>', "Error " + jqXHR.status + ': ' + errorThrown);
@@ -1027,7 +1027,7 @@ function envia(id, key) {
 
 function edita(id, key, element) {
 
-    $('.loader').show("fast", function() {
+    $('.loader').show("fast", function () {
 
         var total = $('.grandTotal' + key).html();
         var profit = $('#grandProfit' + key).html();
@@ -1048,23 +1048,23 @@ function edita(id, key, element) {
             data: val,
             dataType: 'Json',
             async: false,
-            success: function(data) {
+            success: function (data) {
                 var adress = assetBaseUrl + 'profile';
                 location.reload();
                 localStorage.setItem("callback_create", data);
             },
-            error: function(jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR, textStatus, errorThrown) {
 
                 $('.loader').hide();
 
                 var errors = jqXHR.responseJSON;
                 var errorsHtml = '';
-                $.each(errors, function(key, value) {
+                $.each(errors, function (key, value) {
                     errorsHtml += '<li>' + value[0] + '</li>';
                 });
                 $('#contactediterror').html('<ul class="alert alert-warning">' + errorsHtml + '</ul>', "Error " + jqXHR.status + ': ' + errorThrown);
             },
-            complete: function() {
+            complete: function () {
 
                 $(".buttonn" + key).click();
                 location.reload();
@@ -1077,7 +1077,7 @@ function edita(id, key, element) {
 
 function recalcular(id, key, element) {
 
-    $('.loader').show("fast", function() {
+    $('.loader').show("fast", function () {
 
         var total = $('.grandTotal' + key).html();
         var profit = $('#grandProfit' + key).html();
@@ -1110,23 +1110,23 @@ function recalcular(id, key, element) {
             data: val,
             dataType: 'Json',
             async: false,
-            success: function(data) {
+            success: function (data) {
                 var adress = assetBaseUrl + 'profile';
                 location.reload();
                 localStorage.setItem("callback_create", data);
             },
-            error: function(jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR, textStatus, errorThrown) {
 
                 $('.loader').hide();
 
                 var errors = jqXHR.responseJSON;
                 var errorsHtml = '';
-                $.each(errors, function(key, value) {
+                $.each(errors, function (key, value) {
                     errorsHtml += '<li>' + value[0] + '</li>';
                 });
                 $('#contactediterror').html('<ul class="alert alert-warning">' + errorsHtml + '</ul>', "Error " + jqXHR.status + ': ' + errorThrown);
             },
-            complete: function() {
+            complete: function () {
 
                 $(".buttonn" + key).click();
                 location.reload();
@@ -1148,21 +1148,21 @@ function removeRow(id, key, element, tipo) {
         type: 'POST',
         url: assetBaseUrl + "profile/delete",
         data: val,
-        success: function(data) {
+        success: function (data) {
             var adress = assetBaseUrl + 'profile';
 
             console.log(data);
-            window.setTimeout(function() {
+            window.setTimeout(function () {
 
                 location.reload();
                 removeTR(element);
             }, 1000);
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
 
             var errors = jqXHR.responseJSON;
             var errorsHtml = '';
-            $.each(errors, function(key, value) {
+            $.each(errors, function (key, value) {
                 errorsHtml += '<li>' + value[0] + '</li>';
             });
             $('#contactediterror').html('<ul class="alert alert-warning">' + errorsHtml + '</ul>', "Error " + jqXHR.status + ': ' + errorThrown);
@@ -1181,14 +1181,14 @@ function confirma(id, key) {
         data: val,
         dataType: 'Json',
         async: false,
-        beforeSend: function() {
+        beforeSend: function () {
             $('.loader').show();
         },
-        success: function(data) {
+        success: function (data) {
             var adress = assetBaseUrl + 'profile';
             location.reload();
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             $('.loader').hide();
 
             console.log(jqXHR);
@@ -1197,7 +1197,7 @@ function confirma(id, key) {
 
             var errors = jqXHR.responseJSON;
             var errorsHtml = '';
-            $.each(errors, function(key, value) {
+            $.each(errors, function (key, value) {
                 errorsHtml += '<li>' + value[0] + '</li>';
             });
             $('#contactediterror').html('<ul class="alert alert-warning">' + errorsHtml + '</ul>', "Error " + jqXHR.status + ': ' + errorThrown);
@@ -1216,15 +1216,15 @@ function cancel(id, key) {
             type: 'GET',
             url: assetBaseUrl + "profile/confirm",
             data: val,
-            success: function(data) {
+            success: function (data) {
                 try {
                     $.ajax({
                         type: 'post',
                         url: assetBaseUrl + "profile/cancelar_booking_api",
                         data: val,
-                        success: function() {
+                        success: function () {
                             alert("Pedido cancelado com sucesso!");
-                            window.setTimeout(function() {
+                            window.setTimeout(function () {
                                 location.reload();
                             }, 1000);
                         },
@@ -1234,13 +1234,13 @@ function cancel(id, key) {
                     console.log(error);
                 }
             },
-            error: function(jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR, textStatus, errorThrown) {
                 console.log(jqXHR);
                 console.log(textStatus);
                 console.log(errorThrown);
                 var errors = jqXHR.responseJSON;
                 var errorsHtml = '';
-                $.each(errors, function(key, value) {
+                $.each(errors, function (key, value) {
                     errorsHtml += '<li>' + value[0] + '</li>';
                 });
                 $('#contactediterror').html('<ul class="alert alert-warning">' + errorsHtml + '</ul>', "Error " + jqXHR.status + ': ' + errorThrown);
@@ -1259,17 +1259,17 @@ function cancelSendMail(id, key) {
         type: 'GET',
         url: assetBaseUrl + "profile/confirm",
         data: val,
-        success: function(data) {
+        success: function (data) {
             var adress = assetBaseUrl + 'profile';
             // location.reload();
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             console.log(jqXHR);
             console.log(textStatus);
             console.log(errorThrown);
             var errors = jqXHR.responseJSON;
             var errorsHtml = '';
-            $.each(errors, function(key, value) {
+            $.each(errors, function (key, value) {
                 errorsHtml += '<li>' + value[0] + '</li>';
             });
             $('#contactediterror').html('<ul class="alert alert-warning">' + errorsHtml + '</ul>', "Error " + jqXHR.status + ': ' + errorThrown);
@@ -1279,11 +1279,7 @@ function cancelSendMail(id, key) {
 
 function confirmaAts(id, key) {
 
-    $('.loader').show("fast", function() {
-
-        //var total = $('.grandTotal' + key).html();
-        //var profit = $('#grandProfit' + key).html();
-
+    $('.loader').show("fast", function () {
         var total = $('.grandTotal' + key).html();
         var profit = $('#grandProfit' + key).html();
         var status = 'Confirmed';
@@ -1302,14 +1298,14 @@ function confirmaAts(id, key) {
             url: assetBaseUrl + "profile/confirm",
             data: val,
             dataType: "Json",
-            success: function(data) {
+            success: function (data) {
                 var adress = assetBaseUrl + 'profile';
             },
-            complete: function() {
+            complete: function () {
                 $(".buttonn" + key).click();
                 location.reload();
             },
-            error: function(jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR, textStatus, errorThrown) {
 
                 console.log(jqXHR);
                 console.log(textStatus);
@@ -1317,7 +1313,7 @@ function confirmaAts(id, key) {
 
                 var errors = jqXHR.responseJSON;
                 var errorsHtml = '';
-                $.each(errors, function(key, value) {
+                $.each(errors, function (key, value) {
                     errorsHtml += '<li>' + value[0] + '</li>';
                 });
                 $('#contactediterror').html('<ul class="alert alert-warning">' + errorsHtml + '</ul>', "Error " + jqXHR.status + ': ' + errorThrown);
@@ -1340,17 +1336,17 @@ function enviaProduct(id, key, key1) {
         data: val,
         dataType: 'Json',
         async: false,
-        success: function(data) {
+        success: function (data) {
             console.log("exibindo dados create product");
             console.log(data);
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             console.log(jqXHR);
             console.log(textStatus);
             console.log(errorThrown);
             var errors = jqXHR.responseJSON;
             var errorsHtml = '';
-            $.each(errors, function(key, value) {
+            $.each(errors, function (key, value) {
                 errorsHtml += '<li>' + value[0] + '</li>';
             });
             $('#contactediterror').html('<ul class="alert alert-warning">' + errorsHtml + '</ul>', "Error " + jqXHR.status + ': ' + errorThrown);
@@ -1375,10 +1371,10 @@ function enviaQuartos(id, key, key1) {
         data: val,
         dataType: 'Json',
         async: false,
-        success: function(data) {
+        success: function (data) {
 
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
 
             console.log(jqXHR);
             console.log(textStatus);
@@ -1386,7 +1382,7 @@ function enviaQuartos(id, key, key1) {
 
             var errors = jqXHR.responseJSON;
             var errorsHtml = '';
-            $.each(errors, function(key, value) {
+            $.each(errors, function (key, value) {
                 errorsHtml += '<li>' + value[0] + '</li>';
             });
             $('#contactediterror').html('<ul class="alert alert-warning">' + errorsHtml + '</ul>', "Error " + jqXHR.status + ': ' + errorThrown);
@@ -1416,10 +1412,10 @@ function enviaQuartosEsp(id, key, key1, key2) {
         data: val,
         dataType: 'Json',
         async: false,
-        success: function(data) {
+        success: function (data) {
             console.log(data);
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
 
             console.log(jqXHR);
             console.log(textStatus);
@@ -1427,7 +1423,7 @@ function enviaQuartosEsp(id, key, key1, key2) {
 
             var errors = jqXHR.responseJSON;
             var errorsHtml = '';
-            $.each(errors, function(key, value) {
+            $.each(errors, function (key, value) {
                 errorsHtml += '<li>' + value[0] + '</li>';
             });
 
@@ -1453,11 +1449,11 @@ function enviaGolfs(id, key, key1) {
         data: val,
         dataType: 'Json',
         async: false,
-        success: function(data) {
+        success: function (data) {
 
             console.log(data);
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
 
             console.log(jqXHR);
             console.log(textStatus);
@@ -1465,7 +1461,7 @@ function enviaGolfs(id, key, key1) {
 
             var errors = jqXHR.responseJSON;
             var errorsHtml = '';
-            $.each(errors, function(key, value) {
+            $.each(errors, function (key, value) {
                 errorsHtml += '<li>' + value[0] + '</li>';
             });
             $('#contactediterror').html('<ul class="alert alert-warning">' + errorsHtml + '</ul>', "Error " + jqXHR.status + ': ' + errorThrown);
@@ -1492,10 +1488,10 @@ function enviaGolfsEsp(id, key, key1, key2) {
         data: val,
         dataType: 'Json',
         async: false,
-        success: function(data) {
+        success: function (data) {
             console.log(data);
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
 
             console.log(jqXHR);
             console.log(textStatus);
@@ -1503,7 +1499,7 @@ function enviaGolfsEsp(id, key, key1, key2) {
 
             var errors = jqXHR.responseJSON;
             var errorsHtml = '';
-            $.each(errors, function(key, value) {
+            $.each(errors, function (key, value) {
                 errorsHtml += '<li>' + value[0] + '</li>';
             });
             $('#contactediterror').html('<ul class="alert alert-warning">' + errorsHtml + '</ul>', "Error " + jqXHR.status + ': ' + errorThrown);
@@ -1531,16 +1527,16 @@ function enviaTransfers(id, key, key1) {
         data: val,
         dataType: 'Json',
         async: false,
-        success: function(data) {
+        success: function (data) {
 
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             console.log(jqXHR);
             console.log(textStatus);
             console.log(errorThrown);
             var errors = jqXHR.responseJSON;
             var errorsHtml = '';
-            $.each(errors, function(key, value) {
+            $.each(errors, function (key, value) {
                 errorsHtml += '<li>' + value[0] + '</li>';
             });
             $('#contactediterror').html('<ul class="alert alert-warning">' + errorsHtml + '</ul>', "Error " + jqXHR.status + ': ' + errorThrown);
@@ -1564,10 +1560,10 @@ function enviaTransfersEsp(id, key, key1, key2) {
         data: val,
         dataType: 'Json',
         async: false,
-        success: function(data) {
+        success: function (data) {
             console.log(data);
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
 
             console.log(jqXHR);
             console.log(textStatus);
@@ -1575,7 +1571,7 @@ function enviaTransfersEsp(id, key, key1, key2) {
 
             var errors = jqXHR.responseJSON;
             var errorsHtml = '';
-            $.each(errors, function(key, value) {
+            $.each(errors, function (key, value) {
                 errorsHtml += '<li>' + value[0] + '</li>';
             });
             $('#contactediterror').html('<ul class="alert alert-warning">' + errorsHtml + '</ul>', "Error " + jqXHR.status + ': ' + errorThrown);
@@ -1603,10 +1599,10 @@ function enviaCars(id, key, key1) {
         data: val,
         dataType: 'Json',
         async: false,
-        success: function(data) {
+        success: function (data) {
             console.log(data);
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
 
             console.log(jqXHR);
             console.log(textStatus);
@@ -1614,7 +1610,7 @@ function enviaCars(id, key, key1) {
 
             var errors = jqXHR.responseJSON;
             var errorsHtml = '';
-            $.each(errors, function(key, value) {
+            $.each(errors, function (key, value) {
                 errorsHtml += '<li>' + value[0] + '</li>';
             });
             $('#contactediterror').html('<ul class="alert alert-warning">' + errorsHtml + '</ul>', "Error " + jqXHR.status + ': ' + errorThrown);
@@ -1644,10 +1640,10 @@ function enviaCarsEsp(id, key, key1, key2) {
         data: val,
         dataType: 'Json',
         async: false,
-        success: function(data) {
+        success: function (data) {
             console.log(data);
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
 
             console.log(jqXHR);
             console.log(textStatus);
@@ -1655,7 +1651,7 @@ function enviaCarsEsp(id, key, key1, key2) {
 
             var errors = jqXHR.responseJSON;
             var errorsHtml = '';
-            $.each(errors, function(key, value) {
+            $.each(errors, function (key, value) {
                 errorsHtml += '<li>' + value[0] + '</li>';
             });
             $('#contactediterror').html('<ul class="alert alert-warning">' + errorsHtml + '</ul>', "Error " + jqXHR.status + ': ' + errorThrown);
@@ -1680,10 +1676,10 @@ function enviaTickets(id, key, key1) {
         data: val,
         dataType: 'Json',
         async: false,
-        success: function(data) {
+        success: function (data) {
             console.log(data);
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
 
             console.log(jqXHR);
             console.log(textStatus);
@@ -1691,7 +1687,7 @@ function enviaTickets(id, key, key1) {
 
             var errors = jqXHR.responseJSON;
             var errorsHtml = '';
-            $.each(errors, function(key, value) {
+            $.each(errors, function (key, value) {
                 errorsHtml += '<li>' + value[0] + '</li>';
             });
             $('#contactediterror').html('<ul class="alert alert-warning">' + errorsHtml + '</ul>', "Error " + jqXHR.status + ': ' + errorThrown);
@@ -1715,11 +1711,11 @@ function enviaTicketsEsp(id, key, key1, key2) {
         data: val,
         dataType: 'Json',
         async: false,
-        success: function(data) {
+        success: function (data) {
             console.log(data);
 
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
 
             console.log(jqXHR);
             console.log(textStatus);
@@ -1727,7 +1723,7 @@ function enviaTicketsEsp(id, key, key1, key2) {
 
             var errors = jqXHR.responseJSON;
             var errorsHtml = '';
-            $.each(errors, function(key, value) {
+            $.each(errors, function (key, value) {
                 errorsHtml += '<li>' + value[0] + '</li>';
             });
             $('#contactediterror').html('<ul class="alert alert-warning">' + errorsHtml + '</ul>', "Error " + jqXHR.status + ': ' + errorThrown);
@@ -1773,10 +1769,10 @@ function enviaExtra(id, key, key1, key2, tipo) {
         data: val,
         dataType: 'Json',
         async: false,
-        success: function(data) {
+        success: function (data) {
 
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
 
             console.log(jqXHR);
             console.log(textStatus);
@@ -1784,7 +1780,7 @@ function enviaExtra(id, key, key1, key2, tipo) {
 
             var errors = jqXHR.responseJSON;
             var errorsHtml = '';
-            $.each(errors, function(key, value) {
+            $.each(errors, function (key, value) {
                 errorsHtml += '<li>' + value[0] + '</li>';
             });
             $('#contactediterror').html('<ul class="alert alert-warning">' + errorsHtml + '</ul>', "Error " + jqXHR.status + ': ' + errorThrown);
@@ -1794,13 +1790,13 @@ function enviaExtra(id, key, key1, key2, tipo) {
 
 
 
-$(document).ready(function() {
+$(document).ready(function () {
     $(".loaddd").change();
 
 });
 
-$(document).ready(function() {
-    $('.accordion-agency').each(function() {
+$(document).ready(function () {
+    $('.accordion-agency').each(function () {
         var checkin = $(this).next().find('.checkin_date').val();
         var checkin_golf = $(this).next().find('.checkin_date_golf').val();
         var checkin_transfer = $(this).next().find('.checkin_date_transfer').val();
@@ -1819,7 +1815,7 @@ $(document).ready(function() {
         }
     });
 
-    $('select').click(function($event) {
+    $('select').click(function ($event) {
         $event.stopPropagation();
         $event.preventDefault();
     });
@@ -1830,12 +1826,11 @@ $(document).ready(function() {
         height: 100
     });
 
-    $('.editremark_button').click(function() {
+    $('.editremark_button').click(function () {
         let remarks = $(this).closest('div').find('.remark-box').html();
         let pedido_id = $(this).data('pedido_id');
         let type = $(this).data('type');
-        //$('.note-editable').val(remarks);
-        console.log(remarks);
+
         $(".summernote").summernote("code", remarks)
         $('#remark_product_pedido_geral_id').val(pedido_id);
         $('#remark_type').val(type);
@@ -1854,17 +1849,17 @@ function editRemark(remark, type, pedido_id) {
             "type": type,
             "pedido_id": pedido_id,
         }),
-        success: function(data) {
+        success: function (data) {
             console.log('funciona');
             $('#remark-box' + pedido_id + '').html(remark);
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
 
         }
     });
 }
 
-$('.edit_remark_btn').click(function() {
+$('.edit_remark_btn').click(function () {
     //let type = "room";
     let pedido_id = $(this).closest('span').find('#remark_product_pedido_geral_id').val();
     let type = $(this).closest('span').find('#remark_type').val();
@@ -1898,22 +1893,16 @@ function jqueryFloatFormat(nr) {
     return numeroFormatado;
 }
 
-
-
 /* ADD PELO FELIX - VALIDACAO DAS DATAS DE CHECKIN E CHECKOUT */
-$(document).ready(function() {
-
-    $(".roomCheckout").on('blur change', function() {
+$(document).ready(function () {
+    $(".roomCheckout").on('blur change', function () {
         validaDatas(this);
     });
 });
 
-
 function validaDatas(thisCheckout) {
 
     try {
-
-
         let checkoutId = $(thisCheckout).attr("name"); // pega o id da div para poder pegar a div do checkin
 
         let id = checkoutId.replace("checkout", ''); // deixa somente os numeros na variavel
@@ -1935,17 +1924,15 @@ function validaDatas(thisCheckout) {
         if (diffDays >= 14) {
 
             let message = "Atenção , possui a diferença de " + diffDays + " dias entre o checkin e o checkout!";
-            console.log(message);
-
             $.confirm({
                 title: 'Ops!',
                 content: message,
                 theme: 'dark',
                 buttons: {
-                    confirm: function() {
+                    confirm: function () {
                         console.log("confirmado");
                     },
-                    cancel: function() {
+                    cancel: function () {
                         $(thisCheckout).val("");
                     }
                 }
@@ -1956,4 +1943,105 @@ function validaDatas(thisCheckout) {
     } catch (error) {
         console.log("Error ", error.name, error.message);
     }
+}
+
+/**
+ *
+ * @param {int} pedidoProdutoId
+ */
+const abrirModalEditarRemarkInterno = (pedidoProdutoId, modelType) => {
+
+    const remarks = $(`div#remark-box-internal-${pedidoProdutoId}`).html();
+    const buttonEdit = $("#modal-edit-remark-internal").find("#buttonAtualizarRemarks");
+    buttonEdit.removeAttr("onClick");
+
+    $("input[name='editRemarkInternalModelType']").val(modelType);
+    $("#modal-edit-remark-internal").modal("show");
+    $('#summerNoteRemarksInternos').summernote({
+        placeholder: '',
+        tabsize: 2,
+        height: 100
+    });
+
+    $("#summerNoteRemarksInternos").summernote("code", remarks);
+    buttonEdit.attr("onClick", `atualizarRemarkInterno(${pedidoProdutoId}, '${modelType}')`);
+}
+
+/**
+ *
+ * @param {int} pedidoId
+ * @param {string} modelType
+ */
+const salvarRemarkInterno = (pedidoProdutoId, modelType) => {
+    const inputRemark = $(`input[data-pedido-produto-id=${pedidoProdutoId}]`);
+    return enviarRequestSalvarRemarksInternos(
+        pedidoProdutoId,
+        modelType,
+        inputRemark.val()
+    );
+}
+
+/**
+ *
+ * @param {int} pedidoId
+ * @param {string} modelType
+ */
+const atualizarRemarkInterno = (pedidoProdutoId, modelType) => {
+    const remarks = $(`#summerNoteRemarksInternos`).summernote("code");
+    const isUpdated = 1;
+    return enviarRequestSalvarRemarksInternos(
+        pedidoProdutoId,
+        modelType,
+        remarks,
+        isUpdated
+    );
+}
+
+/**
+ *
+ * @param {int} pedidoProdutoId
+ * @param {string} modelType
+ * @param {text} remarks
+ * @param {boolean} isUpdate
+ */
+const enviarRequestSalvarRemarksInternos = (pedidoProdutoId, modelType, remarks, isUpdate = 0) => {
+    $.ajax({
+        url: route('profile.remarks.interno.salvar'),
+        method: 'POST',
+        dataType: 'JSON',
+        data: {
+            pedidoProdutoId: pedidoProdutoId,
+            tipoPedido: modelType,
+            remark: remarks,
+            isUpdate: isUpdate
+        },
+        success: function (response) {
+            if (response.error == false) {
+                $.confirm({
+                    title: 'Remark saved',
+                    content: 'Your changes into internal remark was saved',
+                    type: 'blue',
+                    buttons: {
+                        close: function () {
+                            $("#modal-edit-remark-internal").modal("hide");
+                            $(`div#remark-box-internal-${pedidoProdutoId}`).html(response.remark);
+                            $(`input[data-pedido-produto-id=${pedidoProdutoId}]`).val("");
+                        }
+                    }
+                });
+            }
+        }, error: function (xhr) {
+            const error = xhr.responseJSON;
+            $.confirm({
+                title: 'Error',
+                content: error.message,
+                type: 'red',
+                buttons: {
+                    close: function () {
+                        return true;
+                    }
+                }
+            });
+        }
+    });
 }

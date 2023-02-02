@@ -9,7 +9,7 @@ class PedidoGame extends Model
 {
     //use SoftDeletes;
 
-    protected $fillable = ['pedido_produto_id','data', 'hora', 'course', 'people', 'remark', 'free', 'rate', 'total', 'ats_rate', 'ats_total_rate', 'profit'];
+    protected $fillable = ['pedido_produto_id','data', 'hora', 'course', 'people', 'remark', 'free', 'rate', 'total', 'ats_rate', 'ats_total_rate', 'profit', 'remark_internal'];
 
     protected $appends = ['checkin', 'TotalPax', 'ats_total_rate'];
     public function getCheckinAttribute(){

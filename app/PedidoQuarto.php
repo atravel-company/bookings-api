@@ -12,7 +12,7 @@ class PedidoQuarto extends Model implements Auditable
     //    use SoftDeletes;
     use \OwenIt\Auditing\Auditable;
 
-    protected $fillable = ['pedido_produto_id', 'checkin', 'checkout', 'type', 'rooms', 'plan', 'people', 'remark', 'night', 'offer_name', 'offer', 'price', 'total', 'ats_rate', 'ats_total_rate', 'profit', 'days'];
+    protected $fillable = ['pedido_produto_id', 'checkin', 'checkout', 'type', 'rooms', 'plan', 'people', 'remark', 'night', 'offer_name', 'offer', 'price', 'total', 'ats_rate', 'ats_total_rate', 'profit', 'days', 'remark_internal'];
 
     protected $dates = ['created_at', 'updated_at'];
 

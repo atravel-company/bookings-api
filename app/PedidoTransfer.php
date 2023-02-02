@@ -12,7 +12,7 @@ class PedidoTransfer extends Model implements Auditable
     //use SoftDeletes;
     use \OwenIt\Auditing\Auditable;
 
-    protected $fillable = ['pedido_produto_id', 'data', 'hora', 'adult', 'children', 'babie', 'flight', 'pickup', 'dropoff', 'remark', 'company', 'total', 'ats_rate', 'profit'];
+    protected $fillable = ['pedido_produto_id', 'data', 'hora', 'adult', 'children', 'babie', 'flight', 'pickup', 'dropoff', 'remark', 'company', 'total', 'ats_rate', 'profit', 'remark_internal'];
 
     protected $appends = ['checkin', 'TotalPax', 'ats_total_rate'];
 

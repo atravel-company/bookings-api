@@ -1,5 +1,4 @@
 @if(isset($quartos[$key][$key1]))
-
     <button class="accordion"><span><b>Rooms </b></span></button>
     <div class="panel" style="overflow-y: auto;">
         <!-- ROOMS - RESERVA -->
@@ -11,8 +10,12 @@
                     <table class="w3-table w3-striped w3-centered rooms-table">
                         <!-- Lista de Quartos -->
                         <tr style="background-color: #24AEC9; color: white;">
-                            @if(in_array(Auth::user()->email, $users_array))
-                                <th class="th-number"><span class="add-quarto" data-key="{{$key}}" data-key1="{{$key1}}"><i class="fa fa-plus-circle fa-2x" aria-hidden="true"></i></span></th>
+                            @if(in_array($authUser->email, $users_array))
+                                <th class="th-number">
+                                    <span class="add-quarto" data-key="{{$key}}" data-key1="{{$key1}}">
+                                        <i class="fa fa-plus-circle fa-2x" aria-hidden="true"></i>
+                                    </span>
+                                </th>
                             @endif
                             <th class="th-string">Room Type</th>
                             <th class="th-number">R. List</th>
@@ -23,7 +26,7 @@
                             <th class="th-number">People Nº</th>
                             <th class="th-number">Board</th>
 
-                            @if(in_array(Auth::user()->email, $users_array))
+                            @if(in_array($authUser->email, $users_array))
                                 <th style="min-width: 120px;">R. Rate/night</th>
                             @endif
 
@@ -31,24 +34,22 @@
                             <th class="th-price">Special Value</th>
                             <th class="th-price">Daily Rate</th>
                             <th class="th-price">Total</th>
-                            <!-- <th class="th-string">Remark</th> -->
-
-                            @if(in_array(Auth::user()->email, $users_array))
+                            @if(in_array($authUser->email, $users_array))
                                 <th class="th-ats-rate">ATS Rate</th>
                                 <th class="th-ats-rate">ATS Total Rate</th>
                                 <th class="th-ats-rate">Total Profit</th>
                             @endif
                         </tr>
                         @foreach($quartos[$key][$key1] as $key2=>$quarto)
-                            {{-- <input type="hidden" name="quarto_id{{$key}}_{{$key1}}_{{$key2}}" value="{{$quarto['id']}}">
-                            <input type="hidden" name="pedido_produto_id{{$key1}}" value="{{$quarto['pedido_produto_id']}}"> --}}
                             <tr id="room-original">
                                     <input type="hidden" name="quarto_id{{$key}}_{{$key1}}_{{$key2}}" value="{{$quarto['id']}}">
                                     <input type="hidden" name="pedido_produto_id{{$key1}}" value="{{$quarto['pedido_produto_id']}}">
 
-                                @if(in_array(Auth::user()->email, $users_array))
+                                @if(in_array($authUser->email, $users_array))
                                     <td> <!-- Room Remove -->
-                                        <span class="remove-quarto" onclick="return confirm('Are you sure you want to delete?')?removeRow({{$quarto['id']}}, {{$key}}, $(this), 'alojamento'):'';"><i class="fa fa-minus-circle fa-2x" aria-hidden="true"></i></span>
+                                        <span class="remove-quarto" onclick="return confirm('Are you sure you want to delete?')?removeRow({{$quarto['id']}}, {{$key}}, $(this), 'alojamento'):'';">
+                                            <i class="fa fa-minus-circle fa-2x" aria-hidden="true"></i>
+                                        </span>
                                     </td>
                                     <td> <!-- Room Type -->
                                         <input type="text" value="{{$quarto['type']}}" id="tipologia{{$key}}_{{$key1}}_{{$key2}}"  name="tipologia{{$key}}_{{$key1}}_{{$key2}}" class="form-control w3-block">
@@ -111,9 +112,7 @@
                                     checkout='#checkout{{$key}}_{{$key1}}_{{$key2}}';
                                     $('.datetimepicker{{$key}}_{{$key1}}_{{$key2}}').datetimepicker({widgetParent: checkin, format: 'DD/MM/YYYY', ignoreReadonly: true, widgetPositioning: { vertical: 'bottom'},}).on("dp.change", function (e) {
                                         $('.datetimepickers{{$key}}_{{$key1}}_{{$key2}}').data("DateTimePicker").minDate(e.date);
-
                                         mudadia(document.getElementById('init{{$key}}_{{$key1}}_{{$key2}}').value,document.getElementById('find{{$key}}_{{$key1}}_{{$key2}}').value,'{{$key}}_{{$key1}}_{{$key2}}');
-
                                         soma({{$key}},{{$key1}},{{$key2}});
                                     });
 
@@ -125,9 +124,7 @@
                                         vertical: 'bottom'
                                         },
                                     }).on("dp.change", function (e) {
-
                                         mudadia(document.getElementById('init{{$key}}_{{$key1}}_{{$key2}}').value,document.getElementById('find{{$key}}_{{$key1}}_{{$key2}}').value,'{{$key}}_{{$key1}}_{{$key2}}');
-
                                         soma({{$key}},{{$key1}},{{$key2}})
                                     });
 
@@ -154,18 +151,14 @@
                                     }
 
                                     parseDate("{{$quarto['checkin']}}","{{$quarto['checkout']}}")
-
                                 </script>
 
-                                @if(in_array(Auth::user()->email, $users_array))
-
+                                @if(in_array($authUser->email, $users_array))
                                     <td>
                                         <input id="pessoas{{$key}}_{{$key1}}_{{$key2}}" style="text-align: center" onchange="soma({{$key}},{{$key1}},{{$key2}})" type="number" value="{{$quarto['people']}}" name="pessoas{{$key}}_{{$key1}}_{{$key2}}" class="form-control w3-block people_number" data-quarto-id="{{$quarto['id']}}" required="required">
                                     </td>
                                     <td>
                                         <select data-boardID="people-number-select" onchange="soma({{$key}},{{$key1}},{{$key2}})" id="board{{$key}}_{{$key1}}_{{$key2}}" style="width: 100px;" class="form-control ats-border-color" name="board{{$key}}_{{$key1}}_{{$key2}}" placeholder="" required="required">
-
-
                                             @if($quarto['plan']=='BB')
                                                 <option selected="selected" value="BB">BB</option>
                                             @else
@@ -214,7 +207,7 @@
                                     </td>
                                 @endif
 
-                                @if(in_array(Auth::user()->email, $users_array))
+                                @if(in_array($authUser->email, $users_array))
                                     <td>
                                         <input value="{{$quarto['night']}}" id="real{{$key}}_{{$key1}}_{{$key2}}" onchange="soma({{$key}},{{$key1}},{{$key2}})" class="form-control w3-block loaddd" type="number" name="real{{$key}}_{{$key1}}_{{$key2}}" required="required">
                                     </td>
@@ -225,7 +218,7 @@
                                     <td>{{$quarto['offer_name']}}</td>
                                 @endif
 
-                                @if(in_array(Auth::user()->email, $users_array))
+                                @if(in_array($authUser->email, $users_array))
                                     <td>
                                         <input value="{{$quarto['offer']}}" id="desconto{{$key}}_{{$key1}}_{{$key2}}" onchange="soma({{$key}},{{$key1}},{{$key2}})" class="form-control w3-block loaddd" type="number" name="desconto{{$key}}_{{$key1}}_{{$key2}}">
                                     </td>
@@ -233,26 +226,27 @@
                                     <td>{{$quarto['offer']}} €</td>
                                 @endif
 
-                                @if(in_array(Auth::user()->email, $users_array))
+                                @if(in_array($authUser->email, $users_array))
                                     <td id="preco{{$key}}_{{$key1}}_{{$key2}}">0.00</td>
                                 @else
                                     <td>{{$quarto['price']}} €</td>
                                 @endif
 
-                                @if(in_array(Auth::user()->email, $users_array))
+                                @if(in_array($authUser->email, $users_array))
                                     <td id="totaliza{{$key}}_{{$key1}}_{{$key2}}">0.00</td>
                                 @else
                                     <td>{{$quarto['total']}} €</td>
                                 @endif
 
-                                @if(in_array(Auth::user()->email, $users_array))
+                                @if(in_array($authUser->email, $users_array))
                                     <td>
                                         <input value="{{$quarto['ats_rate']}}" id="atsRate{{$key}}_{{$key1}}_{{$key2}}" onchange="soma({{$key}},{{$key1}},{{$key2}})" class="form-control w3-block loaddd" type="number" name="atsRate{{$key}}_{{$key1}}_{{$key2}}" required="required">
                                     </td>
                                     <td id="atsTotalRate{{$key}}_{{$key1}}_{{$key2}}">0.00</td>
-                                    <td >
+                                    <td>
                                         <span id="atsProfit{{$key}}_{{$key1}}_{{$key2}}">0.00</span>
-                                        <span  onclick="enviaQuartosEsp('{{$quarto['id']}}','{{$key}}','{{$key1}}','{{$key2}}')" class="buttonn{{$key}}"></span>
+                                        <span  onclick="enviaQuartosEsp('{{$quarto['id']}}','{{$key}}','{{$key1}}','{{$key2}}')" class="buttonn{{$key}}">
+                                        </span>
                                     </td>
                                 @endif
                             </tr>
@@ -261,25 +255,26 @@
                 {{ Form::close() }}
             </p>
             <!-- ROOMS - RESERVA -->
+
             <!-- ROOMS - EXTRAS -->
             <p>
                 {{ Form::open(array('id'=>'form_extras'.$key.'_'.$key1, 'name'=>'form_extras'.$key.'_'.$key1, 'method'=>'GET')) }}
-                <input type="hidden" class="produto_id" name="produto_id_{{$key1}}" value="{{$produto[$key][$key1]->id}}">
+                    <input type="hidden" class="produto_id" name="produto_id_{{$key1}}" value="{{$produto[$key][$key1]->id}}">
                     <table class="w3-table w3-striped w3-centered rooms-extras-table">
                         <tr style="background-color: #24AEC9; color: white;">
-                            @if(in_array(Auth::user()->email, $users_array))
+                            @if(in_array($authUser->email, $users_array))
                                 <th class="th-number"><span class="add-quarto-extras" data-key1="{{$key1}}" data-key="{{$key}}"><i class="fa fa-plus-circle fa-2x" aria-hidden="true"></i></span></th>
                             @endif
                             <th class="th-select">Extra</th>
                             <th class="th-number">Amount</th>
                             <th class="th-number">Rate</th>
-                            @if(in_array(Auth::user()->email, $users_array))
+                            @if(in_array($authUser->email, $users_array))
                                 <th style="min-width: 1054px;"></th>
                             @else
                                 <th style="min-width: 919px;"></th>
                             @endif
                             <th class="th-price">Total</th>
-                            @if(in_array(Auth::user()->email, $users_array))
+                            @if(in_array($authUser->email, $users_array))
                                 <th class="th-ats-rate">ATS Rate</th>
                                 <th class="th-ats-rate">ATS Total Rate</th>
                                 <th class="th-ats-rate">Total Profit</th>
@@ -292,12 +287,12 @@
                             <input type="hidden" name="tipo{{$key}}_{{$key1}}_{{$id_extra}}" value="alojamento" class="form-control">
                                 <tr class="extra-tr">
                                 <input type="hidden" name="extra_id{{$key}}_{{$key1}}_{{$id_extra}}" value="{{$extra->id}}">
-                                    @if(in_array(Auth::user()->email, $users_array))
+                                    @if(in_array($authUser->email, $users_array))
                                         <td>
                                             <span class="remove-extra" onclick="return confirm('Are you sure you want to delete?')?removeRow({{$extra->id}}, {{$key}}, $(this), 'extra'):'';"><i class="fa fa-minus-circle fa-2x" aria-hidden="true"></i></span>
                                         </td>
                                     @endif
-                                    @if(in_array(Auth::user()->email, $users_array))
+                                    @if(in_array($authUser->email, $users_array))
                                     <td>
                                         <select id="extra_name{{$key}}_{{$key1}}_{{$id_extra}}" name="extra_name{{$key}}_{{$key1}}_{{$id_extra}}" class="form-control w3-block loaddd">
                                         <option value="">Select</option>
@@ -319,7 +314,7 @@
                                         <input value="{{$extra->amount}}" id="room_extra_amount{{$key}}_{{$key1}}_{{$id_extra}}" onchange="somaExtra('',{{$key}},{{$key1}},{{$id_extra}},'Acc')" class="form-control w3-block loaddd" type="number" name="room_extra_amount{{$key}}_{{$key1}}_{{$id_extra}}">
                                     </td>
 
-                                    @if(in_array(Auth::user()->email, $users_array))
+                                    @if(in_array($authUser->email, $users_array))
                                         <td>
                                             <input value="{{$extra->rate}}" id="extraRate{{$key}}_{{$key1}}_{{$id_extra}}" onchange="somaExtra('',{{$key}},{{$key1}},{{$id_extra}},'Acc')" type="number" name="extraRate{{$key}}_{{$key1}}_{{$id_extra}}" class="form-control loaddd">
                                         </td>
@@ -332,7 +327,7 @@
                                     @endif
 
 
-                                    @if(in_array(Auth::user()->email, $users_array))
+                                    @if(in_array($authUser->email, $users_array))
                                         <td>
                                             <input value="{{$extra->ats_rate}}" id="atsExtraRate{{$key}}_{{$key1}}_{{$id_extra}}" onchange="somaExtra('',{{$key}},{{$key1}},{{$id_extra}},'Acc')" type="number" class="loaddd form-control" name="atsExtraRate{{$key}}_{{$key1}}_{{$key2}}">
                                         </td>
@@ -348,7 +343,7 @@
                         @endforeach
                         <input type="hidden" class="key_max" name="key_max_{{$key1}}" value="{{$id_extra}}">
                         <!-- Estático new -->
-                        @if(in_array(Auth::user()->email, $users_array))
+                        @if(in_array($authUser->email, $users_array))
                             <select data-extraID="extra-select" class="w3-block loaddd form-control hidden">
                                 <option value="">Select</option>
                                 @foreach($tipos_extras as $tipo_extra)
@@ -373,7 +368,7 @@
                       <input type="text" name="remark_geral" class="form-control w3-block remark_geral" placeholder="Insert remark...">
                       <input type="hidden" name="remark_geral_id" class="remark_geral_id" value="{{$quarto['id']}}">
                       <input type="hidden" name="type_remark" class="type_remark" value="room">
-                      @if(in_array(Auth::user()->email, $users_array))
+                      @if(in_array($authUser->email, $users_array))
                             <input type="hidden" class="remark_operador" value="ats">
                         @else
                             <input type="hidden" class="remark_operador" value="agency">
@@ -383,7 +378,7 @@
                       </span>
                     </div><!-- /input-group -->
                     <label style="margin-top:10px">Remarks:</label>
-                    @if(in_array(Auth::user()->email, $users_array))
+                    @if(in_array($authUser->email, $users_array))
                         <button style="float: right; margin-top: 4px;" data-pedido_id='{{$quarto['id']}}' data-type="room" data-toggle="modal" data-target="#modal-edit-remark" aria-hidden="true" class="editremark_button btn btn-default" type="button">Edit Remark</button>
                     @endif
                     <div class="remark-box" id="remark-box{{$quarto['id']}}">
@@ -403,7 +398,7 @@
                     <div class="col-md-1"><b>Total:</b></div>
                     <div class="col-md-11">
                         <div class="col-xs-5" style="text-align: right">
-                            @if(in_array(Auth::user()->email, $users_array))
+                            @if(in_array($authUser->email, $users_array))
                                     + <span id="totalAcc{{$key}}_{{$key1}}">0.00</span> €
                                 @else
                                     + {{$valor[$key][$key1]->valor_quarto}} €
@@ -413,7 +408,7 @@
                             <b>Total Accommodation</b>
                         </div>
                         <div class="col-xs-5" style="text-align: right">
-                            @if(in_array(Auth::user()->email, $users_array))
+                            @if(in_array($authUser->email, $users_array))
                                 + <span id="totalAccExtra{{$key}}_{{$key1}}">0.00</span> €
                             @else
                                 + {{$valor[$key][$key1]->valor_extra}} €
@@ -423,7 +418,7 @@
                             <b>Total Extras</b>
                         </div>
                         @php
-                            if(isset($valor[$key][$key1]->kick) || in_array(Auth::user()->email, $users_array)){
+                            if(isset($valor[$key][$key1]->kick) || in_array($authUser->email, $users_array)){
                                 $hidden = "block";
                             } else{
                                 $hidden = "none";
@@ -431,7 +426,7 @@
 
                         @endphp
                         <div class="col-xs-5" style="text-align: right; display: {{$hidden}}">
-                            @if(in_array(Auth::user()->email, $users_array))
+                            @if(in_array($authUser->email, $users_array))
                                 - <span id="kickbackAcc{{$key}}_{{$key1}}">0.00</span> €
                             @else
                                 {{-- @if($valor[$key][$key1]->kick) --}}
@@ -447,9 +442,9 @@
                                 <b>%</b>
                             {{-- @endif --}}
                         </div>
-                        @if(in_array(Auth::user()->email, $users_array))
+                        @if(in_array($authUser->email, $users_array))
                         <div class="col-xs-5" style="text-align: right">
-                           {{--  @if(in_array(Auth::user()->email, $users_array)) --}}
+                           {{--  @if(in_array($authUser->email, $users_array)) --}}
                                 + <span id="markupAcc{{$key}}_{{$key1}}">0.00</span> €
                            {{--  @else
                                 + {{$valor[$key][$key1]->markup}} €
@@ -462,7 +457,7 @@
                         </div>
                         @endif
                         <div class="col-xs-5" style="border-top: 1px solid black;text-align: right;"">
-                            @if(in_array(Auth::user()->email, $users_array))
+                            @if(in_array($authUser->email, $users_array))
                                 <span id="finalAcc{{$key}}_{{$key1}}">0.00</span> €
                             @else
                                 {{$valor[$key][$key1]->total}} €
@@ -475,5 +470,17 @@
             </div>
         </div>
         <!-- ROOMS - CALCULOS -->
+
+        @if ($authUser->id == 2)
+            <div class="w3-row w3-padding">
+                @include('Admin.profile.struct.remark_internal', [
+                    'users_array' => $users_array,
+                    'user' => $authUser,
+                    'model' => $quarto,
+                    'modelAll' => $quartos,
+                    'modelType' => 'room',
+                ])
+            </div>
+        @endif
     </div>
 @endif

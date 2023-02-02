@@ -135,14 +135,14 @@ const geraTabela = () => {
   });
 
   var oTable = table.dataTable({
-    dom: 'CBfrti<"bottom"p>',
+    dom: 'lfrti<"bottom"p>',
     buttons: [],
     format: 'dd/mm/yyyy',
     "order": [
       [2, 'asc'],
       [16, 'asc']
     ],
-    pageLength: 20,
+    pageLength: 25,
     autoWidth: true,
     resposive: false,
     language: {
