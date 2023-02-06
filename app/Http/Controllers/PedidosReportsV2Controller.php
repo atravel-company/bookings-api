@@ -69,7 +69,9 @@ class PedidosReportsV2Controller extends Controller
         if ($request->has('hotel') and $request->get('hotel') !== null and $request->get('hotel') !== '0') {
             $pedidos = $pedidos->whereHas('pedidoprodutos', function ($q) use ($request) {
                 $q->where('produto_id', $request->get('hotel'));
-            });
+            })->with(['pedidoprodutos' => function ($q) use ($request) {
+                $q->where('produto_id', $request->get('hotel'));
+            }]);
         }
 
         /** usado no AJAX para a tabela de info dentro dos produtos */

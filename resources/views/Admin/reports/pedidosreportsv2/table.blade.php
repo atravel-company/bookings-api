@@ -90,13 +90,13 @@
              </td>
              <td style="text-align:right;"> {{ $pedidogeral->user ? $pedidogeral->user->name : "User Deleted" }} </td>
              <td style="text-align:right;">
-                 {{ number_format(str_replace(',', '', $pedidogeral->valortotalquarto), 2, '.' , ',') }} </td>
+                 {{ number_format(str_replace(',', '', $pedidogeral->pedidoprodutos->sum("valorquarto.valor_quarto") ), 2, '.' , ',') }} </td>
              <td style="text-align:right;">
-                 {{ number_format(str_replace(',', '', $pedidogeral->valortotalgolf), 2, '.' , ',') }} </td>
+                 {{ number_format(str_replace(',', '', $pedidogeral->pedidoprodutos->sum("valorgame.valor_golf") ), 2, '.' , ',') }} </td>
              <td style="text-align:right;">
-                 {{ number_format(str_replace(',', '', $pedidogeral->valortotaltransfer), 2, '.' , ',') }}</td>
+                 {{ number_format(str_replace(',', '', $pedidogeral->pedidoprodutos->sum("valortransfer.valor_transfer") ), 2, '.' , ',') }}</td>
              <td style="text-align:right;">
-                 {{ number_format(str_replace(',', '', $pedidogeral->valortotalcar), 2, '.' , ',') }} </td>
+                 {{ number_format(str_replace(',', '', $pedidogeral->pedidoprodutos->sum("valorcar.valor_car") ), 2, '.' , ',') }} </td>
              <td style="text-align:right;">
                  {{ number_format(str_replace(',', '', $pedidogeral->valortotalextras), 2, '.' , ',') }} </td>
              <td style="text-align:right;">
