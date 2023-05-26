@@ -323,16 +323,14 @@
         </div>
         <!-- GOLF - CALCULOS -->
 
-         @if ($authUser->id == 2)
-            <div class="w3-row w3-padding">
-                @include('Admin.profile.struct.remark_internal', [
-                    'users_array' => $users_array,
-                    'user' => $authUser,
-                    'model' => $golf,
-                    'modelAll' => $golfs,
-                    'modelType' => 'golf',
-                ])
-            </div>
-        @endif
+        <div class="w3-row w3-padding">
+            @include('Admin.profile.struct.remark_internal', [
+                'users_array' => $users_array,
+                'user' => $authUser,
+                'model' => $golf,
+                'modelAll' => $golfs,
+                'modelType' => 'golf',
+            ])
+        </div>
     </div>
 @endif

@@ -453,16 +453,17 @@
         </div>
         <!-- TRANSFERS - CALCULOS -->
 
+         <div class="w3-row w3-padding">
+            @include('Admin.profile.struct.remark_internal', [
+                'users_array' => $users_array,
+                'user' => $authUser,
+                'model' => $transfer,
+                'modelAll' => $transfers,
+                'modelType' => "transfer"
+            ])
+        </div>
+
         @if ($authUser->id == 2)
-            <div class="w3-row w3-padding">
-                @include('Admin.profile.struct.remark_internal', [
-                    'users_array' => $users_array,
-                    'user' => $authUser,
-                    'model' => $transfer,
-                    'modelAll' => $transfers,
-                    'modelType' => "transfer"
-                ])
-            </div>
             <div class="row" style="margin-bottom: 10px; margin-top: 10px">
                 <div class="col-md-offset-1 col-md-11 ">
                     <span title="Clique to send transfer payments to Transfergest"

@@ -685,7 +685,7 @@ class ProfilesController extends Controller
 
         ini_set('memory_limit', '-1');
 
-        $users_array = ['sales@atravel.pt', 'incoming@atravel.pt', 'transfers@atravel.pt', 'bookings@atravel.pt', 'accounts@atravel.pt'];
+        $users_array = ['sales@atravel.pt', 'incoming@atravel.pt', 'transfers@atravel.pt', 'bookings@atravel.pt', 'accounts@atravel.pt', 'bookings2@atravel.pt'];
 
         $destinos = Destinos::get();
         $categorias = Categoria::get();
@@ -834,7 +834,7 @@ class ProfilesController extends Controller
         ini_set('memory_limit', '-1');
 
         $inicioPesquisa = Carbon::now();
-        $users_array = ['sales@atravel.pt', 'incoming@atravel.pt', 'transfers@atravel.pt', 'bookings@atravel.pt', 'accounts@atravel.pt'];
+        $users_array = ['sales@atravel.pt', 'incoming@atravel.pt', 'transfers@atravel.pt', 'bookings@atravel.pt', 'accounts@atravel.pt', 'bookings2@atravel.pt'];
 
         $in = $request->get("in");
         $out = $request->get("out");

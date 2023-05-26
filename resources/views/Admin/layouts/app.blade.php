@@ -2,7 +2,7 @@
 <html lang="{{ app()->getLocale() }}">
 @php
 $users_array = ['sales@atravel.pt', 'incoming@atravel.pt', 'transfers@atravel.pt', 'bookings@atravel.pt',
-'accounts@atravel.pt'];
+'accounts@atravel.pt', 'bookings2@atravel.pt'];
 @endphp
 
 <head>
