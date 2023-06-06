@@ -250,4 +250,5 @@
             'modelType' => 'ticket',
         ])
 </div>
+</div>
 @endif
