@@ -548,6 +548,8 @@ class ProfilesController extends Controller
             } else if ($request->type == "ticket") {
                 PedidoTicket::where([['id', '=', $request->pedido_quarto_id]])->update(['remark' => $remark]);
             }
+
+            return response()->json($remark);
         } catch (\Throwable $th) {
             throw new Exception($th, 500);
         }

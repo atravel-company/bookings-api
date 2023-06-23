@@ -24,10 +24,12 @@ Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $sty
 class PedidoGeralReport implements FromView, WithProperties, WithTitle, ShouldAutoSize, WithEvents
 {
     protected $pedidos;
+    private $ats;
 
-    function __construct($pedidos)
+    function __construct($pedidos, $ats)
     {
         $this->pedidos = $pedidos;
+        $this->ats = $ats;
     }
 
     public function registerEvents(): array
@@ -42,6 +44,12 @@ class PedidoGeralReport implements FromView, WithProperties, WithTitle, ShouldAu
     public function view(): View
     {
         try {
+            if ($this->ats == 1) {
+                return view('Admin.reports.pedidosreportsv2.Excel.reportWithAts', [
+                    'pedidos' => $this->pedidos
+                ]);
+            }
+
             return view('Admin.reports.pedidosreportsv2.Excel.report', [
                 'pedidos' => $this->pedidos
             ]);

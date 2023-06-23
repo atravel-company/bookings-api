@@ -160,7 +160,7 @@ class PedidosReportsV2Controller extends Controller
 
             // return view('Admin.reports.pedidosreportsv2.Excel.report')->with('pedidos', $pedidos);
 
-            return Excel::download(new PedidoGeralReport($pedidos), 'Export_' . Carbon::now()->format("Y-m-d H:i") . ".xls");
+            return Excel::download(new PedidoGeralReport($pedidos, $request->ats), 'Export_' . Carbon::now()->format("Y-m-d H:i") . ".xls");
         } catch (Exception $ex) {
             dd($ex);
         }

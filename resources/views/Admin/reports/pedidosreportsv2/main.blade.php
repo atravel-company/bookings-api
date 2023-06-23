@@ -87,6 +87,7 @@
 
     @php
         $users_array = ['sales@atravel.pt', 'incoming@atravel.pt', 'transfers@atravel.pt', 'bookings@atravel.pt', 'accounts@atravel.pt', 'bookings2@atravel.pt'];
+        $ats = 0;
     @endphp
 
     <div class="w3-container">
@@ -98,6 +99,7 @@
                         <a style="font-size:16px;" href="{{ route('pedidos.v2.reports.index.ats') }}">without ATS</a>
                     @else
                         <a style="font-size:16px;" href="{{ route('pedidos.v2.reports.index') }}">with ATS</a>
+                        @php $ats = 1; @endphp
                     @endif
                 @endif
             </h1>
@@ -231,7 +233,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="input-group" style="position: relative; margin-top:4px;">
-                                    <button class="btn btn-success" type="button" title="Gerar excel" onclick="gerarRelatorioExcel()">
+                                    <button class="btn btn-success" type="button" title="Gerar excel" onclick="gerarRelatorioExcel({{ $ats }})">
                                         <i class="fa fa-file-excel-o" aria-hidden="true"></i>
                                     </button>
                                 </div>
