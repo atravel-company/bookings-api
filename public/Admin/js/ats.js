@@ -562,7 +562,7 @@ $(document).ready(function () {
     });
 
     //Edita os remarks
-    window.sendRemark = function (remark, pedido_quarto_id, type, operador) {
+    window.sendRemark = function (remark, pedido_quarto_id, type, operador, remark_box_div) {
 
         if (remark == null || remark == '' || pedido_quarto_id == null || pedido_quarto_id == '') {
             return;
@@ -579,7 +579,20 @@ $(document).ready(function () {
                 "operador": operador,
             }),
             success: function (data) {
+                remark_box_div.html("");
 
+                if (operador == "ats") {
+                    remark_box_div.html(data);
+                } else {
+                    remark_box_div.html(data);
+                }
+
+                var height = 0;
+                $('b').each(function (i, value) {
+                    height += parseInt($(this).height());
+                });
+                height += '';
+                $(remark_box_div).animate({ scrollTop: height }, 500);
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 var errors = jqXHR.responseJSON;
@@ -608,20 +621,7 @@ $(document).ready(function () {
         var type = $(this).closest('div').find('.type_remark').val();
         var remark_box_div = $(this).closest('section').find('.remark-box');
 
-        if (remark_operador == "ats") {
-            remark_box_div.append("<b class='ats_b'>ATS: </b>" + remark + " </b> <br>");
-        } else {
-            remark_box_div.append("<b class='agency_b'>Agency: </b>" + remark + " </b> <br>");
-        }
-
-        var height = 0;
-        $('b').each(function (i, value) {
-            height += parseInt($(this).height());
-        });
-        height += '';
-        $(remark_box_div).animate({ scrollTop: height }, 500);
-
-        sendRemark(remark, remark_geral_id, type, remark_operador);
+        sendRemark(remark, remark_geral_id, type, remark_operador, remark_box_div);
     });
 
     // $('.room_pax_save').click(function(event) {

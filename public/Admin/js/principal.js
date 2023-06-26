@@ -127,8 +127,6 @@ function criaquarto() {
         widgetParent: checkin,
         format: 'DD/MM/YYYY',
         ignoreReadonly: true,
-    }).on("dp.change", function(e) {
-        $('.datetimepickers' + s).data("DateTimePicker").minDate(e.date);
     });
 
     $('.datetimepickers' + s).datetimepicker({

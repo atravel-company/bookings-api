@@ -51,7 +51,7 @@ $(document).ready(function () {
 /**
  * gera um relatorio em excel com todos os pedidos individualmente ( nao agrupados )
  */
-const gerarRelatorioExcel = () => {
+const gerarRelatorioExcel = (ats) => {
   const start = $("#start").val();
   const end = $("#end").val();
   const hotel = $("select[name=hotel]").val();
@@ -64,6 +64,7 @@ const gerarRelatorioExcel = () => {
     hotel: hotel,
     operator: operator,
     client: client,
+    ats: ats
   });
 
   window.open(urlOpen, "Relatorio excel", "width=1000,height=800", "_blank");
