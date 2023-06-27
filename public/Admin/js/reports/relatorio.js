@@ -67,7 +67,7 @@ const gerarRelatorioExcel = (ats) => {
     ats: ats
   });
 
-  window.open(urlOpen, "Relatorio excel", "width=1000,height=800", "_blank");
+  window.open(urlOpen, "_self", "Relatorio excel", "width=1000,height=800");
 }
 
 const formatExcelDecimal = (num) => {
