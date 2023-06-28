@@ -23,9 +23,12 @@
         </tr>
     </thead>
     <tbody>
-        
-    </tbody>
-        @forelse($pedidos as $pedidoGeral)
+        @php
+        $pedidos = $pedidos->sortBy(function ($value) {
+            return $value->DataFirstServico . $value->lead_name;
+        });
+        @endphp
+        @foreach ($pedidos as $pedidoGeral)
             <tr>
                 <td style="text-align:center"> {{ \Carbon\Carbon::parse($pedidoGeral->DataFirstServico)->format('d/m/Y') }} </td>
                 <td style="text-align:right;"> {{ $pedidoGeral->lead_name }} </td>
@@ -75,8 +78,8 @@
                     {{ number_format(floor($pedidoGeral->profit * 100) / 100, 2, '.' , ',') }}
                 </td>
             </tr>
-            @empty
-        @endforelse
+        @endforeach
+    </tbody>
     <tfoot>
         <tr>
             <th colspan="2" style="text-align:center">Total:</th>
