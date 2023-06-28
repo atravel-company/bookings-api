@@ -281,6 +281,12 @@ class PedidosController extends Controller
 					$obj2[$numero][$key][0] = 'ticketsss';
 					$remarks[$numero][$key][0] = 'only rooms, not exist in tickets';
 				}
+
+				$remarkalojamento = null;
+				$remarkgolf = null;
+				$remarktransfer = null;
+				$remarkcar = null;
+				$remarkticket = null;
 			}
 		}
 
