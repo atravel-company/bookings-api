@@ -24,9 +24,12 @@
         </tr>
     </thead>
     <tbody>
-        @foreach ($pedidos->sortBy(function ($p) {
-        return \Carbon\Carbon::parse($p->DataFirstServico)->format('d/m/Y');
-    })->sortBy("user_id") as $pedidogeral)
+        @php
+            $pedidos = $pedidos->sortBy(function ($value) {
+                return $value->DataFirstServico . $value->lead_name;
+            });
+        @endphp
+        @foreach ($pedidos as $pedidogeral)
             @foreach ($pedidogeral->pedidoprodutos->sortBy("produto_id") as $pedidoproduto)
                 @php
                     $rnts = 0;
