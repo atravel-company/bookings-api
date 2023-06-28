@@ -30,7 +30,7 @@
             });
         @endphp
         @foreach ($pedidos as $pedidogeral)
-            @foreach ($pedidogeral->pedidoprodutos->sortBy("produto_id") as $pedidoproduto)
+            @foreach ($pedidogeral->pedidoprodutos->sortBy("FirstCheckin") as $pedidoproduto)
                 @php
                     $rnts = 0;
                     $bednight = 0;
