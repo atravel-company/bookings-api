@@ -9,7 +9,7 @@
             <th rowspan="2">ADR</th>
             <th rowspan="2">Supplier</th>
             <th rowspan="2">T.OPER</th>
-            <th style="background-color:#ffdd97; text-align:center; border-left:1px solid #000;" colspan="7">
+            <th style="background-color:#ffdd97; text-align:center; border-left:1px solid #000;" colspan="8">
                 Money
             </th>
         </tr>
@@ -21,6 +21,7 @@
             <th style="background-color:#2ea7ff;">EXTRAS</th>
             <th style="background-color:#1259b4;">K.BACK</th>
             <th style="background-color:#ffdd97;">TOTAL</th>
+            <th style="background-color:#ffdd97;">TOTAL da reserva</th>
         </tr>
     </thead>
     <tbody>
@@ -30,6 +31,11 @@
             });
         @endphp
         @foreach ($pedidos as $pedidogeral)
+            @php
+                $totalValorReserva = 0;
+                $numItems = count($pedidogeral->pedidoprodutos);
+                $i = 0;
+            @endphp
             @foreach ($pedidogeral->pedidoprodutos->sortBy("FirstCheckin") as $pedidoproduto)
                 @php
                     $rnts = 0;
@@ -53,6 +59,7 @@
                     if ($pedidoproduto->$pedidoProdutoRelacaoValor) {
                         $valores[$pedidoProdutoRelacaoValor] = $pedidoproduto->$pedidoProdutoRelacaoValor->$field;
                         $totalPedidoProduto = $pedidoproduto->$pedidoProdutoRelacaoValor->total;
+                        $totalValorReserva += $totalPedidoProduto;
                     }
 
                     $datapedidoProduto = $pedidoproduto->$pedidoProdutoRelacaoPedido
@@ -69,6 +76,11 @@
                             return $p->created_at;
                         })
                         ->first();
+
+                    $cor = '';
+                    if (++$i === $numItems) {
+                        $cor = 'red';
+                    }
                 @endphp
 
                 @forelse($pedidoproduto->pedidoquarto as $quarto)
@@ -77,7 +89,7 @@
                 @empty
                     @php $rnts += 0; @endphp
                 @endforelse
-
+            
                 <tr>
                     <td>
                         @if (isset($datapedidoProduto->data))
@@ -116,6 +128,9 @@
                     <td style="text-align:right;"> {{ $pedidogeral->ValorTotalKickBack }} </td>
                     <td style="text-align:right;" data-comentario="coluna TOTAL">
                         {{ number_format($totalPedidoProduto, 2, ',', '.') }}
+                    </td>
+                    <td style="text-align:right;color:{{ $cor }}" data-comentario="coluna TOTAL da reserva">
+                        {{ number_format($totalValorReserva, 2, ',', '.') }}
                     </td>
                 </tr>
             @endforeach
