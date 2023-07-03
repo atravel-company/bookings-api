@@ -59,10 +59,10 @@
                     $totalProfitProduto = 0;
                     
                     if ($pedidoproduto->$pedidoProdutoRelacaoValor) {
-                        $valores[$pedidoProdutoRelacaoValor] = $pedidoproduto->$pedidoProdutoRelacaoValor->$field;
-                        $totalPedidoProduto = $pedidoproduto->$pedidoProdutoRelacaoValor->total;
-                        $totalValorReserva += $totalPedidoProduto;
                         $totalProfitProduto = $pedidoproduto->$pedidoProdutoRelacaoValor->profit;
+                        $valores[$pedidoProdutoRelacaoValor] = $pedidoproduto->$pedidoProdutoRelacaoValor->$field - $totalProfitProduto;
+                        $totalPedidoProduto = $pedidoproduto->$pedidoProdutoRelacaoValor->total - $totalProfitProduto;
+                        $totalValorReserva += $totalPedidoProduto;
                         $totalProfitReserva += $totalProfitProduto;
                     }
 
