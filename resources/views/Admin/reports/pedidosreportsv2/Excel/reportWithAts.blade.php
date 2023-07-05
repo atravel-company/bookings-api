@@ -118,16 +118,16 @@
                     <td style="text-align:right;"> {{ $valores['valorcar'] }} </td>
                     <td align="right" data-comentario="total extra ats">{{ $pedidoGeral->AtsTotalExtra }} </td>
                     <td align="right">
-                    {{ number_format($totalPedidoProduto, 2, ',', '.') }}
+                    {{ $totalPedidoProduto }}
                     </td>
                     <td style="text-align:right;color:{{ $cor }}" data-comentario="coluna TOTAL da reserva">
-                        {{ number_format($totalValorReserva, 2, ',', '.') }}
+                        {{ $totalValorReserva }}
                     </td>
                     <td style="text-align:right;">
-                        {{ number_format($totalProfitProduto, 2, '.' , ',') }}
+                        {{ $totalProfitProduto }}
                     </td>
                     <td style="text-align:right;color:{{ $cor }}">
-                        {{ number_format($totalProfitReserva, 2, '.' , ',') }}
+                        {{ $totalProfitReserva }}
                     </td>
                 </tr>
             @endforeach
