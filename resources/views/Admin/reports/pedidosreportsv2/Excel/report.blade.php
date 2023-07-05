@@ -127,10 +127,10 @@
                     <td style="text-align:right;"> {{ $pedidoproduto->extras->sum('total') }} </td>
                     <td style="text-align:right;"> {{ $pedidogeral->ValorTotalKickBack }} </td>
                     <td style="text-align:right;" data-comentario="coluna TOTAL">
-                        {{ number_format($totalPedidoProduto, 2, ',', '.') }}
+                        {{ $totalPedidoProduto }}
                     </td>
                     <td style="text-align:right;color:{{ $cor }}" data-comentario="coluna TOTAL da reserva">
-                        {{ number_format($totalValorReserva, 2, ',', '.') }}
+                        {{ $totalValorReserva }}
                     </td>
                 </tr>
             @endforeach
