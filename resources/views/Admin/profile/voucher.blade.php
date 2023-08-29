@@ -67,7 +67,6 @@
                     </tr>
                     <tr>
                         <td style="text-align: left; color:#24AEC9;">1250-143 Lisboa</td>
-                        <td style="text-align: left; font-size: small;">www.atstravel.pt</td>
                     </tr>
                     <tr>
                         <td style="text-align: left; font-size: small; color:#24AEC9;">Licence RNVAT 8019</td>
@@ -219,7 +218,7 @@
     <div class="w3-row-padding w3-padding-32" style="border-top: 2px solid #00bad1;">
         <table width="100%">
             <tr width="100%" style="margin-bottom:40px">
-                <td><b>Company:</b> ATS Travel {{-- $produto->nome --}}</td>
+                <td><b>Company:</b> ATRAVEL {{-- $produto->nome --}}</td>
             </tr>
             <tr width="100%" style="margin-bottom:40px">
                 <td style="text-align:right;" width="100%"><b>Client Name:</b> {{$pedidoGeral->lead_name}}</td>

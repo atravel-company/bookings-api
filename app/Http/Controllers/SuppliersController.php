@@ -322,7 +322,7 @@ class SuppliersController extends Controller
 		}
 		else{
 			$this->validate($request, [
-       			'path_image' => 'mimes:jpeg',
+       			'path_image' => 'mimes:jpeg,png',
      		]);
 			//$idTexto=(string)$request->id;
 			$path = Storage::putFile('public', $request->file('path_image'));
