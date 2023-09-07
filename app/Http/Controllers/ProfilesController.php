@@ -1478,7 +1478,7 @@ class ProfilesController extends Controller
                             }
 
                             $pedido_tickets->data = Carbon::parse($ticket_data[$key_id][$i][$j])->format('Y-m-d');
-                            $pedido_tickets->hora = $ticket_hora[$key_id][$i][$j];
+                            $pedido_tickets->hora = urldecode($ticket_hora[$key_id][$i][$j]);
                             $pedido_tickets->adult = intval($ticket_adult[$key_id][$i][$j]);
                             $pedido_tickets->children = intval($ticket_children[$key_id][$i][$j]);
                             $pedido_tickets->babie = intval($ticket_babie[$key_id][$i][$j]);
