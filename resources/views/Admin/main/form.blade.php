@@ -975,15 +975,15 @@ color: #fff;
 
         </div>
 
-        @if($produto->alojamento!=1)
-        @if($produto->golf==1)
-        <div id="golf">
+        @if($produto->alojamento != 1)
+            @if($produto->golf == 1)
+                <div id="golf">
             @else
-            <div style="display:none;" id="golf">
-                @endif
-                @else
                 <div style="display:none;" id="golf">
-                    @endif
+            @endif
+        @else
+            <div style="display:none;" id="golf">
+        @endif
 
                     <div class="w3-light-gray">
 
@@ -994,8 +994,8 @@ color: #fff;
                         <div class="w3-row-padding">
 
                             <div class="w3-col l12">
-                                <h3 class="title_form_book w3-center ats-text-color w3-border-bottom-ats w3-padding-16"
-                                    style="margin-top:0px!important;"></h3>
+                                <h3 class="w3-center ats-text-color w3-border-bottom-ats w3-padding-16"
+                                    style="margin-top:0px!important;">{{ $produto->nome }}</h3>
                             </div>
 
                         </div>

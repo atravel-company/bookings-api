@@ -183,7 +183,7 @@ function formulario(name, id, alojamento1, golf1, transfer1, car1, ticket1, usua
                 // var produto_nome = $(".produto_nome").text();
                 // console.log(produto_nome);
                 // $("input[name='coursegolf']").val(produto_nome);
-            }, 500)
+            }, 700)
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(jqXHR);
