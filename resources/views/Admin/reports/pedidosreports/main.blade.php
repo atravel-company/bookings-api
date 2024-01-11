@@ -445,30 +445,33 @@
                         bedn = api.column(5).data().reduce(function(a, b) {
                             return toFloat(a) + toFloat(b);
                         }, 0);
-                        room = api.column(9).data().reduce(function(a, b) {
+                        playersn = api.column(6).data().reduce(function(a, b) {
                             return toFloat(a) + toFloat(b);
                         }, 0);
-                        golf = api.column(10).data().reduce(function(a, b) {
+                        room = api.column(10).data().reduce(function(a, b) {
                             return toFloat(a) + toFloat(b);
                         }, 0);
-                        trans = api.column(11).data().reduce(function(a, b) {
+                        golf = api.column(11).data().reduce(function(a, b) {
                             return toFloat(a) + toFloat(b);
                         }, 0);
-                        car = api.column(12).data().reduce(function(a, b) {
+                        trans = api.column(12).data().reduce(function(a, b) {
                             return toFloat(a) + toFloat(b);
                         }, 0);
-                        extras = api.column(13).data().reduce(function(a, b) {
+                        car = api.column(13).data().reduce(function(a, b) {
                             return toFloat(a) + toFloat(b);
                         }, 0);
-                        kback = api.column(14).data().reduce(function(a, b) {
+                        extras = api.column(14).data().reduce(function(a, b) {
                             return toFloat(a) + toFloat(b);
                         }, 0);
-
+                        kback = api.column(15).data().reduce(function(a, b) {
+                            return toFloat(a) + toFloat(b);
+                        }, 0);
 
                         adr = parseFloat(room) / parseFloat(rnts);
                         adr = parseFloat(adr);
                         rnts = parseFloat(rnts);
                         bedn = parseFloat(bedn);
+                        playersn = parseFloat(playersn);
 
                         total = $("#TableValorTotalTotal").attr("data-value");
                         vpaid = $("#ValorTotalPago").attr("data-value");
@@ -476,63 +479,66 @@
 
                         $(api.column(3).footer()).html(isNaN(rnts) ? "0.00" : rnts.toLocaleString('de-DE'));
                         $(api.column(4).footer()).html(isNaN(bedn) ? "0.00" : bedn.toLocaleString('de-DE'));
-                        $(api.column(5).footer()).html(isNaN(adr) ? "0.00" : adr.toLocaleString('pt-PT') +  '€');
-                        $(api.column(6).footer()).html('-');
+                        $(api.column(5).footer()).html(isNaN(playersn) ? "0.00" : playersn.toLocaleString('de-DE'));
+                        $(api.column(6).footer()).html(isNaN(adr) ? "0.00" : adr.toLocaleString('pt-PT') +  '€');
                         $(api.column(7).footer()).html('-');
-                        $(api.column(8).footer()).html( formatExcelDecimal(room) );
-                        $(api.column(9).footer()).html( formatExcelDecimal(golf) );
-                        $(api.column(10).footer()).html( formatExcelDecimal(trans) );
-                        $(api.column(11).footer()).html( formatExcelDecimal(car) );
-                        $(api.column(12).footer()).html( formatExcelDecimal(extras) );
-                        $(api.column(13).footer()).html( formatExcelDecimal(kback)  );
-                        $(api.column(14).footer()).html(total.toLocaleString('pt-PT') + ' €');
-                        $(api.column(15).footer()).html(vpaid.toLocaleString('pt-PT') + ' €');
+                        $(api.column(8).footer()).html('-');
+                        $(api.column(9).footer()).html( formatExcelDecimal(room) );
+                        $(api.column(10).footer()).html( formatExcelDecimal(golf) );
+                        $(api.column(11).footer()).html( formatExcelDecimal(trans) );
+                        $(api.column(12).footer()).html( formatExcelDecimal(car) );
+                        $(api.column(13).footer()).html( formatExcelDecimal(extras) );
+                        $(api.column(14).footer()).html( formatExcelDecimal(kback)  );
+                        $(api.column(15).footer()).html(total.toLocaleString('pt-PT') + ' €');
+                        $(api.column(16).footer()).html(vpaid.toLocaleString('pt-PT') + ' €');
+
                         if (parseFloat(unpaid) > 0) {
-                            $(api.column(16).footer()).html('<text style="color: green">' + unpaid.toLocaleString(
+                            $(api.column(17).footer()).html('<text style="color: green">' + unpaid.toLocaleString(
                                 'pt-PT') + ' €</text>');
                         } else if (parseFloat(unpaid) < 0) {
-                            $(api.column(16).footer()).html('<text style="color: red">' + unpaid.toLocaleString(
+                            $(api.column(17).footer()).html('<text style="color: red">' + unpaid.toLocaleString(
                                 'pt-PT') + ' €</text>');
                         } else {
-                            $(api.column(16).footer()).html('<text style="color: black">' + unpaid.toLocaleString(
+                            $(api.column(17).footer()).html('<text style="color: black">' + unpaid.toLocaleString(
                                 'pt-PT') + ' €</text>');
                         }
+
                         if ($('#ats_profit').data('condition') == true) {
-                            room_ats = api.column(18).data().reduce(function(a, b) {
+                            room_ats = api.column(19).data().reduce(function(a, b) {
                                 return toFloat(a) + toFloat(b);
                             }, 0);
                             // unpaid nights total
-                            golf_ats = api.column(19).data().reduce(function(a, b) {
+                            golf_ats = api.column(20).data().reduce(function(a, b) {
                                 return toFloat(a) + toFloat(b);
                             }, 0);
                             // unpaid nights total
-                            transfer_ats = api.column(20).data().reduce(function(a, b) {
+                            transfer_ats = api.column(21).data().reduce(function(a, b) {
                                 return toFloat(a) + toFloat(b);
                             }, 0);
                             // unpaid nights total
-                            car_ats = api.column(21).data().reduce(function(a, b) {
+                            car_ats = api.column(22).data().reduce(function(a, b) {
                                 return toFloat(a) + toFloat(b);
                             }, 0);
                             // unpaid nights total
-                            extras_ats = api.column(22).data().reduce(function(a, b) {
+                            extras_ats = api.column(23).data().reduce(function(a, b) {
                                 return toFloat(a) + toFloat(b);
                             }, 0);
                             // unpaid nights total
-                            total_ats = api.column(23).data().reduce(function(a, b) {
+                            total_ats = api.column(24).data().reduce(function(a, b) {
                                 return toFloat(a) + toFloat(b);
                             }, 0);
                             // unpaid nights total
-                            profit_ats = api.column(24).data().reduce(function(a, b) {
+                            profit_ats = api.column(25).data().reduce(function(a, b) {
                                 return toFloat(a) + toFloat(b);
                             }, 0);
 
-                            $(api.column(17).footer()).html(formatExcelDecimal(room_ats));
-                            $(api.column(18).footer()).html(formatExcelDecimal(golf_ats));
-                            $(api.column(19).footer()).html(formatExcelDecimal(transfer_ats));
-                            $(api.column(20).footer()).html(formatExcelDecimal(car_ats));
-                            $(api.column(21).footer()).html(formatExcelDecimal(extras_ats));
-                            $(api.column(22).footer()).html(formatExcelDecimal(total_ats));
-                            $(api.column(23).footer()).html(formatExcelDecimal(profit_ats));
+                            $(api.column(18).footer()).html(formatExcelDecimal(room_ats));
+                            $(api.column(19).footer()).html(formatExcelDecimal(golf_ats));
+                            $(api.column(20).footer()).html(formatExcelDecimal(transfer_ats));
+                            $(api.column(21).footer()).html(formatExcelDecimal(car_ats));
+                            $(api.column(22).footer()).html(formatExcelDecimal(extras_ats));
+                            $(api.column(23).footer()).html(formatExcelDecimal(total_ats));
+                            $(api.column(24).footer()).html(formatExcelDecimal(profit_ats));
                         }
                     } /* end footer callback */
                 });
