@@ -90,6 +90,7 @@
                             $subtotal = 0;
                             $old_produto_id = 0;
                             $id = 0;
+                            $extraQuarto = [];
                         @endphp
 
                         @foreach ($quartos->sortBy('checkin') as $quarto)
@@ -112,7 +113,10 @@
                                 <td><b>Pax:</b> {{ $quarto->people }}</td>
                                 <td colspan="2"></td>
                             </tr>
-                            @if ($old_produto_id != $quarto->pedido_produto_id)
+                            @if ($old_produto_id != $quarto->pedido_produto_id && !in_array($quarto->pedido_produto_id, $extraQuarto))
+                                @php
+                                    $extraQuarto[] = $quarto->pedido_produto_id;
+                                @endphp
                                 @foreach ($extras_quartos as $extra_quarto)
                                     @if ($extra_quarto->pedido_produto_id == $quarto->pedido_produto_id)
                                         <tr>
