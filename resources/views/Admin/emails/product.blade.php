@@ -407,7 +407,7 @@
         <div class="w3-row w3-padding">
             <table class="w3-table w3-striped w3-centered" width="549px">
             <tr>
-                    <td class="footer" style="text-align: left;">ATS Travel</td>
+                    <td class="footer" style="text-align: left;">ATravel</td>
                     <td class="footer" style="text-align: right; color:#24AEC9;">Av. da Liberdade,</td>
                 </tr>
                 <tr>

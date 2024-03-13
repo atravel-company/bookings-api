@@ -2,13 +2,13 @@
 <html lang="{{ app()->getLocale() }}">
 
 <head>
-    <title>ATS Travel</title>
+    <title>ATRAVEL</title>
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta charset="UTF-8" />
-    <meta name="description" content="ATS Travel" />
-    <meta name="keywords" content="ATS Travel" />
-    <meta name="author" content="ATS Travel" />
+    <meta name="description" content="ATRAVEL" />
+    <meta name="keywords" content="ATRAVEL" />
+    <meta name="author" content="ATRAVEL" />
 
     @include('stylesheet')
 </head>
@@ -50,9 +50,9 @@
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
                             </button>
-                            <a class="navbar-brand" href="index.php"><img src="{{ asset('FrontEnd/images/logoats.png') }}"
-                                    style="margin-top: -13px;max-height: 45px" alt="logotipo - ats travel"
-                                    title="logotipo - ats travel"></a>
+                            <a class="navbar-brand" href="index.php"><img src="{{ asset('FrontEnd/images/LogotipoAtravelCor.png') }}"
+                                    style="margin-top: -13px;max-height: 45px" alt="logotipo - ATRAVEL"
+                                    title="logotipo - ATRAVEL"></a>
                         </div>
                         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                             <ul class="nav navbar-nav">
@@ -119,10 +119,10 @@
     <!-- about-->
 
     <section class="about" id="about">
-        <h1 class="heading">ATS Travel</h3>
+        <h1 class="heading">ATRAVEL</h3>
             <div class="container">
                 <div class="about-top">
-                    <p>ATS Travel is a fully licensed Travel Agency dmc, operating in the Algarve, Portugal, since 1999.
+                    <p>ATRAVEL is a fully licensed Travel Agency dmc, operating in the Algarve, Portugal, since 1999.
                     </p>
                     <p>We are able to offer a wide variety of solutions for travelers within the Algarve region.</p>
                     <p>Offering Airport & Golf transfers, Sightseeing tours, Hotel & Golf reservations, and much more.
@@ -162,17 +162,17 @@
             <h3 class="heading"></h3>
             <div class="col-md-6 contact-left">
                 <h4>Contact us</h4>
-                <p>ATS Travel contacts are here for you to use</p>
+                <p>ATRAVEL contacts are here for you to use</p>
                 <div class="address">
                     <p><i class="fa fa-map-marker" aria-hidden="true"></i> Av. da Liberdade</p>
-                    <p>243, 4ºA,</p>
+                    <p>245, 4ºA,</p>
                     <p>1250-143 Lisboa, Portugal</p>
                 </div>
                 <div class="number">
                     <p><i class="fa fa-phone" aria-hidden="true"></i><a href="tel:+351282457306">(+351) 282 457 306</a>
-                        | <a href="tel:+351917250405">(+351) 917 250 405</a></p>
-                    <p><i class="fa fa-envelope" aria-hidden="true"></i> <a href="mailto:info@atravel.pt">
-                            info@atravel.pt</a></p>
+                        | <a href="tel:+351917250405">(+351) 912 032 695</a></p>
+                    <p><i class="fa fa-envelope" aria-hidden="true"></i> <a href="mailto:sales@atravel.pt">
+                        sales@atravel.pt</a></p>
                 </div>
                 <div class="social-icons">
                     <a href="https://www.facebook.com/atstravel1999" target="_blank"><img
@@ -222,7 +222,7 @@
             </style>
         </div>
         <script type='text/javascript'>
-            function init_map(){var myOptions = {zoom:16, scrollwheel: false, navigationControl: false, mapTypeControl: false,scaleControl: false, draggable: false, center:new google.maps.LatLng(37.133896,-8.5391927),mapTypeId: google.maps.MapTypeId.ROADMAP};map = new google.maps.Map(document.getElementById('gmap_canvas'), myOptions);marker = new google.maps.Marker({map: map,position: new google.maps.LatLng(37.133896,-8.5391927)});infowindow = new google.maps.InfoWindow({content:'<a href="https://www.google.pt/maps/dir//ATS+Travel+dmc,+Rua+D.+Carlos+I+Edf.+P%C3%A9rola+do+Arade,+53C,+1%C2%BAC,+8500-607+Portim%C3%A3o/@37.133896,-8.5391927,17z/data=!4m15!1m6!3m5!1s0xd1b288d20e61713:0x2448fb59d672bf14!2sATS+Travel+dmc!8m2!3d37.133896!4d-8.537004!4m7!1m0!1m5!1m1!1s0xd1b288d20e61713:0x2448fb59d672bf14!2m2!1d-8.537004!2d37.133896" target="_blank" style="color: #000; font-size: 18px;"><strong>ATS Travel</strong></a>'});google.maps.event.addListener(marker, 'click', function(){infowindow.open(map,marker);});infowindow.open(map,marker);}google.maps.event.addDomListener(window, 'load', init_map);
+            function init_map(){var myOptions = {zoom:16, scrollwheel: false, navigationControl: false, mapTypeControl: false,scaleControl: false, draggable: false, center:new google.maps.LatLng(37.133896,-8.5391927),mapTypeId: google.maps.MapTypeId.ROADMAP};map = new google.maps.Map(document.getElementById('gmap_canvas'), myOptions);marker = new google.maps.Marker({map: map,position: new google.maps.LatLng(37.133896,-8.5391927)});infowindow = new google.maps.InfoWindow({content:'<a href="https://www.google.pt/maps/dir//ATS+Travel+dmc,+Rua+D.+Carlos+I+Edf.+P%C3%A9rola+do+Arade,+53C,+1%C2%BAC,+8500-607+Portim%C3%A3o/@37.133896,-8.5391927,17z/data=!4m15!1m6!3m5!1s0xd1b288d20e61713:0x2448fb59d672bf14!2sATS+Travel+dmc!8m2!3d37.133896!4d-8.537004!4m7!1m0!1m5!1m1!1s0xd1b288d20e61713:0x2448fb59d672bf14!2m2!1d-8.537004!2d37.133896" target="_blank" style="color: #000; font-size: 18px;"><strong>ATRAVEL</strong></a>'});google.maps.event.addListener(marker, 'click', function(){infowindow.open(map,marker);});infowindow.open(map,marker);}google.maps.event.addDomListener(window, 'load', init_map);
         </script>
     </div>
     <!-- //map -->
@@ -245,7 +245,7 @@
                 </ul>
                 <div class="clearfix"> </div>
             </div>
-            <p>Copyright © 2017 All Rights Reserved ATS Travel by <a href="http://www.oseubackoffice.com"
+            <p>Copyright © 2017 All Rights Reserved ATRAVEL by <a href="http://www.oseubackoffice.com"
                     target="_blank">oseubackoffice</a></p>
         </div>
     </div>
