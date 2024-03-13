@@ -53,7 +53,7 @@ class SendMailNovaReservaJob implements ShouldQueue
             $mailData,
             function ($message) use ($pedido, $prod, $destinationEmail, $userEmail) {
                 $message
-                    ->from('noreply@atsportugal.com', 'Ats Travel Reservation request')
+                    ->from('noreply@atsportugal.com', 'ATRAVEL Reservation request')
                     ->to('sales@atravel.pt')
                     // ->cc($destinationEmail)
                     ->cc($userEmail)

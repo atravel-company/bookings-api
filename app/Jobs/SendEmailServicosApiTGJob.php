@@ -32,7 +32,7 @@ class SendEmailServicosApiTGJob implements ShouldQueue
 
         Mail::send('Admin.emails.enviaprodutoapi', $mailData, function ($message) {
             $message
-                ->from('noreply@atsportugal.com', 'Ats Travel - API service')
+                ->from('noreply@atsportugal.com', 'ATRAVEL - API service')
                 ->to('sales@atravel.pt')
                 ->cc('transfers@atravel.pt')
                 // ->cc('henrique@oseubackoffice.com')

@@ -138,10 +138,10 @@ $users_array = ['sales@atravel.pt', 'incoming@atravel.pt', 'transfers@atravel.pt
                         <li>
 
                             @if(config('app.env') != 'local')
-                            <img class="w3-padding" id="" src="{{ asset("FrontEnd/images/logoats.png") }}"
+                            <img class="w3-padding" style="width:150px;" id="" src="{{ asset("FrontEnd/images/LogotipoAtravelCor.png") }}"
                                 alt="Picture">
                             @else
-                            <img class="w3-padding" id="" src="{{ asset("FrontEnd/images/logoats.png") }}">
+                            <img class="w3-padding" style="width:150px;" id="" src="{{ asset("FrontEnd/images/LogotipoAtravelCor.png") }}">
                             @endif
                         </li>
                         @if (Route::has('login'))
