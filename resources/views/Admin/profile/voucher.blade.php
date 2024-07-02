@@ -54,16 +54,17 @@
                 <table width="100%" class="w3-centered">
                     <tr>
                         <th style="text-align: left; width:75%;">TOPICOS E DESCOBERTAS LDA</th>
-                        <td align="right" style="text-align: left; width:25%; font-size: small;">Telef.(+351) 917 250
-                            405</td>
+                        <td align="right" style="text-align: left; width:25%; font-size: 18px;">
+                            <b>Mobile.(+351) 917 250 405</b>
+                        </td>
                     </tr>
                     <tr>
                         <td style="text-align: left; color:#24AEC9;">Av. da Liberdade,</td>
-                        <td style="text-align: left; font-size: small;">Mobile.(+351) 282-457 306</td>
+                        <td style="text-align: left; font-size: 18px;"><b>Telef.(+351) 282 457 306</b></td>
                     </tr>
                     <tr>
                         <td style="text-align: left; color:#24AEC9;">245, 4ºA </td>
-                        <td style="text-align: left; font-size: small;">reservations: incoming@atravel.pt</td>
+                        <td style="text-align: left; font-size: 18px;">reservations: incoming@atravel.pt</td>
                     </tr>
                     <tr>
                         <td style="text-align: left; color:#24AEC9;">1250-143 Lisboa</td>
@@ -183,8 +184,10 @@
         <table width="100%" style="margin-top:25px">
             <tr>
                 <td width="33%"><b>Nº of Pax:</b> {{$PedidoGame->people}}</td>
-                <td width="33%"><b>Date:</b> {{$PedidoGame->data}}</td>
-                <td width="33%"><b>Starting Time:</b> {{ Carbon\Carbon::parse( $PedidoGame->hora)->format('H:i') }}</td>
+                <td width="33%" style="font-size: 18px;"><b>Date: {{$PedidoGame->data}}</b></td>
+                <td width="33%" style="font-size: 18px;">
+                    <b>Starting Time: {{ Carbon\Carbon::parse( $PedidoGame->hora)->format('H:i') }}</b>
+                </td>
             </tr>
             @if($PedidoGame->remark)
             <tr>
@@ -224,8 +227,10 @@
                 <td style="text-align:right;" width="100%"><b>Client Name:</b> {{$pedidoGeral->lead_name}}</td>
             </tr>
             <tr width="100%" style="margin-bottom:20px">
-                <td width="33%"> <b>Date:</b> {{ Carbon\Carbon::parse( $PedidoTransfer->data )->format('d/m/y') }} |
-                    <b>Time:</b> {{ Carbon\Carbon::parse( $PedidoTransfer->hora)->format('H:i') }}</td>
+                <td width="33%" style="font-size: 18px;">
+                    <b>Date: {{ Carbon\Carbon::parse( $PedidoTransfer->data )->format('d/m/y') }}</b> |
+                    <b>Time: {{ Carbon\Carbon::parse( $PedidoTransfer->hora)->format('H:i') }}</b>
+                </td>
             </tr>
         </table>
         <br>
@@ -371,8 +376,8 @@
 
         <table width="100%" style="margin-top:25px;">
             <tr>
-                <td width="33%"><b>Date:</b> {{$PedidoTicket->data}}</td>
-                <td width="33%"><b>Hour:</b> {{ Carbon\Carbon::parse( $PedidoTicket->hora)->format('H:i') }}</td>
+                <td width="33%"><b>Date: {{$PedidoTicket->data}}</b></td>
+                <td width="33%"><b>Hour: {{ Carbon\Carbon::parse( $PedidoTicket->hora)->format('H:i') }}</b></td>
                 <td width="33%"><b>Nº Adults:</b> {{$PedidoTicket->adult}}</td>
             </tr>
 

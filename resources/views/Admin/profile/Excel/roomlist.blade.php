@@ -5,11 +5,11 @@
         <td></td>
         </tr>
         <tr>
-        <td>Telef.(+351) 917 250 405</td>
+        <td>Mobile.(+351) 917 250 405</td>
         <td>Av. da Liberdade,</td>
         </tr>
         <tr>
-        <td>Mobile.(+351) 282-457 306</td>
+        <td>Telef.(+351) 282-457 306</td>
         <td>243, 4ºA </td>
         </tr>
         <tr>
