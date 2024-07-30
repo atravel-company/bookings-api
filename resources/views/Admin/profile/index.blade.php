@@ -256,7 +256,7 @@ $authUser = Auth::user();
                                 @if(in_array($authUser->email, $users_array))
                                     <label class="grandTotal{{$key}}">0.00</label>
                                 @else
-                                    <label>{{$pedido->valor or "0.00"}}</label>
+                                    <label>{{$pedido->valor != null ? $pedido->valor : "0.00"}}</label>
                                 @endif
                             </div>
                         </div>
@@ -396,175 +396,7 @@ $authUser = Auth::user();
                                             <div class="w3-col l2">
                                                 <span class="w3-right">
                                                     <table frame="box">
-                                                        <tr>
-                                                            <script type="text/javascript">
-                                                                $('#finalAcc{{$key}}_{{$key1}}').bind("DOMSubtreeModified",function(){
-                                                                    var finalAcc=$('#finalAcc{{$key}}_{{$key1}}').html();
-                                                                    if(isNaN(finalAcc)){
-                                                                        var finalAcc=0;
-                                                                    }
-                                                                    var finalGolf=$('#finalGolf{{$key}}_{{$key1}}').html();
-                                                                    if(isNaN(finalGolf)){
-                                                                        var finalGolf=0;
-                                                                    }
-                                                                    var finalTransfer=$('#finalTransfer{{$key}}_{{$key1}}').html();
-                                                                    if(isNaN(finalTransfer)){
-                                                                        var finalTransfer=0;
-                                                                    }
-                                                                    var finalCar=$('#finalCar{{$key}}_{{$key1}}').html();
-                                                                    if(isNaN(finalCar)){
-                                                                        var finalCar=0;
-                                                                    }
-                                                                    var finalTicket=$('#finalTicket{{$key}}_{{$key1}}').html();
-                                                                    if(isNaN(finalTicket)){
-                                                                        var finalTicket=0;
-                                                                    }
-                                                                    indiv=$('#totalProduct{{$key}}_{{$key1}}').html();
-                                                                    var totalProduct = (+finalAcc)+(+finalGolf)+(+finalTransfer)+(+finalCar)+(+finalTicket);
-                                                                    $('#totalProduct{{$key}}_{{$key1}}').html(parseFloat(totalProduct).toFixed(2));
-
-                                                                    var grand=$('.grandTotal{{$key}}').html();
-                                                                    grand= grand-indiv;
-                                                                    grand=(+grand)+(+totalProduct);
-
-                                                                    $('.grandTotal{{$key}}').html(parseFloat(grand).toFixed(2));
-                                                                });
-
-                                                                $('#finalGolf{{$key}}_{{$key1}}').bind("DOMSubtreeModified",function(){
-                                                                    finalAcc=$('#finalAcc{{$key}}_{{$key1}}').html();
-                                                                    if(isNaN(finalAcc)){
-                                                                        finalAcc=0;
-                                                                    }
-                                                                    finalGolf=$('#finalGolf{{$key}}_{{$key1}}').html();
-                                                                    if(isNaN(finalGolf)){
-                                                                        finalGolf=0;
-                                                                    }
-                                                                    finalTransfer=$('#finalTransfer{{$key}}_{{$key1}}').html();
-                                                                    if(isNaN(finalTransfer)){
-                                                                        finalTransfer=0;
-                                                                    }
-                                                                    finalCar=$('#finalCar{{$key}}_{{$key1}}').html();
-                                                                    if(isNaN(finalCar)){
-                                                                        finalCar=0;
-                                                                    }
-                                                                    finalTicket=$('#finalTicket{{$key}}_{{$key1}}').html();
-                                                                    if(isNaN(finalTicket)){
-                                                                        finalTicket=0;
-                                                                    }
-                                                                    indiv=$('#totalProduct{{$key}}_{{$key1}}').html();
-                                                                    totalProduct = (+finalAcc)+(+finalGolf)+(+finalTransfer)+(+finalCar)+(+finalTicket)
-                                                                    $('#totalProduct{{$key}}_{{$key1}}').html(parseFloat(totalProduct).toFixed(2));
-
-
-                                                                    grand=$('.grandTotal{{$key}}').html();
-                                                                    grand= grand-indiv;
-                                                                    grand=(+grand)+(+totalProduct);
-
-                                                                    $('.grandTotal{{$key}}').html(parseFloat(grand).toFixed(2));
-                                                                });
-
-                                                                $('#finalTransfer{{$key}}_{{$key1}}').bind("DOMSubtreeModified",function(){
-                                                                    finalAcc=$('#finalAcc{{$key}}_{{$key1}}').html();
-                                                                    if(isNaN(finalAcc)){
-                                                                        finalAcc=0;
-                                                                    }
-                                                                    finalGolf=$('#finalGolf{{$key}}_{{$key1}}').html();
-                                                                    if(isNaN(finalGolf)){
-                                                                        finalGolf=0;
-                                                                    }
-                                                                    finalTransfer=$('#finalTransfer{{$key}}_{{$key1}}').html();
-                                                                    if(isNaN(finalTransfer)){
-                                                                        finalTransfer=0;
-                                                                    }
-                                                                    finalCar=$('#finalCar{{$key}}_{{$key1}}').html();
-                                                                    if(isNaN(finalCar)){
-                                                                        finalCar=0;
-                                                                    }
-                                                                    finalTicket=$('#finalTicket{{$key}}_{{$key1}}').html();
-                                                                    if(isNaN(finalTicket)){
-                                                                        finalTicket=0;
-                                                                    }
-                                                                    indiv=$('#totalProduct{{$key}}_{{$key1}}').html();
-                                                                    totalProduct = (+finalAcc)+(+finalGolf)+(+finalTransfer)+(+finalCar)+(+finalTicket)
-                                                                    $('#totalProduct{{$key}}_{{$key1}}').html(parseFloat(totalProduct).toFixed(2));
-
-                                                                    console.log("Valro do total do produto", totalProduct);
-
-                                                                    grand=$('.grandTotal{{$key}}').html();
-                                                                    grand= grand-indiv;
-                                                                    grand=(+grand)+(+totalProduct);
-
-                                                                    $('.grandTotal{{$key}}').html(parseFloat(grand).toFixed(2));
-                                                                });
-
-                                                                $('#finalCar{{$key}}_{{$key1}}').bind("DOMSubtreeModified",function(){
-                                                                    finalAcc=$('#finalAcc{{$key}}_{{$key1}}').html();
-                                                                    if(isNaN(finalAcc)){
-                                                                        finalAcc=0;
-                                                                    }
-                                                                    finalGolf=$('#finalGolf{{$key}}_{{$key1}}').html();
-                                                                    if(isNaN(finalGolf)){
-                                                                        finalGolf=0;
-                                                                    }
-                                                                    finalTransfer=$('#finalTransfer{{$key}}_{{$key1}}').html();
-                                                                    if(isNaN(finalTransfer)){
-                                                                        finalTransfer=0;
-                                                                    }
-                                                                    finalCar=$('#finalCar{{$key}}_{{$key1}}').html();
-                                                                    if(isNaN(finalCar)){
-                                                                        finalCar=0;
-                                                                    }
-                                                                    finalTicket=$('#finalTicket{{$key}}_{{$key1}}').html();
-                                                                    if(isNaN(finalTicket)){
-                                                                        finalTicket=0;
-                                                                    }
-                                                                    indiv=$('#totalProduct{{$key}}_{{$key1}}').html();
-                                                                    totalProduct = (+finalAcc)+(+finalGolf)+(+finalTransfer)+(+finalCar)+(+finalTicket)
-                                                                    $('#totalProduct{{$key}}_{{$key1}}').html(parseFloat(totalProduct).toFixed(2));
-
-
-                                                                    grand=$('.grandTotal{{$key}}').html();
-                                                                    grand= grand-indiv;
-                                                                    grand=(+grand)+(+totalProduct);
-
-                                                                    $('.grandTotal{{$key}}').html(parseFloat(grand).toFixed(2));
-                                                                });
-
-                                                                $('#finalTicket{{$key}}_{{$key1}}').bind("DOMSubtreeModified",function(){
-
-                                                                    finalAcc=$('#finalAcc{{$key}}_{{$key1}}').html();
-                                                                    if(isNaN(finalAcc)){
-                                                                        finalAcc=0;
-                                                                    }
-                                                                    finalGolf=$('#finalGolf{{$key}}_{{$key1}}').html();
-                                                                    if(isNaN(finalGolf)){
-                                                                        finalGolf=0;
-                                                                    }
-                                                                    finalTransfer=$('#finalTransfer{{$key}}_{{$key1}}').html();
-                                                                    if(isNaN(finalTransfer)){
-                                                                        finalTransfer=0;
-                                                                    }
-                                                                    finalCar=$('#finalCar{{$key}}_{{$key1}}').html();
-                                                                    if(isNaN(finalCar)){
-                                                                        finalCar=0;
-                                                                    }
-                                                                    finalTicket=$('#finalTicket{{$key}}_{{$key1}}').html();
-                                                                    if(isNaN(finalTicket)){
-                                                                        finalTicket=0;
-                                                                    }
-                                                                    indiv=$('#totalProduct{{$key}}_{{$key1}}').html();
-                                                                    totalProduct = (+finalAcc)+(+finalGolf)+(+finalTransfer)+(+finalCar)+(+finalTicket)
-                                                                    $('#totalProduct{{$key}}_{{$key1}}').html(parseFloat(totalProduct).toFixed(2));
-
-
-                                                                    grand=$('.grandTotal{{$key}}').html();
-                                                                    grand= grand-indiv;
-                                                                    grand=(+grand)+(+totalProduct);
-
-                                                                    $('.grandTotal{{$key}}').html(parseFloat(grand).toFixed(2));
-                                                                    // var prev = $('grandTotal{{$key}}').data('val');
-                                                                });
-                                                            </script>
+                                                        <tr id="tr_total_{{$key}}_{{$key1}}">
                                                         </tr>
                                                     </table>
                                                 </span>
@@ -574,209 +406,10 @@ $authUser = Auth::user();
                                                 @if(in_array($authUser->email, $users_array))
                                                 <span class="w3-right">
                                                     <table frame="box">
-                                                        <tr>
+                                                        <tr id="tr_profit_{{$key}}_{{$key1}}">
                                                             <script type="text/javascript">
                                                                 var valorKickback;
                                                                 var valorMarkup;
-
-                                                                $('#totalProfitAcc{{$key}}_{{$key1}}, #kickbackAcc{{$key}}_{{$key1}}, #markupAcc{{$key}}_{{$key1}}').bind("DOMSubtreeModified",function(){
-                                                                    totalProfitAcc=$('#totalProfitAcc{{$key}}_{{$key1}}').html();
-                                                                    var totalProfitAcc = (+totalProfitAcc)-(valorKickback)+(+valorMarkup);
-                                                                        if(isNaN(totalProfitAcc)){
-                                                                            totalProfitAcc=0;
-                                                                        }
-                                                                    totalProfitGolf=$('#totalProfitGolf{{$key}}_{{$key1}}').html();
-                                                                    var totalProfitGolf = (+totalProfitGolf)-(valorKickback)+(+valorMarkup);
-                                                                    if(isNaN(totalProfitGolf)){
-                                                                        totalProfitGolf=0;
-                                                                    }
-                                                                    totalProfitTransfer=$('#totalProfitTransfer{{$key}}_{{$key1}}').html();
-                                                                    var totalProfitTransfer = (+totalProfitTransfer)-(valorKickback)+(+valorMarkup);
-                                                                    if(isNaN(totalProfitTransfer)){
-                                                                        totalProfitTransfer=0;
-                                                                    }
-                                                                    totalProfitCar=$('#totalProfitCar{{$key}}_{{$key1}}').html();
-                                                                    var totalProfitCar = (+totalProfitCar)-(valorKickback)+(+valorMarkup);
-                                                                    if(isNaN(totalProfitCar)){
-                                                                        totalProfitCar=0;
-                                                                    }
-                                                                    totalProfitTicket=$('#totalProfitTicket{{$key}}_{{$key1}}').html();
-                                                                    var totalProfitTicket = (+totalProfitTicket)-(valorKickback)+(+valorMarkup);
-                                                                    if(isNaN(totalProfitTicket)){
-                                                                        totalProfitTicket=0;
-                                                                    }
-
-                                                                    indiv2 = $('#profitProduct{{$key}}_{{$key1}}').html();
-
-                                                                    profitProduct = (totalProfitAcc+totalProfitGolf+totalProfitTransfer+totalProfitCar+totalProfitTicket);
-
-                                                                    $('#profitProduct{{$key}}_{{$key1}}').html(parseFloat(profitProduct).toFixed(2));
-                                                                    //$('#profitProduct{{$key}}_{{$key1}}').html( formatMonetario(parseFloat(profitProduct) ) );
-
-                                                                    grand2 = $('#grandProfit{{$key}}').html();
-                                                                    grand2= grand2-indiv2;
-                                                                    grand2=(+grand2)+(+profitProduct);
-
-                                                                    $('#grandProfit{{$key}}').html(parseFloat(grand2).toFixed(2));
-                                                                });
-
-                                                                $('#totalProfitGolf{{$key}}_{{$key1}}, #kickbackGolf{{$key}}_{{$key1}}, #markupGolf{{$key}}_{{$key1}}').bind("DOMSubtreeModified",function(){
-                                                                    totalProfitAcc=$('#totalProfitAcc{{$key}}_{{$key1}}').html();
-                                                                    var totalProfitAcc = (+totalProfitAcc)-(valorKickback)+(+valorMarkup);
-                                                                    if(isNaN(totalProfitAcc)){
-                                                                        totalProfitAcc=0;
-                                                                    }
-                                                                    totalProfitGolf=$('#totalProfitGolf{{$key}}_{{$key1}}').html();
-                                                                    var totalProfitGolf = (+totalProfitGolf)-(valorKickback)+(+valorMarkup);
-                                                                    if(isNaN(totalProfitGolf)){
-                                                                        totalProfitGolf=0;
-                                                                    }
-                                                                    totalProfitTransfer=$('#totalProfitTransfer{{$key}}_{{$key1}}').html();
-                                                                    var totalProfitTransfer = (+totalProfitTransfer)-(valorKickback)+(+valorMarkup);
-                                                                    if(isNaN(totalProfitTransfer)){
-                                                                        totalProfitTransfer=0;
-                                                                    }
-                                                                    totalProfitCar=$('#totalProfitCar{{$key}}_{{$key1}}').html();
-                                                                    var totalProfitCar = (+totalProfitCar)-(valorKickback)+(+valorMarkup);
-                                                                    if(isNaN(totalProfitCar)){
-                                                                        totalProfitCar=0;
-                                                                    }
-                                                                    totalProfitTicket=$('#totalProfitTicket{{$key}}_{{$key1}}').html();
-                                                                    var totalProfitTicket = (+totalProfitTicket)-(valorKickback)+(+valorMarkup);
-                                                                    if(isNaN(totalProfitTicket)){
-                                                                        totalProfitTicket=0;
-                                                                    }
-                                                                    indiv2=$('#profitProduct{{$key}}_{{$key1}}').html();
-                                                                    profitProduct = (+totalProfitAcc)+(+totalProfitGolf)+(+totalProfitTransfer)+(+totalProfitCar)+(+totalProfitTicket)
-                                                                    $('#profitProduct{{$key}}_{{$key1}}').html(parseFloat(profitProduct).toFixed(2));
-                                                                    //$('#profitProduct{{$key}}_{{$key1}}').html( formatMonetario(parseFloat(profitProduct) ) );
-
-
-                                                                    grand2=$('#grandProfit{{$key}}').html();
-                                                                    grand2= grand2-indiv2;
-                                                                    grand2=(+grand2)+(+profitProduct);
-
-                                                                    $('#grandProfit{{$key}}').html(parseFloat(grand2).toFixed(2));
-                                                                });
-
-                                                                $('#totalProfitTransfer{{$key}}_{{$key1}}, #kickbackTransfer{{$key}}_{{$key1}}, #markupTransfer{{$key}}_{{$key1}}').bind("DOMSubtreeModified",function(){
-                                                                    totalProfitAcc=$('#totalProfitAcc{{$key}}_{{$key1}}').html();
-                                                                    var totalProfitAcc = (+totalProfitAcc)-(valorKickback)+(+valorMarkup);
-                                                                    if(isNaN(totalProfitAcc)){
-                                                                        totalProfitAcc=0;
-                                                                    }
-                                                                    totalProfitGolf=$('#totalProfitGolf{{$key}}_{{$key1}}').html();
-                                                                    var totalProfitGolf = (+totalProfitGolf)-(valorKickback)+(+valorMarkup);
-                                                                    if(isNaN(totalProfitGolf)){
-                                                                        totalProfitGolf=0;
-                                                                    }
-                                                                    totalProfitTransfer=$('#totalProfitTransfer{{$key}}_{{$key1}}').html();
-                                                                    var totalProfitTransfer = (+totalProfitTransfer)-(valorKickback)+(+valorMarkup);
-                                                                    if(isNaN(totalProfitTransfer)){
-                                                                        totalProfitTransfer=0;
-                                                                    }
-                                                                    totalProfitCar=$('#totalProfitCar{{$key}}_{{$key1}}').html();
-                                                                    var totalProfitCar = (+totalProfitCar)-(valorKickback)+(+valorMarkup);
-                                                                    if(isNaN(totalProfitCar)){
-                                                                        totalProfitCar=0;
-                                                                    }
-                                                                    totalProfitTicket=$('#totalProfitTicket{{$key}}_{{$key1}}').html();
-                                                                    var totalProfitTicket = (+totalProfitTicket)-(valorKickback)+(+valorMarkup);
-                                                                    if(isNaN(totalProfitTicket)){
-                                                                        totalProfitTicket=0;
-                                                                    }
-                                                                    indiv2=$('#profitProduct{{$key}}_{{$key1}}').html();
-                                                                    profitProduct = (+totalProfitAcc)+(+totalProfitGolf)+(+totalProfitTransfer)+(+totalProfitCar)+(+totalProfitTicket)
-                                                                    $('#profitProduct{{$key}}_{{$key1}}').html(parseFloat(profitProduct).toFixed(2));
-                                                                    //$('#profitProduct{{$key}}_{{$key1}}').html( formatMonetario(parseFloat(profitProduct) ) );
-
-
-                                                                    grand2=$('#grandProfit{{$key}}').html();
-                                                                    grand2= grand2-indiv2;
-                                                                    grand2=(+grand2)+(+profitProduct);
-
-                                                                    $('#grandProfit{{$key}}').html(parseFloat(grand2).toFixed(2));
-                                                                });
-
-                                                                $('#totalProfitCar{{$key}}_{{$key1}}, #kickbackCar{{$key}}_{{$key1}}, #markupCar{{$key}}_{{$key1}}').bind("DOMSubtreeModified",function(){
-                                                                    totalProfitAcc=$('#totalProfitAcc{{$key}}_{{$key1}}').html();
-                                                                    var totalProfitAcc = (+totalProfitAcc)-(valorKickback)+(+valorMarkup);
-                                                                    if(isNaN(totalProfitAcc)){
-                                                                        totalProfitAcc=0;
-                                                                    }
-                                                                    totalProfitGolf=$('#totalProfitGolf{{$key}}_{{$key1}}').html();
-                                                                    var totalProfitGolf = (+totalProfitGolf)-(valorKickback)+(+valorMarkup);
-                                                                    if(isNaN(totalProfitGolf)){
-                                                                        totalProfitGolf=0;
-                                                                    }
-                                                                    totalProfitTransfer=$('#totalProfitTransfer{{$key}}_{{$key1}}').html();
-                                                                    var totalProfitTransfer = (+totalProfitTransfer)-(valorKickback)+(+valorMarkup);
-                                                                    if(isNaN(totalProfitTransfer)){
-                                                                        totalProfitTransfer=0;
-                                                                    }
-                                                                    totalProfitCar=$('#totalProfitCar{{$key}}_{{$key1}}').html();
-                                                                    var totalProfitCar = (+totalProfitCar)-(valorKickback)+(+valorMarkup);
-                                                                    if(isNaN(totalProfitCar)){
-                                                                        totalProfitCar=0;
-                                                                    }
-                                                                    totalProfitTicket=$('#totalProfitTicket{{$key}}_{{$key1}}').html();
-                                                                    var totalProfitTicket = (+totalProfitTicket)-(valorKickback)+(+valorMarkup);
-                                                                    if(isNaN(totalProfitTicket)){
-                                                                        totalProfitTicket=0;
-                                                                    }
-                                                                    indiv2=$('#profitProduct{{$key}}_{{$key1}}').html();
-                                                                    profitProduct = (+totalProfitAcc)+(+totalProfitGolf)+(+totalProfitTransfer)+(+totalProfitCar)+(+totalProfitTicket)
-                                                                    $('#profitProduct{{$key}}_{{$key1}}').html(parseFloat(profitProduct).toFixed(2));
-                                                                    //$('#profitProduct{{$key}}_{{$key1}}').html( formatMonetario(parseFloat(profitProduct) ) );
-
-
-                                                                    grand2=$('#grandProfit{{$key}}').html();
-                                                                    grand2= grand2-indiv2;
-                                                                    grand2=(+grand2)+(+profitProduct);
-
-                                                                    $('#grandProfit{{$key}}').html(parseFloat(grand2).toFixed(2));
-                                                                });
-
-                                                                $('#totalProfitTicket{{$key}}_{{$key1}}, #kickbackTicket{{$key}}_{{$key1}}, #markupTicket{{$key}}_{{$key1}}').bind("DOMSubtreeModified",function(){
-
-                                                                    totalProfitAcc=$('#totalProfitAcc{{$key}}_{{$key1}}').html();
-                                                                    var totalProfitAcc = (+totalProfitAcc)-(valorKickback)+(+valorMarkup);
-                                                                    if(isNaN(totalProfitAcc)){
-                                                                        totalProfitAcc=0;
-                                                                    }
-                                                                    totalProfitGolf=$('#totalProfitGolf{{$key}}_{{$key1}}').html();
-                                                                    var totalProfitGolf = (+totalProfitGolf)-(valorKickback)+(+valorMarkup);
-                                                                    if(isNaN(totalProfitGolf)){
-                                                                        totalProfitGolf=0;
-                                                                    }
-                                                                    totalProfitTransfer=$('#totalProfitTransfer{{$key}}_{{$key1}}').html();
-                                                                    var totalProfitTransfer = (+totalProfitTransfer)-(valorKickback)+(+valorMarkup);
-                                                                    if(isNaN(totalProfitTransfer)){
-                                                                        totalProfitTransfer=0;
-                                                                    }
-                                                                    totalProfitCar=$('#totalProfitCar{{$key}}_{{$key1}}').html();
-                                                                    var totalProfitCar = (+totalProfitCar)-(valorKickback)+(+valorMarkup);
-                                                                    if(isNaN(totalProfitCar)){
-                                                                        totalProfitCar=0;
-                                                                    }
-                                                                    totalProfitTicket=$('#totalProfitTicket{{$key}}_{{$key1}}').html();
-                                                                    var totalProfitTicket = (+totalProfitTicket)-(valorKickback)+(+valorMarkup);
-                                                                    if(isNaN(totalProfitTicket)){
-                                                                        totalProfitTicket=0;
-                                                                    }
-                                                                    indiv2=$('#profitProduct{{$key}}_{{$key1}}').html();
-                                                                    profitProduct = (+totalProfitAcc)+(+totalProfitGolf)+(+totalProfitTransfer)+(+totalProfitCar)+(+totalProfitTicket);
-
-                                                                    $('#profitProduct{{$key}}_{{$key1}}').html(parseFloat(profitProduct).toFixed(2));
-                                                                    //$('#profitProduct{{$key}}_{{$key1}}').html( formatMonetario(parseFloat(profitProduct) ) );
-
-                                                                    grand2=$('#grandProfit{{$key}}').html();
-                                                                    grand2= grand2-indiv2;
-                                                                    grand2=(+grand2)+(+profitProduct);
-
-                                                                    $('#grandProfit{{$key}}').html(parseFloat(grand2).toFixed(2));
-
-                                                                });
                                                             </script>
                                                         </tr>
                                                     </table>
@@ -1615,7 +1248,122 @@ $(document).ready(function(){
             }
         });
     });
+
+    var tr_total = $('[id^="tr_total_"]');
+    for (var i = 0; i < tr_total.length; i++) {
+        var id = tr_total[i].id;
+        var idParts = id.split('_');
+        var key = idParts[2];
+        var key1 = idParts[3];
+
+        observeElement('finalAcc' + key + '_' + key1, key, key1);
+        observeElement('finalGolf' + key + '_' + key1, key, key1);
+        observeElement('finalTransfer' + key + '_' + key1, key, key1);
+        observeElement('finalCar' + key + '_' + key1, key, key1);
+        observeElement('finalTicket' + key + '_' + key1, key, key1);
+    }
+
+    var tr_profit = $('[id^="tr_profit_"]');
+    for (var i = 0; i < tr_profit.length; i++) {
+        var id = tr_profit[i].id;
+        var idParts = id.split('_');
+        var key = idParts[2];
+        var key1 = idParts[3];
+
+        observeProfitElements(key, key1);
+    }
 });
 
+function calculateValues(key, key1) {
+    var finalAcc = parseFloat($('#finalAcc' + key + '_' + key1).html()) || 0;
+    var finalGolf = parseFloat($('#finalGolf' + key + '_' + key1).html()) || 0;
+    var finalTransfer = parseFloat($('#finalTransfer' + key + '_' + key1).html()) || 0;
+    var finalCar = parseFloat($('#finalCar' + key + '_' + key1).html()) || 0;
+    var finalTicket = parseFloat($('#finalTicket' + key + '_' + key1).html()) || 0;
+
+    var indiv = parseFloat($('#totalProduct' + key + '_' + key1).html()) || 0;
+
+    var totalProduct = finalAcc + finalGolf + finalTransfer + finalCar + finalTicket;
+    $('#totalProduct' + key + '_' + key1).html(totalProduct.toFixed(2));
+
+    var grand = parseFloat($('.grandTotal' + key).html()) || 0;
+    grand = grand - indiv + totalProduct;
+
+    $('.grandTotal' + key).html(grand.toFixed(2));
+}
+
+function observeElement(id, key, key1) {
+    var targetNode = document.getElementById(id);
+    if (targetNode) {
+        var config = { childList: true, subtree: true };
+
+        var callback = function(mutationsList, observer) {
+            calculateValues(key, key1);
+        };
+
+        var observer = new MutationObserver(callback);
+        observer.observe(targetNode, config);
+    }
+}
+
+function calculateProfit(key, key1) {
+    var totalProfitAcc = parseFloat($('#totalProfitAcc' + key + '_' + key1).html()) || 0;
+    var totalProfitGolf = parseFloat($('#totalProfitGolf' + key + '_' + key1).html()) || 0;
+    var totalProfitTransfer = parseFloat($('#totalProfitTransfer' + key + '_' + key1).html()) || 0;
+    var totalProfitCar = parseFloat($('#totalProfitCar' + key + '_' + key1).html()) || 0;
+    var totalProfitTicket = parseFloat($('#totalProfitTicket' + key + '_' + key1).html()) || 0;
+
+    totalProfitAcc -= valorKickback;
+    totalProfitGolf -= valorKickback;
+    totalProfitTransfer -= valorKickback;
+    totalProfitCar -= valorKickback;
+    totalProfitTicket -= valorKickback;
+
+    totalProfitAcc = isNaN(totalProfitAcc) ? 0 : totalProfitAcc + valorMarkup;
+    totalProfitGolf = isNaN(totalProfitGolf) ? 0 : totalProfitGolf + valorMarkup;
+    totalProfitTransfer = isNaN(totalProfitTransfer) ? 0 : totalProfitTransfer + valorMarkup;
+    totalProfitCar = isNaN(totalProfitCar) ? 0 : totalProfitCar + valorMarkup;
+    totalProfitTicket = isNaN(totalProfitTicket) ? 0 : totalProfitTicket + valorMarkup;
+
+    var indiv2 = parseFloat($('#profitProduct' + key + '_' + key1).html()) || 0;
+
+    var profitProduct = totalProfitAcc + totalProfitGolf + totalProfitTransfer + totalProfitCar + totalProfitTicket;
+    $('#profitProduct' + key + '_' + key1).html(profitProduct.toFixed(2));
+
+    var grandProfit = parseFloat($('#grandProfit' + key).html()) || 0;
+
+    grandProfit = grandProfit - indiv2 + profitProduct;
+    $('#grandProfit' + key).html(grandProfit.toFixed(2));
+}
+
+function observeProfitElements(key, key1) {
+    var elementsToObserve = [
+        '#totalProfitAcc' + key + '_' + key1,
+        '#kickbackAcc' + key + '_' + key1,
+        '#markupAcc' + key + '_' + key1,
+        '#totalProfitGolf' + key + '_' + key1,
+        '#kickbackGolf' + key + '_' + key1,
+        '#markupGolf' + key + '_' + key1,
+        '#totalProfitTransfer' + key + '_' + key1,
+        '#kickbackTransfer' + key + '_' + key1,
+        '#markupTransfer' + key + '_' + key1,
+        '#totalProfitCar' + key + '_' + key1,
+        '#kickbackCar' + key + '_' + key1,
+        '#markupCar' + key + '_' + key1,
+        '#totalProfitTicket' + key + '_' + key1,
+        '#kickbackTicket' + key + '_' + key1,
+        '#markupTicket' + key + '_' + key1
+    ];
+
+    elementsToObserve.forEach(function (selector) {
+        var targetNode = document.querySelector(selector);
+        if (targetNode) {
+            var observer = new MutationObserver(function () {
+                calculateProfit(key, key1);
+            });
+            observer.observe(targetNode, { childList: true, subtree: true });
+        }
+    });
+}
 </script>
 @endpush
