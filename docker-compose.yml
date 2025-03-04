@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  redis-prod-atravelbookings-ats-cache:
+    image: redis:alpine
+    container_name: redis-prod-atravelbookings-ats-cache
+    restart: always
+    ports:
+      - "6382:6382"
