@@ -1087,65 +1087,28 @@ $('.formula').on('submit',function(e){
     }
 
 //---------------------------------------------------------------------------------------------//
-    if(modal.id=='supplier'){
-      //var input=$('input[type=file]');
-      //console.log(input.);
-      //console.log(input);
-      //var path_image = $('#path_image').val();
-      //alert(path_image.files[0]);
-
-
-      //var account_number = $('#account_number').val();
-
-      //var val = {'path_image': new FormData($("#upload_form")[0])};
-
-
-      var form = new FormData();
-      var image = $('#path_image')[0].files[0];
-      var name = $('#namesup').val();
-      var email = $('#emailuser').val();
-      var password = $('#passworduser').val();
-      var social_denomination = $('#social_denomination').val();
-      var fiscal_number = $('#fiscal_number').val();
-      var web = $('#web').val();
-      var remarks = $('#remarks').val();
-      form.append('path_image', image);
-      form.append('name', name);
-      form.append('email', email);
-      form.append('password', password);
-      form.append('social_denomination', social_denomination);
-      form.append('fiscal_number', fiscal_number);
-      form.append('web', web);
-      form.append('remarks', remarks);
-      console.log('name is: '+name+' web is: '+web);
-      console.log('DADOS : nome->'+name+' email is: '+email);
-      //$('#account_number').val('')
-      $.ajax({
-        type:'POST',
-        url:"users/create",
-        data:form,
-        processData: false,
-        contentType: false,
-        success: function(data){
-          console.log('SUCESSO,SUCESSO,SUCESSO,SUCESSO,SUCESSO,SUCESSO,SUCESSO,');
-          document.getElementById('supplier').style.display='none';
-          document.getElementById("upload_form").reset();
-          window.location.reload();
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            console.log('ERRO,ERRO,ERRO,ERRO,ERRO,ERRO,ERRO,ERRO,ERRO,ERRO,');
-          console.log(jqXHR);
-          console.log(textStatus);
-          console.log(errorThrown);
-
-          var errors = jqXHR.responseJSON;
-            var errorsHtml= '';
-            $.each( errors, function( key, value ) {
-                errorsHtml += '<li>' + value[0] + '</li>';
-            });
-            $('#error').html('<ul class="alert alert-warning">'+errorsHtml+'</ul>' , "Error " + jqXHR.status +': '+ errorThrown);
-
-        },
+    if (modal.id == 'supplier') {
+      $('#upload_form').submit(function(e) {
+          $.ajax({
+              type: 'POST',
+              url: "users/create",
+              data: new FormData(this), // Create FormData inside AJAX call
+              processData: false,
+              contentType: false,
+              success: function(data) {
+                  document.getElementById('supplier').style.display = 'none';
+                  document.getElementById("upload_form").reset();
+                  window.location.reload();
+              },
+              error: function(jqXHR, textStatus, errorThrown) {
+                  var errors = jqXHR.responseJSON.errors;
+                  var errorsHtml = '';
+                  $.each(errors, function(key, value) {
+                      errorsHtml += '<li>' + value[0] + '</li>';
+                  });
+                  $('#error').html('<ul class="alert alert-warning">' + errorsHtml + '</ul>', "Error " + jqXHR.status + ': ' + errorThrown);
+              }
+          });
       });
     }
 
