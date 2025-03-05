@@ -53,12 +53,19 @@ class LoginController extends BaseController
                 'name' => 'required|string|max:255',
                 'email' => 'required|string|email|max:255|unique:users',
                 'password' => 'required|string|min:6',
-                'path_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'path_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:30720',
             ])->validate();
 
             $data = $request->all();
 
-            $img = $this->imgUpload($request->file('path_image') );
+            $img = $request->file('path_image');
+
+            if ($img->getSize() > 2 * 1024 * 1024) // 2MB
+            {
+                $img = compressImage($img);
+            }
+
+            $img = $this->imgUpload($img);
 
             if($img)
                 $data['path_image'] = $img;

@@ -29,7 +29,10 @@ class BaseController extends Controller
         foreach($commands as $c){
 
           $process = new Process($c);
-          $process->setWorkingDirectory('/var/www/vhosts/atsportugal.com/httpdocs/');
+          // Set working directory only in production
+          if (app()->environment('prod')) {
+            $process->setWorkingDirectory('/var/www/vhosts/atsportugal.com/httpdocs/');
+          }          
           $process->run();
         }
 
