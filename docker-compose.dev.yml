@@ -20,7 +20,7 @@ services:
       DB_PASSWORD: ""
     depends_on:
       - mysql
-    command: "./scripts/setup.sh && php artisan serve --host=0.0.0.0"
+    command: "./scripts/init.sh"
 
   mysql:
     image: mysql:5.7
