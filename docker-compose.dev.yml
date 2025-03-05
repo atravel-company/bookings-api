@@ -11,7 +11,7 @@ services:
     volumes:
       - .:/app
     ports:
-      - "8000:8000"
+      - "9000:8000"
     environment:
       DB_HOST: mysql
       DB_PORT: 3306
@@ -20,13 +20,14 @@ services:
       DB_PASSWORD: ""
     depends_on:
       - mysql
+    command: "php artisan serve --host=0.0.0.0"
 
   mysql:
     image: mysql:5.7
     container_name: dev_atravel_mysql
     restart: always
     ports:
-      - "3306:3306"
+      - "4306:3306"
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
       MYSQL_DATABASE: laravel
@@ -36,4 +37,4 @@ services:
     container_name: dev_atravel_redis
     restart: always
     ports:
-      - "6382:6382"
+      - "7382:6382"
