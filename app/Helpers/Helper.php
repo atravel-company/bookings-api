@@ -1,5 +1,43 @@
 <?php
 
+use Intervention\Image\Facades\Image;
+use Illuminate\Http\UploadedFile;
+
+if (!function_exists('compressImage')) {
+    /**
+     * Compress an uploaded image until it is under 2 MB.
+     *
+     * @param \Illuminate\Http\UploadedFile $image
+     * @return \Illuminate\Http\UploadedFile
+     */
+    function compressImage(UploadedFile $image)
+    {
+        $targetSize = 2 * 1024 * 1024; // 2MB
+        $img = Image::make($image->getRealPath());
+        $quality = 90; // percent
+        
+        // Iteratively compress until the file size is <= 2 MB or quality is very low
+        do {
+            $encodedImage = $img->encode('jpg', $quality);
+            $size = strlen($encodedImage);
+            if ($size <= $targetSize) {
+                break;
+            }
+            $quality -= 5;
+        } while ($quality > 10);
+
+        $tempPath = sys_get_temp_dir() . '/' . uniqid('compressed_', true) . '.jpg';
+        file_put_contents($tempPath, $encodedImage);
+
+        return new UploadedFile(
+            $tempPath,
+            $image->getClientOriginalName(),
+            'image/jpeg',
+            null,
+            true // Mark it as a test file so it's accepted by Laravel
+        );
+    }
+}
 
 function formatarDecimal($value)
 {
