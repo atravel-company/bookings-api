@@ -45,7 +45,8 @@
         "sort-packages": true,
         "allow-plugins": {
             "composer/installers": true
-        }
+        },
+        "process-timeout": 900
     },
     "extra": {
         "laravel": {
