@@ -14,3 +14,5 @@ storage
 storage/*
 artisan
 bootstrap/cache/*
+
+scripts/sync-storage.log

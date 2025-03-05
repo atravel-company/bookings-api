@@ -18,6 +18,10 @@ RUN apt-get update && \
       curl \
       unzip \
       ca-certificates \
+      nano \
+      procps \
+      rsync \
+      inotify-tools \
       netcat && \
     rm -rf /var/lib/apt/lists/*
 

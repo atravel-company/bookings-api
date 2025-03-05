@@ -26,3 +26,20 @@ else
   echo "Please ensure your database is running and accessible."
   exit 1
 fi
+
+# Let all scripts be executable
+chmod +x ./scripts/*
+
+# Start sync-storage.sh job
+if ps aux | grep "[s]ync-storage.sh" > /dev/null; then
+    echo "Storage synchronization script is already running. Skipping..."
+else
+    echo "WORKING DIRECTORY:"
+    pwd
+    echo "Starting storage synchronization script in the background..."
+    nohup ./scripts/sync-storage.sh > ./scripts/sync-storage.log 2>&1 &
+    disown
+    echo "Storage synchronization script started and disowned."
+fi
+
+echo "Setup script completed."
