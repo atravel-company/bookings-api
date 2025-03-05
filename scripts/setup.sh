@@ -14,7 +14,7 @@ if [ ! -f ".env" ]; then
 fi
 
 # Check if MySQL is running on port 3306
-if nc -z localhost 3306; then
+if nc -z mysql 3306; then
   echo "MySQL is running on port 3306"
   # Run migrations
   php artisan migrate
