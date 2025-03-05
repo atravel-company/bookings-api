@@ -187,6 +187,7 @@ return [
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Clockwork\Support\Laravel\ClockworkServiceProvider::class,
         OwenIt\Auditing\AuditingServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -251,7 +252,8 @@ return [
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
-        'Clockwork' => Clockwork\Support\Laravel\Facade::class
+        'Clockwork' => Clockwork\Support\Laravel\Facade::class,
+        'Image' => Intervention\Image\Facades\Image::class,
     ],
 
 ];
