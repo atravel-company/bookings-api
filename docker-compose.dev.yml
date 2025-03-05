@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: atravel_app
+    container_name: dev_atravel_app
     tty: true
     stdin_open: true
     volumes:
@@ -23,17 +23,17 @@ services:
 
   mysql:
     image: mysql:5.7
-    container_name: atravel_mysql
+    container_name: dev_atravel_mysql
     restart: always
     ports:
       - "3306:3306"
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
       MYSQL_DATABASE: laravel
-  
-  redis-prod-atravelbookings-ats-cache:
+
+  redis:
     image: redis:alpine
-    container_name: redis-prod-atravelbookings-ats-cache
+    container_name: dev_atravel_redis
     restart: always
     ports:
       - "6382:6382"

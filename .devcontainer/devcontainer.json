@@ -1,7 +1,7 @@
 {
   "name": "legacy-laravel-container",
   "dockerComposeFile": [
-      "../docker-compose.yml"
+      "../docker-compose.dev.yml"
   ],
   "service": "app",
   "workspaceFolder": "/app",
