@@ -16,12 +16,13 @@ fi
 # Check if MySQL is running on port 3306
 if nc -z mysql 3306; then
   echo "MySQL is running on port 3306"
+  echo "Starting migration and seeding..."
   # Run migrations
-  php artisan migrate
+  php artisan migrate:fresh
   php artisan db:seed
   echo "Migrations completed."
 else
-  echo "MySQL is not running on port 3306. Skipping migrations."
+  echo "MySQL is not running on port 3306. Skipping migrations and seeding."
   echo "Please ensure your database is running and accessible."
   exit 1
 fi
