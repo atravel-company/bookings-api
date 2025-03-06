@@ -60,17 +60,7 @@ class LoginController extends BaseController
 
             $img = $request->file('path_image');
 
-            if ($img->getSize() > 2 * 1024 * 1024) // 2MB
-            {
-                $img = compressImage($img);
-            }
-
-            $img = $this->imgUpload($img);
-
-            if($img)
-                $data['path_image'] = $img;
-            else
-                $data['path_image'] = "";
+            $data['path_image'] = storeImage($img);
 
             $data['password'] = bcrypt($data['password']);
 

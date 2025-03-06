@@ -2,6 +2,8 @@
 
 use Intervention\Image\Facades\Image;
 use Illuminate\Http\UploadedFile;
+use Carbon\Carbon;
+
 
 if (!function_exists('compressImage')) {
     /**
@@ -36,6 +38,27 @@ if (!function_exists('compressImage')) {
             null,
             true // Mark it as a test file so it's accepted by Laravel
         );
+    }
+}
+
+if (!function_exists('storeImage'))
+{
+    /**
+     * Stores an image and compress accordingly.
+     *
+     * @param \Illuminate\Http\UploadedFile $image
+     * @return string $imagePath
+     */
+    function storeImage(UploadedFile $image)
+    {
+        if ($image->getSize() > 2 * 1024 * 1024) // 2MB
+        {
+            $image = compressImage($image);
+        }
+
+        $filename  = Carbon::now()->timestamp . '_user.jpeg';
+
+        return $image->storeAs('', $filename, 'public');
     }
 }
 
