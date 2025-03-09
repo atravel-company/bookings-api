@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Backpack\PermissionManager\app\Models\Role;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Validation\Rule;
 use Storage;
 
 
@@ -50,9 +51,15 @@ class LoginController extends BaseController
 
 
             Validator::make($request->all(), [
-                'name' => 'required|string|max:255',
-                'email' => 'required|string|email|max:255|unique:users',
-                'password' => 'required|string|min:6',
+                'name'       => 'required|string|max:255',
+                'email'      => [
+                    'required',
+                    'string',
+                    'email',
+                    'max:255',
+                    Rule::unique('users')->whereNull('deleted_at'),
+                ],
+                'password'   => 'required|string|min:6',
                 'path_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:30720',
             ])->validate();
 
