@@ -30,15 +30,19 @@ fi
 # Let all scripts be executable
 chmod +x ./scripts/*
 
+# No more needed after commit 54d6e3c8:
+# fix: store images directly in `public/storage`
+# Should be deleted in the future, along with sync-storage.sh.
+# 
 # Run sync-storage.sh job
-if ps aux | grep "[s]ync-storage.sh" > /dev/null; then
-    echo "Storage synchronization script is already running. Skipping..."
-else
-    echo "Starting storage synchronization script in the background..."
-    nohup ./scripts/sync-storage.sh > ./scripts/sync-storage.log 2>&1 &
-    disown
-    echo "Storage synchronization script started and disowned."
-fi
+# if ps aux | grep "[s]ync-storage.sh" > /dev/null; then
+#     echo "Storage synchronization script is already running. Skipping..."
+# else
+#     echo "Starting storage synchronization script in the background..."
+#     nohup ./scripts/sync-storage.sh > ./scripts/sync-storage.log 2>&1 &
+#     disown
+#     echo "Storage synchronization script started and disowned."
+# fi
 
 # Run update-phpini.sh job
 bash ./scripts/update-phpini.sh
