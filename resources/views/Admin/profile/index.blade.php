@@ -408,8 +408,16 @@ $authUser = Auth::user();
                                                     <table frame="box">
                                                         <tr id="tr_profit_{{$key}}_{{$key1}}">
                                                             <script type="text/javascript">
-                                                                var valorKickback;
-                                                                var valorMarkup;
+                                                                var valorKickbackAcc;
+                                                                var valorKickbackGolf;
+                                                                var valorKickbackTransfer;
+                                                                var valorKickbackCar;
+                                                                var valorKickbackTicket;
+                                                                var valorMarkupAcc;
+                                                                var valorMarkupGolf;
+                                                                var valorMarkupTransfer;
+                                                                var valorMarkupCar;
+                                                                var valorMarkupTicket;
                                                             </script>
                                                         </tr>
                                                     </table>
@@ -1313,17 +1321,17 @@ function calculateProfit(key, key1) {
     var totalProfitCar = parseFloat($('#totalProfitCar' + key + '_' + key1).html()) || 0;
     var totalProfitTicket = parseFloat($('#totalProfitTicket' + key + '_' + key1).html()) || 0;
 
-    totalProfitAcc -= valorKickback;
-    totalProfitGolf -= valorKickback;
-    totalProfitTransfer -= valorKickback;
-    totalProfitCar -= valorKickback;
-    totalProfitTicket -= valorKickback;
+    totalProfitAcc -= valorKickbackAcc;
+    totalProfitGolf -= valorKickbackGolf;
+    totalProfitTransfer -= valorKickbackTransfer;
+    totalProfitCar -= valorKickbackCar;
+    totalProfitTicket -= valorKickbackTicket;
 
-    totalProfitAcc = isNaN(totalProfitAcc) ? 0 : totalProfitAcc + valorMarkup;
-    totalProfitGolf = isNaN(totalProfitGolf) ? 0 : totalProfitGolf + valorMarkup;
-    totalProfitTransfer = isNaN(totalProfitTransfer) ? 0 : totalProfitTransfer + valorMarkup;
-    totalProfitCar = isNaN(totalProfitCar) ? 0 : totalProfitCar + valorMarkup;
-    totalProfitTicket = isNaN(totalProfitTicket) ? 0 : totalProfitTicket + valorMarkup;
+    totalProfitAcc = isNaN(totalProfitAcc) ? 0 : totalProfitAcc + valorMarkupAcc;
+    totalProfitGolf = isNaN(totalProfitGolf) ? 0 : totalProfitGolf + valorMarkupGolf;
+    totalProfitTransfer = isNaN(totalProfitTransfer) ? 0 : totalProfitTransfer + valorMarkupTransfer;
+    totalProfitCar = isNaN(totalProfitCar) ? 0 : totalProfitCar + valorMarkupCar;
+    totalProfitTicket = isNaN(totalProfitTicket) ? 0 : totalProfitTicket + valorMarkupTicket;
 
     var indiv2 = parseFloat($('#profitProduct' + key + '_' + key1).html()) || 0;
 
