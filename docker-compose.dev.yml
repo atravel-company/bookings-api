@@ -20,7 +20,6 @@ services:
       DB_PASSWORD: ""
     depends_on:
       - mysql
-      - redis
     command: "./scripts/init.sh"
 
   mysql:
@@ -32,10 +31,3 @@ services:
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
       MYSQL_DATABASE: atsportugal_dev_db
-
-  redis:
-    image: redis:alpine
-    container_name: dev_atravel_redis
-    restart: always
-    ports:
-      - "7382:6382"
