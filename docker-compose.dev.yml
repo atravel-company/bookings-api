@@ -20,7 +20,6 @@ services:
       DB_PASSWORD: ""
     depends_on:
       - mysql
-    command: "./scripts/init.sh"
 
   mysql:
     image: mysql:5.7
