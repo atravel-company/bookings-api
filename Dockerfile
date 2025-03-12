@@ -19,6 +19,8 @@ RUN apt-get update && \
       unzip \
       ca-certificates \
       nano \
+      vim \
+      lsof \
       procps \
       rsync \
       inotify-tools \
