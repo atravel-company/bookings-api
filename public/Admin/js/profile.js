@@ -247,15 +247,15 @@ function soma(x, y, z) {
     totalAccExtra = $('#totalAccExtra' + x + '_' + y).html()
 
     percent = document.getElementById('kickbackAccInput' + x + '_' + y).value / 100;
-    valorKickback = totalAcc * percent;
-    $('#kickbackAcc' + x + '_' + y).html(jqueryFloatFormat(parseFloat(valorKickback)));
+    valorKickbackAcc = totalAcc * percent;
+    $('#kickbackAcc' + x + '_' + y).html(jqueryFloatFormat(parseFloat(valorKickbackAcc)));
 
     percentMarkup = document.getElementById('markupAccInput' + x + '_' + y).value / 100;
-    valorMarkup = totalAcc * percentMarkup;
-    $('#markupAcc' + x + '_' + y).html(parseFloat(valorMarkup).toFixed(2))
+    valorMarkupAcc = totalAcc * percentMarkup;
+    $('#markupAcc' + x + '_' + y).html(parseFloat(valorMarkupAcc).toFixed(2))
 
     //final
-    finalAcc = (+totalAcc) + (+totalAccExtra) - (valorKickback) + (+valorMarkup)
+    finalAcc = (+totalAcc) + (+totalAccExtra) - (valorKickbackAcc) + (+valorMarkupAcc)
     $('#finalAcc' + x + '_' + y).html(parseFloat(finalAcc).toFixed(2))
 
     atsRate = document.getElementById("atsRate" + x + '_' + y + '_' + z).value;
@@ -344,14 +344,14 @@ function somaGolf(x, y, z) {
     totalGolfExtra = $('#totalGolfExtra' + x + '_' + y).html()
     //kick-back
     percent = $('#kickbackGolfInput' + x + '_' + y).val() / 100;
-    valorKickback = totalGolf * percent;
-    $('#kickbackGolf' + x + '_' + y).html(parseFloat(valorKickback).toFixed(2))
+    valorKickbackGolf = totalGolf * percent;
+    $('#kickbackGolf' + x + '_' + y).html(parseFloat(valorKickbackGolf).toFixed(2))
     //markup
     percentMarkup = $('#markupGolfInput' + x + '_' + y).val() / 100;
-    valorMarkup = totalGolf * percentMarkup;
-    $('#markupGolf' + x + '_' + y).html(parseFloat(valorMarkup).toFixed(2))
+    valorMarkupGolf = totalGolf * percentMarkup;
+    $('#markupGolf' + x + '_' + y).html(parseFloat(valorMarkupGolf).toFixed(2))
     //final
-    finalGolf = (+totalGolf) + (+totalGolfExtra) - (valorKickback) + (+valorMarkup)
+    finalGolf = (+totalGolf) + (+totalGolfExtra) - (valorKickbackGolf) + (+valorMarkupGolf)
     $('#finalGolf' + x + '_' + y).html(parseFloat(finalGolf).toFixed(2))
 
 
@@ -393,7 +393,7 @@ function somaGolf(x, y, z) {
         montante2 = (+atual2) + (+unitario2)
     }
 
-    // montante2 = (+unitario2)-(valorKickback)+(+valorMarkup);
+    // montante2 = (+unitario2)-(valorKickbackGolf)+(+valorMarkupGolf);
     $('#totalProfitGolf' + x + '_' + y).html(parseFloat(montante2).toFixed(2))
 
 }
@@ -435,14 +435,14 @@ function somaTransfer(x, y, z) {
     totalTransferExtra = $('#totalTransferExtra' + x + '_' + y).html()
     //kick-back
     percent = document.getElementById('kickbackTransferInput' + x + '_' + y).value / 100;
-    valorKickback = totalTransfer * percent;
-    $('#kickbackTransfer' + x + '_' + y).html(parseFloat(valorKickback).toFixed(2))
+    valorKickbackTransfer = totalTransfer * percent;
+    $('#kickbackTransfer' + x + '_' + y).html(parseFloat(valorKickbackTransfer).toFixed(2))
     //markup
     percentMarkup = document.getElementById('markupTransferInput' + x + '_' + y).value / 100;
-    valorMarkup = totalTransfer * percentMarkup;
-    $('#markupTransfer' + x + '_' + y).html(parseFloat(valorMarkup).toFixed(2))
+    valorMarkupTransfer = totalTransfer * percentMarkup;
+    $('#markupTransfer' + x + '_' + y).html(parseFloat(valorMarkupTransfer).toFixed(2))
     //final
-    finalTransfer = (+totalTransfer) + (+totalTransferExtra) - (valorKickback) + (+valorMarkup)
+    finalTransfer = (+totalTransfer) + (+totalTransferExtra) - (valorKickbackTransfer) + (+valorMarkupTransfer)
     $('#finalTransfer' + x + '_' + y).html(parseFloat(finalTransfer).toFixed(2))
 
     atsRate = document.getElementById("atsRateTransfer" + x + '_' + y + '_' + z).value;
@@ -526,14 +526,14 @@ function somaCar(x, y, z) {
     totalCarExtra = $('#totalCarExtra' + x + '_' + y).html();
     //kick-back
     percent = document.getElementById('kickbackCarInput' + x + '_' + y).value / 100;
-    valorKickback = totalCar * percent;
-    $('#kickbackCar' + x + '_' + y).html(parseFloat(valorKickback).toFixed(2));
+    valorKickbackCar = totalCar * percent;
+    $('#kickbackCar' + x + '_' + y).html(parseFloat(valorKickbackCar).toFixed(2));
     //markup
     percentMarkup = document.getElementById('markupCarInput' + x + '_' + y).value / 100;
-    valorMarkup = totalCar * percentMarkup;
-    $('#markupCar' + x + '_' + y).html(parseFloat(valorMarkup).toFixed(2));
+    valorMarkupCar = totalCar * percentMarkup;
+    $('#markupCar' + x + '_' + y).html(parseFloat(valorMarkupCar).toFixed(2));
     //final
-    finalCar = (+totalCar) + (+totalCarExtra) - (valorKickback) + (+valorMarkup);
+    finalCar = (+totalCar) + (+totalCarExtra) - (valorKickbackCar) + (+valorMarkupCar);
     $('#finalCar' + x + '_' + y).html(parseFloat(finalCar).toFixed(2));
 
 
@@ -614,14 +614,14 @@ function somaTicket(x, y, z) {
     totalTicketExtra = $('#totalTicketExtra' + x + '_' + y).html();
     //kick-back
     percent = document.getElementById('kickbackTicketInput' + x + '_' + y).value / 100;
-    valorKickback = totalTicket * percent;
-    $('#kickbackTicket' + x + '_' + y).html(parseFloat(valorKickback).toFixed(2));
+    valorKickbackTicket = totalTicket * percent;
+    $('#kickbackTicket' + x + '_' + y).html(parseFloat(valorKickbackTicket).toFixed(2));
     //markup
     percentMarkup = document.getElementById('markupTicketInput' + x + '_' + y).value / 100;
-    valorMarkup = totalTicket * percentMarkup;
-    $('#markupTicket' + x + '_' + y).html(parseFloat(valorMarkup).toFixed(2));
+    valorMarkupTicket = totalTicket * percentMarkup;
+    $('#markupTicket' + x + '_' + y).html(parseFloat(valorMarkupTicket).toFixed(2));
     //final
-    finalTicket = (+totalTicket) + (+totalTicketExtra) - (valorKickback) + (+valorMarkup)
+    finalTicket = (+totalTicket) + (+totalTicketExtra) - (valorKickbackTicket) + (+valorMarkupTicket)
     $('#finalTicket' + x + '_' + y).html(parseFloat(finalTicket).toFixed(2));
 
     atsRate = document.getElementById("atsRateTicket" + x + '_' + y + '_' + z).value;
@@ -712,16 +712,16 @@ function somaExtra(qntd, x, y, z, tag) {
 
     //kick-back
     percent = $('#kickback' + tag + 'Input' + x + '_' + y).val() / 100;
-    valorKickback = totalAcc * percent;
-    $('#kickback' + tag + x + '_' + y).html(parseFloat(valorKickback).toFixed(2));
+    valorKickbackAcc = totalAcc * percent;
+    $('#kickback' + tag + x + '_' + y).html(parseFloat(valorKickbackAcc).toFixed(2));
     //markup
     percentMarkup = $('#markup' + tag + 'Input' + x + '_' + y).val() / 100;
-    valorMarkup = totalAcc * percentMarkup;
-    $('#markup' + tag + x + '_' + y).html(parseFloat(valorMarkup).toFixed(2));
+    valorMarkupAcc = totalAcc * percentMarkup;
+    $('#markup' + tag + x + '_' + y).html(parseFloat(valorMarkupAcc).toFixed(2));
 
     totalAccExtra = $('#total' + tag + 'Extra' + x + '_' + y).html();
 
-    finalAcc = (+totalAcc) + (+totalAccExtra) - (valorKickback) + (+valorMarkup);
+    finalAcc = (+totalAcc) + (+totalAccExtra) - (valorKickbackAcc) + (+valorMarkupAcc);
     $('#final' + tag + x + '_' + y).html(parseFloat(finalAcc).toFixed(2));
 
     atsRate = $("#atsExtraRate" + x + '_' + y + '_' + z).val();
@@ -801,29 +801,29 @@ function somaExtra(qntd, x, y, z, tag) {
 function kickbackAcc(x, y, z) {
     percent = document.getElementById('kickbackAccInput' + x + '_' + y).value / 100;
     totalAcc = $('#totalAcc' + x + '_' + y).html();
-    valorKickback = totalAcc * percent;
-    valorMarkup = 0;
+    valorKickbackAcc = totalAcc * percent;
+    valorMarkupAcc = 0;
     if (typeof document.getElementById('markupAccInput' + x + '_' + y) != undefined && document.getElementById('markupAccInput' + x + '_' + y) != null) {
         percentMarkup = document.getElementById('markupAccInput' + x + '_' + y).value / 100;
-        valorMarkup = totalAcc * percentMarkup;
+        valorMarkupAcc = totalAcc * percentMarkup;
     }
 
-    // $('#kickbackAcc' + x + '_' + y).html(parseFloat(valorKickback).toFixed(2));
-    $('#kickbackAcc' + x + '_' + y).html(jqueryFloatFormat(parseFloat(valorKickback)));
+    // $('#kickbackAcc' + x + '_' + y).html(parseFloat(valorKickbackAcc).toFixed(2));
+    $('#kickbackAcc' + x + '_' + y).html(jqueryFloatFormat(parseFloat(valorKickbackAcc)));
 
     totalAccExtra = $('#totalAccExtra' + x + '_' + y).html();
-    finalAcc = (+totalAcc) + (+totalAccExtra) - (valorKickback) + (+valorMarkup);
+    finalAcc = (+totalAcc) + (+totalAccExtra) - (valorKickbackAcc) + (+valorMarkupAcc);
     $('#finalAcc' + x + '_' + y).html(parseFloat(finalAcc).toFixed(2));
 }
 
 function markupAcc(x, y, z) {
     percentMarkup = document.getElementById('markupAccInput' + x + '_' + y).value / 100;
     totalAcc = $('#totalAcc' + x + '_' + y).html();
-    valorMarkup = totalAcc * percentMarkup;
-    $('#markupAcc' + x + '_' + y).html(parseFloat(valorMarkup).toFixed(2));
+    valorMarkupAcc = totalAcc * percentMarkup;
+    $('#markupAcc' + x + '_' + y).html(parseFloat(valorMarkupAcc).toFixed(2));
 
     totalAccExtra = $('#totalAccExtra' + x + '_' + y).html();
-    finalAcc = (+totalAcc) + (+totalAccExtra) - (valorKickback) + (+valorMarkup);
+    finalAcc = (+totalAcc) + (+totalAccExtra) - (valorKickbackAcc) + (+valorMarkupAcc);
     $('#finalAcc' + x + '_' + y).html(parseFloat(finalAcc).toFixed(2));
 
 }
@@ -831,11 +831,11 @@ function markupAcc(x, y, z) {
 function kickbackGolf(x, y, z) {
     percent = document.getElementById('kickbackGolfInput' + x + '_' + y).value / 100;
     totalGolf = $('#totalGolf' + x + '_' + y).html();
-    valorKickback = totalGolf * percent;
-    $('#kickbackGolf' + x + '_' + y).html(parseFloat(valorKickback).toFixed(2));
+    valorKickbackGolf = totalGolf * percent;
+    $('#kickbackGolf' + x + '_' + y).html(parseFloat(valorKickbackGolf).toFixed(2));
 
     totalGolfExtra = $('#totalGolfExtra' + x + '_' + y).html();
-    finalGolf = (+totalGolf) + (+totalGolfExtra) - (valorKickback) + (+valorMarkup);
+    finalGolf = (+totalGolf) + (+totalGolfExtra) - (valorKickbackGolf) + (+valorMarkupGolf);
     $('#finalGolf' + x + '_' + y).html(parseFloat(finalGolf).toFixed(2));
 
 }
@@ -843,11 +843,11 @@ function kickbackGolf(x, y, z) {
 function markupGolf(x, y, z) {
     percentMarkup = document.getElementById('markupGolfInput' + x + '_' + y).value / 100;
     totalGolf = $('#totalGolf' + x + '_' + y).html();
-    valorMarkup = totalGolf * percentMarkup;
-    $('#markupGolf' + x + '_' + y).html(parseFloat(valorMarkup).toFixed(2));
+    valorMarkupGolf = totalGolf * percentMarkup;
+    $('#markupGolf' + x + '_' + y).html(parseFloat(valorMarkupGolf).toFixed(2));
 
     totalGolfExtra = $('#totalGolfExtra' + x + '_' + y).html();
-    finalGolf = (+totalGolf) + (+totalGolfExtra) - (valorKickback) + (+valorMarkup);
+    finalGolf = (+totalGolf) + (+totalGolfExtra) - (valorKickbackGolf) + (+valorMarkupGolf);
     $('#finalGolf' + x + '_' + y).html(parseFloat(finalGolf).toFixed(2));
 
 }
@@ -855,11 +855,11 @@ function markupGolf(x, y, z) {
 function kickbackTransfer(x, y, z) {
     percent = document.getElementById('kickbackTransferInput' + x + '_' + y).value / 100;
     totalTransfer = $('#totalTransfer' + x + '_' + y).html();
-    valorKickback = totalTransfer * percent;
-    $('#kickbackTransfer' + x + '_' + y).html(parseFloat(valorKickback).toFixed(2));
+    valorKickbackTransfer = totalTransfer * percent;
+    $('#kickbackTransfer' + x + '_' + y).html(parseFloat(valorKickbackTransfer).toFixed(2));
 
     totalTransferExtra = $('#totalTransferExtra' + x + '_' + y).html();
-    finalTransfer = (+totalTransfer) + (+totalTransferExtra) - (valorKickback) + (+valorMarkup);
+    finalTransfer = (+totalTransfer) + (+totalTransferExtra) - (valorKickbackTransfer) + (+valorMarkupTransfer);
     $('#finalTransfer' + x + '_' + y).html(parseFloat(finalTransfer).toFixed(2));
 
 }
@@ -867,11 +867,11 @@ function kickbackTransfer(x, y, z) {
 function markupTransfer(x, y, z) {
     percentMarkup = document.getElementById('markupTransferInput' + x + '_' + y).value / 100;
     totalTransfer = $('#totalTransfer' + x + '_' + y).html();
-    valorMarkup = totalTransfer * percentMarkup;
-    $('#markupTransfer' + x + '_' + y).html(parseFloat(valorMarkup).toFixed(2));
+    valorMarkupTransfer = totalTransfer * percentMarkup;
+    $('#markupTransfer' + x + '_' + y).html(parseFloat(valorMarkupTransfer).toFixed(2));
 
     totalTransferExtra = $('#totalTransferExtra' + x + '_' + y).html()
-    finalTransfer = (+totalTransfer) + (+totalTransferExtra) - (valorKickback) + (+valorMarkup)
+    finalTransfer = (+totalTransfer) + (+totalTransferExtra) - (valorKickbackTransfer) + (+valorMarkupTransfer)
     $('#finalTransfer' + x + '_' + y).html(parseFloat(finalTransfer).toFixed(2));
 
 }
@@ -879,11 +879,11 @@ function markupTransfer(x, y, z) {
 function kickbackCar(x, y, z) {
     percent = document.getElementById('kickbackCarInput' + x + '_' + y).value / 100;
     totalCar = $('#totalCar' + x + '_' + y).html();
-    valorKickback = totalCar * percent;
-    $('#kickbackCar' + x + '_' + y).html(parseFloat(valorKickback).toFixed(2));
+    valorKickbackCar = totalCar * percent;
+    $('#kickbackCar' + x + '_' + y).html(parseFloat(valorKickbackCar).toFixed(2));
 
     totalCarExtra = $('#totalCarExtra' + x + '_' + y).html();
-    finalCar = (+totalCar) + (+totalCarExtra) - (valorKickback) + (+valorMarkup);
+    finalCar = (+totalCar) + (+totalCarExtra) - (valorKickbackCar) + (+valorMarkupCar);
     $('#finalCar' + x + '_' + y).html(parseFloat(finalCar).toFixed(2));
 
 }
@@ -891,11 +891,11 @@ function kickbackCar(x, y, z) {
 function markupCar(x, y, z) {
     percentMarkup = document.getElementById('markupCarInput' + x + '_' + y).value / 100;
     totalCar = $('#totalCar' + x + '_' + y).html();
-    valorMarkup = totalCar * percentMarkup;
-    $('#markupCar' + x + '_' + y).html(parseFloat(valorMarkup).toFixed(2));
+    valorMarkupCar = totalCar * percentMarkup;
+    $('#markupCar' + x + '_' + y).html(parseFloat(valorMarkupCar).toFixed(2));
 
     totalCarExtra = $('#totalCarExtra' + x + '_' + y).html();
-    finalCar = (+totalCar) + (+totalCarExtra) - (valorKickback) + (+valorMarkup);
+    finalCar = (+totalCar) + (+totalCarExtra) - (valorKickbackCar) + (+valorMarkupCar);
     $('#finalCar' + x + '_' + y).html(parseFloat(finalCar).toFixed(2));
 
 }
@@ -903,11 +903,11 @@ function markupCar(x, y, z) {
 function kickbackTicket(x, y, z) {
     percent = document.getElementById('kickbackTicketInput' + x + '_' + y).value / 100;
     totalTicket = $('#totalTicket' + x + '_' + y).html();
-    valorKickback = totalTicket * percent;
-    $('#kickbackTicket' + x + '_' + y).html(parseFloat(valorKickback).toFixed(2));
+    valorKickbackTicket = totalTicket * percent;
+    $('#kickbackTicket' + x + '_' + y).html(parseFloat(valorKickbackTicket).toFixed(2));
 
     totalTicketExtra = $('#totalTicketExtra' + x + '_' + y).html();
-    finalTicket = (+totalTicket) + (+totalTicketExtra) - (valorKickback) + (+valorMarkup);
+    finalTicket = (+totalTicket) + (+totalTicketExtra) - (valorKickbackTicket) + (+valorMarkupTicket);
     $('#finalTicket' + x + '_' + y).html(parseFloat(finalTicket).toFixed(2));
 
 }
@@ -915,11 +915,11 @@ function kickbackTicket(x, y, z) {
 function markupTicket(x, y, z) {
     percentMarkup = document.getElementById('markupTicketInput' + x + '_' + y).value / 100;
     totalTicket = $('#totalTicket' + x + '_' + y).html();
-    valorMarkup = totalTicket * percentMarkup;
-    $('#markupTicket' + x + '_' + y).html(parseFloat(valorMarkup).toFixed(2));
+    valorMarkupTicket = totalTicket * percentMarkup;
+    $('#markupTicket' + x + '_' + y).html(parseFloat(valorMarkupTicket).toFixed(2));
 
     totalTicketExtra = $('#totalTicketExtra' + x + '_' + y).html();
-    finalTicket = (+totalTicket) + (+totalTicketExtra) - (valorKickback) + (+valorMarkup);
+    finalTicket = (+totalTicket) + (+totalTicketExtra) - (valorKickbackTicket) + (+valorMarkupTicket);
     $('#finalTicket' + x + '_' + y).html(parseFloat(finalTicket).toFixed(2));
 
 }
