@@ -46,6 +46,6 @@ services:
     container_name: prod_atravel_mysql
     restart: always
     ports:
-      - "2306:3306"
+      - "127.0.0.1:2306:3306"
     environment:
       MYSQL_DATABASE: atsportugal_prod_db
