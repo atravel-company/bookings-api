@@ -453,8 +453,8 @@ function somaTransfer(x, y, z) {
 
     atsProfit = real - atsRate;
 
-    console.log("VALOR DE REAL ", real);
-    console.log("VALOR DE REAL ", atsRate);
+    // console.log("VALOR DE REAL ", real);
+    // console.log("VALOR DE REAL ", atsRate);
 
     if (atsRate == 0) {
         $("#atsProfitTransfer" + x + '_' + y + '_' + z).html(parseFloat(real).toFixed(2))

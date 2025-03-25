@@ -30,7 +30,7 @@ services:
       PUSHER_APP_KEY: 37abc5efe9e26526a020
       PUSHER_APP_SECRET: 
       PUSHER_CHANNEL: ats-production
-      PUSHER_DEBUG: true
+      PUSHER_DEBUG: false
 
       API_TRANSFERGEST_HOST: https://transfers.atsportugal.com/
       API_TRANSFERGEST_USER: api@atravel.com
