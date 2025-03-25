@@ -1321,11 +1321,11 @@ function calculateProfit(key, key1) {
     var totalProfitCar = parseFloat($('#totalProfitCar' + key + '_' + key1).html()) || 0;
     var totalProfitTicket = parseFloat($('#totalProfitTicket' + key + '_' + key1).html()) || 0;
 
-    totalProfitAcc -= valorKickbackAcc;
-    totalProfitGolf -= valorKickbackGolf;
-    totalProfitTransfer -= valorKickbackTransfer;
-    totalProfitCar -= valorKickbackCar;
-    totalProfitTicket -= valorKickbackTicket;
+    totalProfitAcc -= $('#kickbackAcc' + key + '_' + key1).html() || valorKickbackAcc;
+    totalProfitGolf -= $('#kickbackGolf' + key + '_' + key1).html() || valorKickbackGolf;
+    totalProfitTransfer -= $('#kickbackTransfer' + key + '_' + key1).html() || valorKickbackTransfer;
+    totalProfitCar -= $('#kickbackCar' + key + '_' + key1).html() || valorKickbackCar;
+    totalProfitTicket -= $('#kickbackTicket' + key + '_' + key1).html() || valorKickbackTicket;
 
     totalProfitAcc = isNaN(totalProfitAcc) ? 0 : totalProfitAcc + valorMarkupAcc;
     totalProfitGolf = isNaN(totalProfitGolf) ? 0 : totalProfitGolf + valorMarkupGolf;
