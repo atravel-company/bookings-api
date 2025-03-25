@@ -106,6 +106,12 @@ return [
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
+
+        'monitored_users' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/monitored_users_creation.log'),
+            'level' => 'info',
+        ],
     ],
 
 ];
