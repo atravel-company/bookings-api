@@ -1327,11 +1327,17 @@ function calculateProfit(key, key1) {
     totalProfitCar -= $('#kickbackCar' + key + '_' + key1).html() || valorKickbackCar;
     totalProfitTicket -= $('#kickbackTicket' + key + '_' + key1).html() || valorKickbackTicket;
 
-    totalProfitAcc = isNaN(totalProfitAcc) ? 0 : totalProfitAcc + valorMarkupAcc;
-    totalProfitGolf = isNaN(totalProfitGolf) ? 0 : totalProfitGolf + valorMarkupGolf;
-    totalProfitTransfer = isNaN(totalProfitTransfer) ? 0 : totalProfitTransfer + valorMarkupTransfer;
-    totalProfitCar = isNaN(totalProfitCar) ? 0 : totalProfitCar + valorMarkupCar;
-    totalProfitTicket = isNaN(totalProfitTicket) ? 0 : totalProfitTicket + valorMarkupTicket;
+    valorMarkupAcc = $('#markupAcc' + key + '_' + key1).html() || valorMarkupAcc
+    valorMarkupGolf = $('#markupGolf' + key + '_' + key1).html() || valorMarkupGolf
+    valorMarkupTransfer = $('#markupTransfer' + key + '_' + key1).html() || valorMarkupTransfer
+    valorMarkupCar = $('#markupCar' + key + '_' + key1).html() || valorMarkupCar
+    valorMarkupTicket = $('#markupTicket' + key + '_' + key1).html() || valorMarkupTicket
+
+    totalProfitAcc = isNaN(totalProfitAcc) ? 0 : totalProfitAcc + Number(valorMarkupAcc);
+    totalProfitGolf = isNaN(totalProfitGolf) ? 0 : totalProfitGolf + Number(valorMarkupGolf);
+    totalProfitTransfer = isNaN(totalProfitTransfer) ? 0 : totalProfitTransfer + Number(valorMarkupTransfer);
+    totalProfitCar = isNaN(totalProfitCar) ? 0 : totalProfitCar + Number(valorMarkupCar);
+    totalProfitTicket = isNaN(totalProfitTicket) ? 0 : totalProfitTicket + Number(valorMarkupTicket);
 
     var indiv2 = parseFloat($('#profitProduct' + key + '_' + key1).html()) || 0;
 
