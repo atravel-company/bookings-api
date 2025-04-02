@@ -40,6 +40,11 @@ services:
     depends_on:
       - mysql
     command: "./scripts/init.sh"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   mysql:
     image: mysql:5.7

@@ -20,6 +20,11 @@ services:
       DB_PASSWORD: ""
     depends_on:
       - mysql
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   mysql:
     image: mysql:5.7
