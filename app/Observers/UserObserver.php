@@ -19,6 +19,10 @@ class UserObserver
                 'user_agent' => request()->userAgent(),
                 'creator_id'   => $creator ? $creator->id : null,
                 'creator_email'=> $creator ? $creator->email : null,
+                'request_data' => request()->all(), // Log all request data
+                'request_headers' => request()->headers->all(), // Log all request headers
+                'request_method' => request()->method(), // Log the request method
+                'request_url' => request()->url(), // Log the request URL
             ]);
         }
     }
