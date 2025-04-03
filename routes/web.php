@@ -2,7 +2,7 @@
 
 Route::get('/', 'FrontEndController@index');
 
-Auth::routes();
+Auth::routes(['register' => false]);
 
 
 Route::permanentRedirect('/public', '/admin');

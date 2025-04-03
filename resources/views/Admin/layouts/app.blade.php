@@ -155,11 +155,7 @@ $users_array = ['sales@atravel.pt', 'incoming@atravel.pt', 'transfers@atravel.pt
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <!-- Authentication Links -->
-                        @if (Auth::guest())
-                        <li><a href="{{ route('login') }}" style="color: white;">Login</a></li>
-                        <li><a href="{{ route('register') }}" style="color: white;">Register</a></li>
-                        @else
-
+                        @if (!Auth::guest())
                         <li class="dropdown iconsNavebar nav-item">
                             <span class="badge badge-pill badge-success insertPusherNotificationTotal"></span>
                             <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button"
