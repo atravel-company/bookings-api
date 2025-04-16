@@ -34,6 +34,7 @@ class PedidosReportsV2Controller extends Controller
 
     public function applyFilter(Request $request)
     {
+        set_time_limit(300);
         try {
 
             $produtos = Produto::orderBy('nome')->get();

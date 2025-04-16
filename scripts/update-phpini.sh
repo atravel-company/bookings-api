@@ -83,6 +83,7 @@ for PHP_INI in "${PHP_INI_PATHS[@]}"; do
   echo "Processing php.ini file: $PHP_INI"
   update_php_setting "upload_max_filesize" "$UPLOAD_MAX_FILESIZE" "$PHP_INI"
   update_php_setting "post_max_size" "$POST_MAX_SIZE" "$PHP_INI"
+  update_php_setting "max_execution_time" "300" "$PHP_INI"
   echo ""
 done
 
