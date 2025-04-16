@@ -16,9 +16,7 @@ class PedidoGeral extends Model implements Auditable
     protected $fillable = ['id', 'type', 'lead_name', 'responsavel', 'referencia', 'user_id', 'valor', 'profit', 'status', 'deleted_at'];
 
 
-    protected $appends = ['valortotalquarto', 'valortotalgolf', 'valortotaltransfer', 'valortotalcar', 'valortotalextras', 'valortotalkickback', 'TotalPagamento', 'ValorTotalProfitExtras', 'AtsTotalExtra', 'DataFirstServico', 'DataFirstServicoDesc'];
-
-    protected $dates = ['DataFirstServico', 'DataFirstServicoDesc'];
+    protected $appends = ['valortotalquarto', 'valortotalgolf', 'valortotaltransfer', 'valortotalcar', 'valortotalextras', 'valortotalkickback', 'TotalPagamento', 'ValorTotalProfitExtras', 'AtsTotalExtra'];
 
     public function produtoss()
     {
@@ -65,64 +63,83 @@ class PedidoGeral extends Model implements Auditable
             ->orWhere('status', 'Waiting Confirmation');
     }
 
-    public function scopeViewWithAllProd($query, $userRequest = false)
+    public function scopeViewWithAllProd($query, $userRequest = []) // Default to empty array
     {
-
-        if (isset($userRequest['start'])) {
-            $userRequest['start'] = Carbon::parse(str_replace('/', '-', $userRequest['start']))->format("Y-m-d");
-        } else {
-            $userRequest['start'] = null;
-        }
-
-        if (isset($userRequest['end'])) {
-            $userRequest['end'] = Carbon::parse(str_replace('/', '-', $userRequest['end']))->format("Y-m-d");
-        } else {
-            $userRequest['end'] = Carbon::now()->format("Y-m-d");
-        }
-
-        $data = $query->where("status", "!=", "Canceled")->with('payments')->with('user')
-            ->with(['pedidoprodutos' => function ($sql) use ($userRequest) {
-                $sql->with('extras');
-                $sql->with('valorquarto');
-                $sql->with('pedidoquarto');
-                $sql->with('valortransfer');
-                $sql->with('pedidotransfer');
-                $sql->with('valorgame');
-                $sql->with('pedidogame');
-                $sql->with('valorcar');
-                $sql->with('pedidocar');
-                $sql->with('valorticket');
-                $sql->with('pedidoticket');
-                $sql->with('produto');
+        // Base Eager Loading - Load relationships needed in almost all cases
+        // Consider if *all* of these are *always* needed. Reducing eager loading helps.
+        $query->with('payments', 'user')
+            ->with(['pedidoprodutos' => function ($sql) {
+                // Load common nested relationships for products
+                // Be critical: Are all of these needed even when just listing orders?
+                $sql->with('extras', 'valorquarto', 'pedidoquarto', 'valortransfer', 'pedidotransfer', 'valorgame', 'pedidogame', 'valorcar', 'pedidocar', 'valorticket', 'pedidoticket', 'produto');
             }]);
 
-        if (isset($userRequest['start'])) {
-            if ($userRequest['start'] !== null) {
-                $data = $data->customDataFilters($userRequest);
-            }
+        // Prepare dates - Use Carbon directly for parsing
+        $startDate = null;
+        if (isset($userRequest['start']) && !empty($userRequest['start'])) {
+            try {
+                // Assuming format d/m/Y from your original code
+                $startDate = Carbon::createFromFormat("d/m/Y", $userRequest['start'])->format('Y-m-d');
+            } catch (\Exception $e) { $startDate = null; /* Handle invalid date format */ }
         }
 
-        return $data;
+        $endDate = null;
+        if (isset($userRequest['end']) && !empty($userRequest['end'])) {
+            try {
+                $endDate = Carbon::createFromFormat("d/m/Y", $userRequest['end'])->format('Y-m-d');
+            } catch (\Exception $e) { $endDate = null; /* Handle invalid date format */ }
+        } else if ($startDate) {
+            // Default end date if start is provided but end isn't (based on original code)
+            $endDate = Carbon::now()->format("Y-m-d");
+        }
+
+
+        // Apply date filters using database queries if dates are valid
+        if ($startDate || $endDate) {
+            // Pass parsed dates to the custom filter scope
+            $query->customDataFilters(['start' => $startDate, 'end' => $endDate]);
+        }
+
+        // Removed: $query->where("status", "!=", "Canceled"); // Moved to controller for clarity
+
+        return $query;
     }
 
     public function scopeCustomDataFilters($query, $data)
     {
+        $start = $data['start'] ?? null;
+        $end = $data['end'] ?? null;
 
-        if ($data['start'] !== null) {
-            $query = $query->whereHas('pedidoprodutos.pedidoquarto', function ($q) use ($data) {
-                $q->whereBetween('checkin', [$data['start'], $data['end']]);
-            })->orWhereHas('pedidoprodutos.pedidotransfer', function ($q) use ($data) {
-                $q->whereBetween('data', [$data['start'], $data['end']]);
-            })->orWhereHas('pedidoprodutos.pedidogame', function ($q) use ($data) {
-                $q->whereBetween('data', [$data['start'], $data['end']]);
-            })->orWhereHas('pedidoprodutos.pedidocar', function ($q) use ($data) {
-                $q->whereBetween('pickup_data', [$data['start'], $data['end']]);
-            })->orWhereHas('pedidoprodutos.pedidoticket', function ($q) use ($data) {
-                $q->whereBetween('data', [$data['start'], $data['end']]);
+        // Apply date range filtering using WHERE HAS clauses within a grouped WHERE
+        // This ensures that at least one related product type falls within the date range.
+        if ($start && $end) {
+            $query->where(function ($subQuery) use ($start, $end) {
+                $subQuery->orWhereHas('pedidoprodutos.pedidoquarto', function ($q) use ($start, $end) { $q->whereBetween('checkin', [$start, $end]); })
+                        ->orWhereHas('pedidoprodutos.pedidotransfer', function ($q) use ($start, $end) { $q->whereBetween('data', [$start, $end]); })
+                        ->orWhereHas('pedidoprodutos.pedidogame', function ($q) use ($start, $end) { $q->whereBetween('data', [$start, $end]); })
+                        ->orWhereHas('pedidoprodutos.pedidocar', function ($q) use ($start, $end) { $q->whereBetween('pickup_data', [$start, $end]); })
+                        ->orWhereHas('pedidoprodutos.pedidoticket', function ($q) use ($start, $end) { $q->whereBetween('data', [$start, $end]); });
+            });
+        } elseif ($start) { // Only start date provided
+            $query->where(function ($subQuery) use ($start) {
+                $subQuery->orWhereHas('pedidoprodutos.pedidoquarto', function ($q) use ($start) { $q->where('checkin', '>=', $start); })
+                        ->orWhereHas('pedidoprodutos.pedidotransfer', function ($q) use ($start) { $q->where('data', '>=', $start); })
+                        ->orWhereHas('pedidoprodutos.pedidogame', function ($q) use ($start) { $q->where('data', '>=', $start); })
+                        ->orWhereHas('pedidoprodutos.pedidocar', function ($q) use ($start) { $q->where('pickup_data', '>=', $start); })
+                        ->orWhereHas('pedidoprodutos.pedidoticket', function ($q) use ($start) { $q->where('data', '>=', $start); });
+            });
+        } elseif ($end) { // Only end date provided
+            $query->where(function ($subQuery) use ($end) {
+                $subQuery->orWhereHas('pedidoprodutos.pedidoquarto', function ($q) use ($end) { $q->where('checkin', '<=', $end); })
+                        ->orWhereHas('pedidoprodutos.pedidotransfer', function ($q) use ($end) { $q->where('data', '<=', $end); })
+                        ->orWhereHas('pedidoprodutos.pedidogame', function ($q) use ($end) { $q->where('data', '<=', $end); })
+                        ->orWhereHas('pedidoprodutos.pedidocar', function ($q) use ($end) { $q->where('pickup_data', '<=', $end); })
+                        ->orWhereHas('pedidoprodutos.pedidoticket', function ($q) use ($end) { $q->where('data', '<=', $end); });
             });
         }
+        // If neither $start nor $end, this scope won't add date constraints.
 
-        return $query;
+        return $query; // Make sure to return the query builder instance
     }
 
     public function formatDecimal($value)
@@ -258,51 +275,6 @@ class PedidoGeral extends Model implements Auditable
         }
 
         return $this->formatDecimal($total);
-    }
-
-    public function getDataFirstServicoAttribute()
-    {
-
-        try {
-
-            $data = $this->pedidoprodutos()->get();
-
-            if ($data) {
-                $response = $data->sortBy(function ($col) {
-                    return $col->firstCheckin;
-                })->values()->first();
-
-                if ($response) {
-                    return $response->firstCheckin;
-                } else {
-                    return Carbon::parse("00/01/0009");
-                }
-            } else {
-                return Carbon::parse("00/01/0009");
-            }
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $ex) {
-            dd($ex);
-        }
-    }
-
-    public function getDataFirstServicoDescAttribute()
-    {
-
-        $data = $this->pedidoprodutos()->get();
-
-        if ($data) {
-            $response = $data->sortByDesc(function ($col) {
-                return $col->firstCheckin;
-            })->values()->first();
-
-            if ($response) {
-                return $response->firstCheckin;
-            } else {
-                return Carbon::parse("00/01/0009");
-            }
-        } else {
-            return Carbon::parse("00/01/0009");
-        }
     }
 
     public function getAtsTotalQuartoAttribute()
