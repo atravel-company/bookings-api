@@ -638,7 +638,7 @@
 
                     html += "<tr>";
                     html += "<td> # </td>";
-                    html += "<td> " + moment(pedidos.FirstCheckin).format("DD/MM/YYYY") + "</td>";
+                    html += "<td> " + moment(pedidos.FirstCheckin).add(1, 'days').format("DD/MM/YYYY") + "</td>";
                     html += "<td> " + json.lead_name + "</td>";
                     html += "<td> " + rnts + "</td>";
                     html += "<td> " + parseFloat(bednight).toFixed(2) + "</td>";

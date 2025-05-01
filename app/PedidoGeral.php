@@ -16,7 +16,7 @@ class PedidoGeral extends Model implements Auditable
     protected $fillable = ['id', 'type', 'lead_name', 'responsavel', 'referencia', 'user_id', 'valor', 'profit', 'status', 'deleted_at'];
 
 
-    protected $appends = ['valortotalquarto', 'valortotalgolf', 'valortotaltransfer', 'valortotalcar', 'valortotalextras', 'valortotalkickback', 'TotalPagamento', 'ValorTotalProfitExtras', 'AtsTotalExtra'];
+    protected $appends = ['valortotalquarto', 'valortotalgolf', 'valortotaltransfer', 'valortotalcar', 'valortotalextras', 'valortotalkickback', 'TotalPagamento', 'ValorTotalProfitExtras', 'AtsTotalExtra', 'DataFirstServico', 'DataFirstServicoDesc'];
 
     public function produtoss()
     {
@@ -337,6 +337,63 @@ class PedidoGeral extends Model implements Auditable
         } catch (Exception $ex) {
 
             dd("pedidogeral execption", $ex);
+        }
+    }
+
+    /**
+     * Get the overall earliest service date for this PedidoGeral.
+     * Relies on 'pedidoprodutos' and their nested date relations being EAGER-LOADED.
+     *
+     * @return \Carbon\Carbon|null
+     */
+    public function getDataFirstServicoAttribute(): ?Carbon
+    {
+        // Ensure the main relationship is loaded
+        if (! $this->relationLoaded('pedidoprodutos')) {
+            // It's generally bad practice to lazy-load in an accessor,
+            // return null or default if data wasn't explicitly loaded.
+            // If this happens, fix the eager loading in the controller (Part 1).
+            return Carbon::parse("00/01/0009"); // Or return null;
+        }
+
+        // Map over the loaded collection, get each item's firstCheckin, filter out nulls
+        $dates = $this->pedidoprodutos
+            ->map(function ($pedidoProduto) {
+                // Uses the optimized getFirstCheckinAttribute from PedidoProduto
+                return $pedidoProduto->FirstCheckin;
+            })
+            ->filter(); // Remove any null dates
+
+        // Find the minimum date from the collection of valid dates
+        if ($dates->isEmpty()) {
+            // Return the original default date if no valid dates found
+            return Carbon::parse("00/01/0009"); // Return as Carbon object
+        } else {
+            return $dates->min(); // Returns the earliest Carbon date object
+        }
+    }
+
+    /**
+     * Get the overall latest service date for this PedidoGeral.
+     * Relies on 'pedidoprodutos' and their nested date relations being EAGER-LOADED.
+     *
+     * @return \Carbon\Carbon|null
+     */
+    public function getDataFirstServicoDescAttribute(): ?Carbon
+    {
+        if (! $this->relationLoaded('pedidoprodutos')) {
+             return Carbon::parse("00/01/0009"); // Or return null;
+        }
+
+        $dates = $this->pedidoprodutos
+            ->map(function ($pp) { return $pp->firstCheckin; })
+            ->filter();
+
+        if ($dates->isEmpty()) {
+            return Carbon::parse("00/01/0009");
+        } else {
+            // Use max() to find the latest date
+            return $dates->max();
         }
     }
 }

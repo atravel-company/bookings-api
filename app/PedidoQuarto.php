@@ -16,6 +16,11 @@ class PedidoQuarto extends Model implements Auditable
 
     protected $dates = ['created_at', 'updated_at'];
 
+    protected $casts = [
+        'checkin' => 'date',
+        'checkout' => 'date',
+    ];
+
     protected $appends = ['rnts', 'bednight', 'ats_total_rate'];
 
 
