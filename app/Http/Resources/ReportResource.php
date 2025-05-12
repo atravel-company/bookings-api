@@ -19,11 +19,8 @@ class ReportResource extends JsonResource
             'clientName'   => $this->lead_name,
             'operatorName' => $this->user->name,
             'startDate'    => $this->DataFirstServico,
-            'bookings'     => [
-                'totals'  => $this->calculateTotals($request),
-                'metrics' => $this->calculateMetrics(),
-                'array'   => BookingResource::collection($this->pedidoprodutos),
-            ],
+            'totals'       => $this->calculateTotals($request),
+            'metrics'      => $this->calculateMetrics(),
         ];
     }
 
@@ -70,7 +67,7 @@ class ReportResource extends JsonResource
     }
 
     /**
-     * Calculate group totals by aggregating each booking's values.
+     * Calculate group totals by aggregating each booking's totals.
      *
      * @param \Illuminate\Http\Request $request
      * @return array
@@ -88,17 +85,17 @@ class ReportResource extends JsonResource
 
         foreach ($this->pedidoprodutos as $produto) {
             // Create a BookingResource instance and get its transformed array.
-            $bookingData = (new BookingResource($produto))->toArray($request);
+            $bookingData = (new BookingResource($produto, $this->id))->toArray($request);
             $type = $bookingData['type'] ?? null;
 
             // For quarto, golf or transfer, add its service value.
             if (in_array($type, ['quarto', 'golf', 'transfer'])) {
-                $calculatedTotals[$type] += $bookingData['values']['service'];
+                $calculatedTotals[$type] += $bookingData['totals'][$type];
             }
 
             // Extras and kickback are summed across all bookings.
-            $calculatedTotals['extras']   += $bookingData['values']['extras'];
-            $calculatedTotals['kickback'] += $bookingData['values']['kickback'];
+            $calculatedTotals['extras']   += $bookingData['totals']['extras'];
+            $calculatedTotals['kickback'] += $bookingData['totals']['kickback'];
         }
 
         return $calculatedTotals;

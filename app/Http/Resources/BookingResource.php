@@ -6,10 +6,19 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class BookingResource extends JsonResource
 {
+
+    protected $parentId;
+
+    public function __construct($resource, $parentId)
+    {
+        parent::__construct($resource);
+        $this->parentId = $parentId;
+    }
+
     public function toArray($request)
     {
         $type     = $this->tipoproduto === 'game' ? 'golf' : $this->tipoproduto;
-        $checkin  = $this->FirstCheckin;
+        $startDate  = $this->FirstCheckin;
         $supplier = $this->produto->nome ?? null;
 
         // dynamically pick the right relation name:
@@ -20,11 +29,12 @@ class BookingResource extends JsonResource
         $kick  = $this->$rel->kick              ?? 0;
 
         return [
+            'parentId' => $this->parentId,
             'type'     => $type,
-            'checkin'  => $checkin,
+            'startDate'  => $startDate,
             'supplier' => $supplier,
-            'values'   => [
-                'service'  => $svc,
+            'totals'   => [
+                $type  => $svc,
                 'extras'   => $extra,
                 'kickback' => $kick,
                 'total'    => $this->valor,
