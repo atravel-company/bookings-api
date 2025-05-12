@@ -37,7 +37,7 @@ class BookingResource extends JsonResource
                 $type  => $svc,
                 'extras'   => $extra,
                 'kickback' => $kick,
-                'total'    => $this->valor,
+                'sum'    => $this->valor,
             ],
             'metrics'  => $this->calculateMetrics(),
         ];
