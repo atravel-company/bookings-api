@@ -25,8 +25,10 @@ class ReportsController extends Controller
       $rows = [new ReportResource($report)];
 
       // then each booking‐service under it
-      foreach ($report->pedidoprodutos as $booking) {
-        $rows[] = new BookingResource($booking, $report->id);
+      if (count($report->pedidoprodutos) > 1) {
+        foreach ($report->pedidoprodutos as $report) {
+          $rows[] = new BookingResource($report, $report->id);
+        }
       }
 
       return $rows;

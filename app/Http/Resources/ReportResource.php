@@ -14,11 +14,17 @@ class ReportResource extends JsonResource
      */
     public function toArray($request)
     {
+        if ($this->pedidoprodutos->count() == 1) {
+            $produto = $this->pedidoprodutos->first();
+            $supplier = $produto->produto->nome ?? null;
+        }
+
         return [
             'id'           => $this->id,
             'clientName'   => $this->lead_name,
             'operatorName' => $this->user->name,
             'startDate'    => $this->DataFirstServico,
+            'supplier'     => $supplier ?? null,
             'totals'       => $this->calculateTotals($request),
             'metrics'      => $this->calculateMetrics(),
         ];
