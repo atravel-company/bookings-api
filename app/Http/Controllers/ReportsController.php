@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Report\IndexReportRequest;
-use App\Http\Resources\BookingResource;
 use App\Http\Resources\ReportResource;
 use App\Services\ReportsService;
 
