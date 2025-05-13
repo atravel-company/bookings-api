@@ -21,17 +21,7 @@ class ReportsController extends Controller
     $filteredReports = $this->reportService->getFilteredReports($request->input('dates'));
 
     $payload = $filteredReports->flatMap(function ($report) {
-      // 1st: the “summary” row
-      $rows = [new ReportResource($report)];
-
-      // then each booking‐service under it
-      if (count($report->pedidoprodutos) > 1) {
-        foreach ($report->pedidoprodutos as $report) {
-          $rows[] = new BookingResource($report, $report->id);
-        }
-      }
-
-      return $rows;
+      return [new ReportResource($report)];
     });
 
     return $payload;

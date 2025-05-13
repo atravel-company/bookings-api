@@ -14,19 +14,44 @@ class ReportResource extends JsonResource
      */
     public function toArray($request)
     {
-        if ($this->pedidoprodutos->count() == 1) {
-            $produto = $this->pedidoprodutos->first();
-            $supplier = $produto->produto->nome ?? null;
-        }
+        if ($this->pedidoprodutos->count() == 1)
+            return $this->fromPedidoProduto(
+                $this->pedidoprodutos->first(),
+                $this->lead_name,
+                $this->user->name
+            );
 
         return [
-            'id'           => $this->id,
-            'clientName'   => $this->lead_name,
+            'id' => $this->id,
+            'clientName' => $this->lead_name,
             'operatorName' => $this->user->name,
-            'startDate'    => $this->DataFirstServico,
-            'supplier'     => $supplier ?? null,
-            'totals'       => $this->calculateTotals($request),
-            'metrics'      => $this->calculateMetrics(),
+            'startDate' => $this->DataFirstServico,
+            'supplier' => null,
+            'totals' => $this->calculateTotals($request),
+            'metrics' => $this->calculateMetrics(),
+            'children' => $this->pedidoprodutos->map(function ($p) {
+                return $this->fromPedidoProduto(
+                    $p,
+                    $this->lead_name,
+                    $this->user->name
+                );
+            }),
+        ];
+    }
+
+    public function fromPedidoProduto($product, $clientName, $operatorName): array
+    {
+        $type = $product->tipoproduto === 'game' ? 'golf' : $product->tipoproduto;
+
+        return [
+            'id' => $product->id,
+            'type' => $type,
+            'clientName' => $clientName,
+            'operatorName' => $operatorName,
+            'startDate' => $product->FirstCheckin,
+            'supplier' => $product->produto->nome ?? null,
+            'totals' => $this->calculatePedidoProdutoTotals($product, $type),
+            'metrics' => $this->calculatePedidoProdutoMetrics($product),
         ];
     }
 
@@ -50,7 +75,7 @@ class ReportResource extends JsonResource
         $players = $this->pedidoprodutos
             ->pluck('pedidogame')
             ->flatten()
-            ->sum(function($game) {
+            ->sum(function ($game) {
                 return $game->people + $game->free;
             });
 
@@ -65,10 +90,10 @@ class ReportResource extends JsonResource
         $adr = floor($adr * 100) / 100.;
 
         return [
-            'rnts'     => $rnts,
+            'rnts' => $rnts,
             'bednight' => $bednight,
-            'players'  => $players,
-            'adr'      => $adr,
+            'players' => $players,
+            'adr' => $adr,
         ];
     }
 
@@ -81,12 +106,12 @@ class ReportResource extends JsonResource
     private function calculateTotals($request): array
     {
         $calculatedTotals = [
-            'quarto'   => 0,
-            'golf'     => 0,
+            'quarto' => 0,
+            'golf' => 0,
             'transfer' => 0,
-            'extras'   => 0,
+            'extras' => 0,
             'kickback' => 0,
-            'sum'      => $this->valor, // Preserved from the group.
+            'sum' => $this->valor, // Preserved from the group.
         ];
 
         foreach ($this->pedidoprodutos as $produto) {
@@ -100,10 +125,51 @@ class ReportResource extends JsonResource
             }
 
             // Extras and kickback are summed across all bookings.
-            $calculatedTotals['extras']   += $bookingData['totals']['extras'];
+            $calculatedTotals['extras'] += $bookingData['totals']['extras'];
             $calculatedTotals['kickback'] += $bookingData['totals']['kickback'];
         }
 
         return $calculatedTotals;
+    }
+
+    /**
+     * Calculate totals for a PedidoProduto booking.
+     *
+     * @param string $type
+     * @return array
+     */
+    private function calculatePedidoProdutoTotals($product, $type): array
+    {
+        $rel   = 'valor' . ($type === 'golf' ? 'game' : $type);
+        $svc   = $product->$rel->{"valor_{$type}"} ?? 0;
+        $extra = $product->$rel->valor_extra         ?? 0;
+        $kick  = $product->$rel->kick                ?? 0;
+
+        return [
+            $type   => $svc,
+            'extras'   => $extra,
+            'kickback' => $kick,
+            'sum'      => $product->valor,
+        ];
+    }
+
+    /**
+     * Calculate metrics for a PedidoProduto booking.
+     *
+     * @return array
+     */
+    private function calculatePedidoProdutoMetrics($product): array
+    {
+        $rnts     = $product->pedidoquarto->sum('rnts');
+        $bednight = $product->pedidoquarto->sum('bednight');
+        $players  = $product->pedidogame->sum(function ($g) {
+            return $g->people + ($g->free ?? 0);
+        });
+        $guests   = $product->pedidogame->sum('TotalPax');
+
+        $lastValorQuarto = $product->valorquarto->valor_quarto ?? 0;
+        $adr = floor(($lastValorQuarto / max($rnts, 1)) * 100) / 100;
+
+        return compact('rnts', 'bednight', 'players', 'guests', 'adr');
     }
 }
