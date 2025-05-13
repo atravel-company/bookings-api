@@ -22,7 +22,7 @@ class BookingResource extends JsonResource
         $supplier = $this->produto->nome ?? null;
 
         // dynamically pick the right relation name:
-        $rel = 'valor' . ($type === 'transfer' ? 'transfer' : $type);
+        $rel = 'valor' . ($type === 'golf' ? 'game' : $type);
 
         $svc   = $this->$rel->{"valor_{$type}"}   ?? 0;
         $extra = $this->$rel->valor_extra       ?? 0;
