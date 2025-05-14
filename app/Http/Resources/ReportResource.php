@@ -59,11 +59,11 @@ class ReportResource extends JsonResource
 
         return [
             'id' => $product->id,
-            'type' => $type,
+            'startDate' => $product->FirstCheckin,
             'clientName' => $client,
             'operatorName' => $operator,
-            'startDate' => $product->FirstCheckin,
-            'supplier' => $product->produto->nome ?? null,
+            'supplierName' => $product->produto->nome ?? null,
+            'type' => $type,
             'totals' => $this->calculateBookingTotals($product, $type),
             'metrics' => $this->calculateBookingMetrics($product),
         ];
@@ -99,3 +99,4 @@ class ReportResource extends JsonResource
         return compact('rnts', 'bednight', 'players', 'guests', 'adr');
     }
 }
+    
