@@ -43,10 +43,10 @@ class ReportResource extends JsonResource
 
         return [
             'id' => $this->id,
+            'startDate' => $this->DataFirstServico,
             'clientName' => $this->lead_name,
             'operatorName' => $this->user->name,
-            'startDate' => $this->DataFirstServico,
-            'supplier' => null,
+            'supplierName' => null,
             'totals' => $groupTotals,
             'metrics' => $groupMetrics,
             'children' => $children->all(),
