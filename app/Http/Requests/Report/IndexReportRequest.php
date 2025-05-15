@@ -17,7 +17,7 @@ class IndexReportRequest extends FormRequest
         // If the "dates" input is an array, then validate it as a period.
         if ($this->has('dates') && is_array($this->input('dates'))) {
             return [
-                'dates'   => 'array',
+                'dates' => 'array',
                 'dates.0' => 'required|date',
                 'dates.1' => 'required|date|after_or_equal:dates.0',
             ];
@@ -27,6 +27,23 @@ class IndexReportRequest extends FormRequest
         return [
             'dates' => 'nullable|date',
         ];
+    }
+
+    /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        if ($this->has('dates')) {
+            $dates = $this->input('dates');
+            if (is_string($dates)) {
+                $dates = explode(',', $dates);
+                count($dates) == 1 ? $dates = $dates[0] : $dates;
+            }
+            $this->merge(['dates' => $dates]);
+        }
     }
 
     protected function passedValidation()
