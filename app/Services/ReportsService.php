@@ -15,7 +15,7 @@ class ReportsService
       $start = Carbon::parse($dateInput[0])->startOfDay()->toDateTimeString();
       $end   = Carbon::parse($dateInput[1])->endOfDay()->toDateTimeString();
     } else {
-      $date  = Carbon::parse($dateInput);
+      $date  = Carbon::parse($dateInput); // if null, defaults to now()
       $start = $date->startOfDay()->toDateTimeString();
       $end   = $date->endOfDay()->toDateTimeString();
     }
