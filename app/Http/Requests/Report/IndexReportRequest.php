@@ -17,20 +17,14 @@ class IndexReportRequest extends FormRequest
 
     public function rules()
     {
-        return is_array($this->input('dates'))
-            ? [
-                'dates' => 'array',
-                'dates.*' => 'date',
-                'dates.1' => 'after_or_equal:dates.0',
-            ]
-            : ['dates' => 'nullable|date'];
-    }
-
-    protected function passedValidation()
-    {
-        // If no date provided, default to today as a single date.
-        if (!$this->has('dates') || empty($this->input('dates'))) {
-            $this->merge(['dates' => Carbon::today()->toDateTimeString()]);
-        }
+        return is_array($this->input(
+            'dates'
+        )) ? [
+            'dates' => 'array',
+            'dates.*' => 'date',
+            'dates.1' => 'after_or_equal:dates.0',
+        ] : [
+            'dates' => 'nullable|date'
+        ];
     }
 }
