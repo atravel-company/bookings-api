@@ -47,7 +47,7 @@ class ReportsService
 
     // Filter out PedidoGerals whose computed DataFirstServico doesn't fall in range.
     return $pedidos->filter(function ($pedido) use ($start, $end) {
-      $serviceDate = $pedido->DataFirstServico;
+      $serviceDate = Carbon::parse($pedido->DataFirstServico);
       return $serviceDate && $serviceDate->between($start, $end);
     });
   }
