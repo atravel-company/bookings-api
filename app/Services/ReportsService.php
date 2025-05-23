@@ -8,7 +8,7 @@ use Carbon\Carbon;
 class ReportsService
 {
   // Notice we remove the type hint so we can accept either type.
-  public function getFilteredReports($dateInput, $users = null)
+  public function getFilteredReports($dateInput, $users = null, $products = null)
   {
     // If $dateInput is an array, treat it as a [start, end] tuple.
     if (is_array($dateInput)) {
@@ -28,6 +28,18 @@ class ReportsService
       } else {
         $query->where('user_id', $users);
       }
+    }
+
+    if ($products !== null) {
+      $query->whereHas('pedidoprodutos', function ($q) use ($products) {
+        if (is_array($products) && !empty($products)) {
+          // Filter where pedidoprodutos has a produto_id in the given array
+          $q->whereIn('produto_id', $products);
+        } elseif (!is_array($products)) {
+          // Filter where pedidoprodutos has a specific produto_id
+          $q->where('produto_id', $products);
+        }
+      });
     }
 
     $pedidos = $query->viewWithAllProd([])

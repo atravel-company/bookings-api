@@ -41,6 +41,18 @@ class IndexReportRequest extends FormRequest
             ];
         }
 
-        return array_merge($dateRules, $userIdRules);
+        $produtoIdRules = [];
+        if (is_array($this->input('products'))) {
+            $produtoIdRules = [
+                'products' => 'nullable|array',
+                'products.*' => 'integer|exists:produtos,id',
+            ];
+        } else {
+            $produtoIdRules = [
+                'products' => 'nullable|integer|exists:produtos,id',
+            ];
+        }
+
+        return array_merge($dateRules, $userIdRules, $produtoIdRules);
     }
 }
