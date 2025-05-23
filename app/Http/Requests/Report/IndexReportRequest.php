@@ -4,8 +4,7 @@ namespace App\Http\Requests\Report;
 
 use App\Http\Requests\Traits\NormalizesCommaSeparated;
 use Illuminate\Foundation\Http\FormRequest;
-use Carbon\Carbon;
-
+    
 // Tuple sample:
 // http://localhost:9000/api/reports?dates[0]=2025-02-01&dates[1]=2025-02-02
 
@@ -17,14 +16,20 @@ class IndexReportRequest extends FormRequest
 
     public function rules()
     {
-        return is_array($this->input(
-            'dates'
-        )) ? [
-            'dates' => 'array',
-            'dates.*' => 'date',
-            'dates.1' => 'after_or_equal:dates.0',
-        ] : [
-            'dates' => 'nullable|date'
+        $rules = [
+            'user_id' => 'nullable|integer|exists:users,id', // Assuming 'users' table and 'id' column
         ];
+
+        if (is_array($this->input('dates'))) {
+            return array_merge($rules, [
+                'dates' => 'array',
+                'dates.*' => 'date',
+                'dates.1' => 'after_or_equal:dates.0',
+            ]);
+        }
+
+        return array_merge($rules, [
+            'dates' => 'nullable|date'
+        ]);
     }
 }

@@ -8,7 +8,7 @@ use Carbon\Carbon;
 class ReportsService
 {
   // Notice we remove the type hint so we can accept either type.
-  public function getFilteredReports($dateInput)
+  public function getFilteredReports($dateInput, $userId = null)
   {
     // If $dateInput is an array, treat it as a [start, end] tuple.
     if (is_array($dateInput)) {
@@ -20,7 +20,13 @@ class ReportsService
       $end   = $date->endOfDay()->toDateTimeString();
     }
 
-    $pedidos = PedidoGeral::viewWithAllProd([])
+    $query = PedidoGeral::query();
+
+    if ($userId !== null) {
+      $query->where('user_id', $userId);
+    }
+
+    $pedidos = $query->viewWithAllProd([])
       ->customDataFilters(['start' => $start, 'end' => $end])
       ->get();
 

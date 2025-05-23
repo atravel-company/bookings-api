@@ -18,7 +18,12 @@ class ReportsController extends Controller
 
   public function index(IndexReportRequest $request)
   {
-    $filteredReports = $this->reportService->getFilteredReports($request->input('dates'));
+    $validatedData = $request->validated();
+
+    $dates = $validatedData['dates'] ?? null; // Use null coalescing for safety
+    $userId = $validatedData['user_id'] ?? null;
+
+    $filteredReports = $this->reportService->getFilteredReports($dates, $userId);
 
     $payload = $filteredReports->flatMap(function ($report) {
       return [new ReportResource($report)];
