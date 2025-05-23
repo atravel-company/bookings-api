@@ -17,10 +17,6 @@ use App\Http\Controllers\Api\ProductsController;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::get('/reports', [ReportsController::class, 'index']);
 
 Route::get('/users', [UsersController::class, 'index']);
