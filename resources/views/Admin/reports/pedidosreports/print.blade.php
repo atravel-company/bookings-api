@@ -170,7 +170,7 @@
 
                     <tr>
                         <td class="hidden" data-status="{{$pedidogeral->status}}">{{ $pedidogeral->id }}</td>
-                        <td> {{ \Carbon\Carbon::parse($pedidogeral->DataFirstServico)->format('d/m/Y') }} </td>
+                        <td> {{ $pedidogeral->DataFirstServico->format('d/m/Y') }} </td>
                         <td style="text-align:left;"> {{ $pedidogeral->lead_name }} </td>
                         <td>
                             @php $rnts = 0; @endphp

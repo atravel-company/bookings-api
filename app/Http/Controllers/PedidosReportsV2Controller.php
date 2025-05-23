@@ -57,87 +57,68 @@ class PedidosReportsV2Controller extends Controller
 
     public function filterRequest(Request $request)
     {
-        $pedidos = PedidoGeral::ViewWithAllProd($request->all());
+        // Start the query using the scope which includes base eager loading and potentially date filters
+        // Pass the request data directly to the scope
+        $pedidosQuery = PedidoGeral::ViewWithAllProd($request->all());
 
-        if ($request->has('pedidoid') and $request->get('pedidoid') !== null) {
-            $pedidos->where('id', $request->get('pedidoid'));
+        // Apply direct filters on the pedido_gerals table
+        if ($request->filled('pedidoid')) { // filled() checks for non-empty value
+            $pedidosQuery->where('id', $request->get('pedidoid'));
         }
 
-        if ($request->has('client') and $request->get('client') !== null) {
-            $pedidos->where('lead_name', 'like', '%' . $request->get('client') . "%");
+        if ($request->filled('client')) {
+            $pedidosQuery->where('lead_name', 'like', '%' . $request->get('client') . "%");
         }
 
-        if ($request->has('hotel') and $request->get('hotel') !== null and $request->get('hotel') !== '0') {
-            $pedidos = $pedidos->whereHas('pedidoprodutos', function ($q) use ($request) {
-                $q->where('produto_id', $request->get('hotel'));
-            })->with(['pedidoprodutos' => function ($q) use ($request) {
-                $q->where('produto_id', $request->get('hotel'));
+        // Apply status filter directly to the database query
+        // This replaces the inefficient ->get()->filter() later
+        $pedidosQuery->where('status', '!=', 'Cancelled');
+
+        // --- Relationship Filters (using whereHas) ---
+
+        // Consolidate Product/Supplier filtering if 'hotel' and 'suplier_id' filter on the same field (produto_id)
+        // Assuming 'suplier_id' is actually meant to be a 'produto_id' based on the query logic. Rename if possible.
+        $produtoIdFilter = null;
+        if ($request->filled('hotel') && $request->get('hotel') !== '0') {
+            $produtoIdFilter = $request->get('hotel');
+        } elseif ($request->filled('suplier_id') && $request->get('suplier_id') !== '0') {
+            // If 'suplier_id' filter should apply even if 'hotel' is present, adjust this logic
+            $produtoIdFilter = $request->get('suplier_id');
+        }
+
+        if ($produtoIdFilter) {
+            $pedidosQuery->whereHas('pedidoprodutos', function ($q) use ($produtoIdFilter) {
+                $q->where('produto_id', $produtoIdFilter);
+            });
+
+            // Refine eager loading: Only load relations for the *filtered* products
+            // This overwrites the broader eager loading from the scope for pedidoprodutos, which is often desired here.
+            $pedidosQuery->with(['pedidoprodutos' => function ($q) use ($produtoIdFilter) {
+                $q->where('produto_id', $produtoIdFilter);
+                // Include nested relationships needed for these specific products
+                $q->with('extras', 'valorquarto', 'pedidoquarto', 'valortransfer', 'pedidotransfer', 'valorgame', 'pedidogame', 'valorcar', 'pedidocar', 'valorticket', 'pedidoticket', 'produto');
             }]);
         }
+        // If no specific product filter, the eager loading from `scopeViewWithAllProd` applies.
 
-        /** usado no AJAX para a tabela de info dentro dos produtos */
-        if ($request->has('suplier_id') and $request->get('suplier_id') !== null and $request->get('suplier_id') !== '0') {
-            $pedidos = $pedidos->whereHas('pedidoprodutos', function ($q) use ($request) {
-                $q->where('produto_id', $request->get('suplier_id'));
-            })->with(['pedidoprodutos' => function ($sql) use ($request) {
-                $sql->where('produto_id', $request->get('suplier_id'));
-                $sql->with('extras');
-                $sql->with('valorquarto');
-                $sql->with('pedidoquarto');
-                $sql->with('valortransfer');
-                $sql->with('pedidotransfer');
-                $sql->with('valorgame');
-                $sql->with('pedidogame');
-                $sql->with('valorcar');
-                $sql->with('pedidocar');
-                $sql->with('valorticket');
-                $sql->with('pedidoticket');
-                $sql->with('produto');
-            }]);
-        }
 
-        if ($request->has('operator') and $request->get('operator') !== null and $request->get('operator') !== '0') {
-            $pedidos = $pedidos->whereHas('user', function ($q) use ($request) {
+        if ($request->filled('operator') && $request->get('operator') !== '0') {
+            $pedidosQuery->whereHas('user', function ($q) use ($request) {
                 $q->where('id', $request->get('operator'));
             });
+            // Note: 'user' is already eager loaded by scopeViewWithAllProd, no extra ->with() needed.
         }
 
-        $pedidos = $pedidos->where('status', '!=', 'Cancelled');
+        // --- Date Filtering ---
+        // The date filtering logic is now handled *inside* the `scopeViewWithAllProd` -> `customDataFilters`
+        // by applying WHERE HAS clauses *before* ->get().
+        // Remove the inefficient PHP-based date filtering blocks that used ->filter().
 
-        $pedidos = $pedidos->get()->filter(function ($value, $key) {
-            return $value->status != 'Cancelled';
-        });
+        // --- Execute the Query ---
+        // Now, ->get() fetches only the data filtered by the database.
+        $pedidos = $pedidosQuery->orderBy('id', 'desc')->get(); // Added an example ordering, adjust as needed
 
-        if ($request->get("start") != null and $request->get("end") == null) {
-            $pedidos = $pedidos->filter(function ($value, $key) use ($request) {
-                $data = $value['DataFirstServico'];
-
-                $inicio = Carbon::createFromFormat("d/m/Y", $request->get('start'))->format('Y-m-d');
-                return $data >= $inicio;
-                return $data->gte($inicio);
-            });
-        }
-
-        if ($request->get("start") == null and $request->get("end") != null) {
-            $pedidos = $pedidos->filter(function ($value, $key) use ($request) {
-                $data = $value['DataFirstServico'];
-                $fim =  Carbon::createFromFormat("d/m/Y", $request->get('end'))->format('Y-m-d');
-                return $data <= $fim;
-                return $data->lte($fim);
-            });
-        }
-
-        if ($request->get("start") != null and $request->get("end") != null) {
-            $pedidos = $pedidos->filter(function ($value, $key) use ($request) {
-                $data = $value['DataFirstServico'];
-
-                $inicio =  Carbon::createFromFormat("d/m/Y", $request->get('start'))->format('Y-m-d');
-                $fim =  Carbon::createFromFormat("d/m/Y", $request->get('end'))->format('Y-m-d');
-
-                return $data >= $inicio && $data <= $fim;
-                return $data->gte($inicio) && $data->lte($fim);
-            });
-        }
+        // The inefficient ->filter() calls previously here are REMOVED.
 
         return $pedidos;
     }

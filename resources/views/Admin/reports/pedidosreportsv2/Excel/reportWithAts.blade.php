@@ -95,7 +95,7 @@
                 @endforelse
 
                 <tr>
-                    <td style="text-align:center"> {{ \Carbon\Carbon::parse($pedidoGeral->DataFirstServico)->format('d/m/Y') }} </td>
+                    <td style="text-align:center"> {{ $pedidogeral->DataFirstServico->format('d/m/Y') }} </td>
                     <td style="text-align:right;"> {{ $pedidoGeral->lead_name }} </td>
                     <td style="text-align: center">
                         {{ $rnts }}

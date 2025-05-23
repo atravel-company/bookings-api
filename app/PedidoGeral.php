@@ -18,8 +18,6 @@ class PedidoGeral extends Model implements Auditable
 
     protected $appends = ['valortotalquarto', 'valortotalgolf', 'valortotaltransfer', 'valortotalcar', 'valortotalextras', 'valortotalkickback', 'TotalPagamento', 'ValorTotalProfitExtras', 'AtsTotalExtra', 'DataFirstServico', 'DataFirstServicoDesc'];
 
-    protected $dates = ['DataFirstServico', 'DataFirstServicoDesc'];
-
     public function produtoss()
     {
         return $this->belongsToMany('App\Produto', 'pedido_produto')->withTrashed()->withTimestamps()->withPivot('id', 'valor', 'email_check');
@@ -85,61 +83,72 @@ class PedidoGeral extends Model implements Auditable
         $query->with('payments', 'user')
               ->with(['pedidoprodutos' => $eagerLoadPedidoProdutos]);
 
-        if (isset($userRequest['start'])) {
-            $userRequest['start'] = Carbon::parse(str_replace('/', '-', $userRequest['start']))->format("Y-m-d");
-        } else {
-            $userRequest['start'] = null;
+        // Prepare dates - Use Carbon directly for parsing
+        $startDate = null;
+        if (isset($userRequest['start']) && !empty($userRequest['start'])) {
+            try {
+                // Assuming format d/m/Y from your original code
+                $startDate = Carbon::createFromFormat("d/m/Y", $userRequest['start'])->format('Y-m-d');
+            } catch (\Exception $e) { $startDate = null; /* Handle invalid date format */ }
         }
 
-        if (isset($userRequest['end'])) {
-            $userRequest['end'] = Carbon::parse(str_replace('/', '-', $userRequest['end']))->format("Y-m-d");
-        } else {
-            $userRequest['end'] = Carbon::now()->format("Y-m-d");
+        $endDate = null;
+        if (isset($userRequest['end']) && !empty($userRequest['end'])) {
+            try {
+                $endDate = Carbon::createFromFormat("d/m/Y", $userRequest['end'])->format('Y-m-d');
+            } catch (\Exception $e) { $endDate = null; /* Handle invalid date format */ }
+        } else if ($startDate) {
+            // Default end date if start is provided but end isn't (based on original code)
+            $endDate = Carbon::now()->format("Y-m-d");
         }
 
-        $data = $query->where("status", "!=", "Canceled")->with('payments')->with('user')
-            ->with(['pedidoprodutos' => function ($sql) use ($userRequest) {
-                $sql->with('extras');
-                $sql->with('valorquarto');
-                $sql->with('pedidoquarto');
-                $sql->with('valortransfer');
-                $sql->with('pedidotransfer');
-                $sql->with('valorgame');
-                $sql->with('pedidogame');
-                $sql->with('valorcar');
-                $sql->with('pedidocar');
-                $sql->with('valorticket');
-                $sql->with('pedidoticket');
-                $sql->with('produto');
-            }]);
 
-        if (isset($userRequest['start'])) {
-            if ($userRequest['start'] !== null) {
-                $data = $data->customDataFilters($userRequest);
-            }
+        // Apply date filters using database queries if dates are valid
+        if ($startDate || $endDate) {
+            // Pass parsed dates to the custom filter scope
+            $query->customDataFilters(['start' => $startDate, 'end' => $endDate]);
         }
 
-        return $data;
+        // Removed: $query->where("status", "!=", "Canceled"); // Moved to controller for clarity
+
+        return $query;
     }
 
     public function scopeCustomDataFilters($query, $data)
     {
+        $start = $data['start'] ?? null;
+        $end = $data['end'] ?? null;
 
-        if ($data['start'] !== null) {
-            $query = $query->whereHas('pedidoprodutos.pedidoquarto', function ($q) use ($data) {
-                $q->whereBetween('checkin', [$data['start'], $data['end']]);
-            })->orWhereHas('pedidoprodutos.pedidotransfer', function ($q) use ($data) {
-                $q->whereBetween('data', [$data['start'], $data['end']]);
-            })->orWhereHas('pedidoprodutos.pedidogame', function ($q) use ($data) {
-                $q->whereBetween('data', [$data['start'], $data['end']]);
-            })->orWhereHas('pedidoprodutos.pedidocar', function ($q) use ($data) {
-                $q->whereBetween('pickup_data', [$data['start'], $data['end']]);
-            })->orWhereHas('pedidoprodutos.pedidoticket', function ($q) use ($data) {
-                $q->whereBetween('data', [$data['start'], $data['end']]);
+        // Apply date range filtering using WHERE HAS clauses within a grouped WHERE
+        // This ensures that at least one related product type falls within the date range.
+        if ($start && $end) {
+            $query->where(function ($subQuery) use ($start, $end) {
+                $subQuery->orWhereHas('pedidoprodutos.pedidoquarto', function ($q) use ($start, $end) { $q->whereBetween('checkin', [$start, $end]); })
+                        ->orWhereHas('pedidoprodutos.pedidotransfer', function ($q) use ($start, $end) { $q->whereBetween('data', [$start, $end]); })
+                        ->orWhereHas('pedidoprodutos.pedidogame', function ($q) use ($start, $end) { $q->whereBetween('data', [$start, $end]); })
+                        ->orWhereHas('pedidoprodutos.pedidocar', function ($q) use ($start, $end) { $q->whereBetween('pickup_data', [$start, $end]); })
+                        ->orWhereHas('pedidoprodutos.pedidoticket', function ($q) use ($start, $end) { $q->whereBetween('data', [$start, $end]); });
+            });
+        } elseif ($start) { // Only start date provided
+            $query->where(function ($subQuery) use ($start) {
+                $subQuery->orWhereHas('pedidoprodutos.pedidoquarto', function ($q) use ($start) { $q->where('checkin', '>=', $start); })
+                        ->orWhereHas('pedidoprodutos.pedidotransfer', function ($q) use ($start) { $q->where('data', '>=', $start); })
+                        ->orWhereHas('pedidoprodutos.pedidogame', function ($q) use ($start) { $q->where('data', '>=', $start); })
+                        ->orWhereHas('pedidoprodutos.pedidocar', function ($q) use ($start) { $q->where('pickup_data', '>=', $start); })
+                        ->orWhereHas('pedidoprodutos.pedidoticket', function ($q) use ($start) { $q->where('data', '>=', $start); });
+            });
+        } elseif ($end) { // Only end date provided
+            $query->where(function ($subQuery) use ($end) {
+                $subQuery->orWhereHas('pedidoprodutos.pedidoquarto', function ($q) use ($end) { $q->where('checkin', '<=', $end); })
+                        ->orWhereHas('pedidoprodutos.pedidotransfer', function ($q) use ($end) { $q->where('data', '<=', $end); })
+                        ->orWhereHas('pedidoprodutos.pedidogame', function ($q) use ($end) { $q->where('data', '<=', $end); })
+                        ->orWhereHas('pedidoprodutos.pedidocar', function ($q) use ($end) { $q->where('pickup_data', '<=', $end); })
+                        ->orWhereHas('pedidoprodutos.pedidoticket', function ($q) use ($end) { $q->where('data', '<=', $end); });
             });
         }
+        // If neither $start nor $end, this scope won't add date constraints.
 
-        return $query;
+        return $query; // Make sure to return the query builder instance
     }
 
     public function formatDecimal($value)
@@ -277,51 +286,6 @@ class PedidoGeral extends Model implements Auditable
         return $this->formatDecimal($total);
     }
 
-    public function getDataFirstServicoAttribute()
-    {
-
-        try {
-
-            $data = $this->pedidoprodutos()->get();
-
-            if ($data) {
-                $response = $data->sortBy(function ($col) {
-                    return $col->firstCheckin;
-                })->values()->first();
-
-                if ($response) {
-                    return $response->firstCheckin;
-                } else {
-                    return Carbon::parse("00/01/0009");
-                }
-            } else {
-                return Carbon::parse("00/01/0009");
-            }
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $ex) {
-            dd($ex);
-        }
-    }
-
-    public function getDataFirstServicoDescAttribute()
-    {
-
-        $data = $this->pedidoprodutos()->get();
-
-        if ($data) {
-            $response = $data->sortByDesc(function ($col) {
-                return $col->firstCheckin;
-            })->values()->first();
-
-            if ($response) {
-                return $response->firstCheckin;
-            } else {
-                return Carbon::parse("00/01/0009");
-            }
-        } else {
-            return Carbon::parse("00/01/0009");
-        }
-    }
-
     public function getAtsTotalQuartoAttribute()
     {
         $total = 0;
@@ -382,6 +346,63 @@ class PedidoGeral extends Model implements Auditable
         } catch (Exception $ex) {
 
             dd("pedidogeral execption", $ex);
+        }
+    }
+
+    /**
+     * Get the overall earliest service date for this PedidoGeral.
+     * Relies on 'pedidoprodutos' and their nested date relations being EAGER-LOADED.
+     *
+     * @return \Carbon\Carbon|null
+     */
+    public function getDataFirstServicoAttribute(): ?Carbon
+    {
+        // Ensure the main relationship is loaded
+        if (! $this->relationLoaded('pedidoprodutos')) {
+            // It's generally bad practice to lazy-load in an accessor,
+            // return null or default if data wasn't explicitly loaded.
+            // If this happens, fix the eager loading in the controller (Part 1).
+            return Carbon::parse("00/01/0009"); // Or return null;
+        }
+
+        // Map over the loaded collection, get each item's firstCheckin, filter out nulls
+        $dates = $this->pedidoprodutos
+            ->map(function ($pedidoProduto) {
+                // Uses the optimized getFirstCheckinAttribute from PedidoProduto
+                return $pedidoProduto->FirstCheckin;
+            })
+            ->filter(); // Remove any null dates
+
+        // Find the minimum date from the collection of valid dates
+        if ($dates->isEmpty()) {
+            // Return the original default date if no valid dates found
+            return Carbon::parse("00/01/0009"); // Return as Carbon object
+        } else {
+            return $dates->min(); // Returns the earliest Carbon date object
+        }
+    }
+
+    /**
+     * Get the overall latest service date for this PedidoGeral.
+     * Relies on 'pedidoprodutos' and their nested date relations being EAGER-LOADED.
+     *
+     * @return \Carbon\Carbon|null
+     */
+    public function getDataFirstServicoDescAttribute(): ?Carbon
+    {
+        if (! $this->relationLoaded('pedidoprodutos')) {
+             return Carbon::parse("00/01/0009"); // Or return null;
+        }
+
+        $dates = $this->pedidoprodutos
+            ->map(function ($pp) { return $pp->firstCheckin; })
+            ->filter();
+
+        if ($dates->isEmpty()) {
+            return Carbon::parse("00/01/0009");
+        } else {
+            // Use max() to find the latest date
+            return $dates->max();
         }
     }
 }

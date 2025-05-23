@@ -1,0 +1,20 @@
+{
+  "name": "legacy-laravel-container",
+  "dockerComposeFile": [
+      "../docker-compose.dev.yml"
+  ],
+  "service": "app",
+  "workspaceFolder": "/app",
+  "customizations": {
+      "vscode": {
+          "extensions": [
+              "ms-azuretools.vscode-docker",
+              "bmewburn.vscode-intelephense-client",
+              "esbenp.prettier-vscode",
+              "google.geminicodeassist"
+          ]
+      }
+  },
+  "postCreateCommand": "bash scripts/setup.sh",
+  "remoteUser": "root"
+}

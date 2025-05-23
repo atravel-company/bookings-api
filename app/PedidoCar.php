@@ -16,6 +16,10 @@ class PedidoCar extends Model implements Auditable
 
     protected $appends = ['checkin', 'TotalPax', 'ats_total_rate'];
 
+    protected $casts = [
+        'pickup_data' => 'date',
+    ];
+
     public function getCheckinAttribute()
     {
         return $this->pickup_data;

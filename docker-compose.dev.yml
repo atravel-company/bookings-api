@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dev_atravel_app
+    tty: true
+    stdin_open: true
+    volumes:
+      - .:/app
+    ports:
+      - "9000:8000"
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: atsportugal_dev_db
+      DB_USERNAME: root
+      DB_PASSWORD: ""
+    depends_on:
+      - mysql
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  mysql:
+    image: mysql:5.7
+    container_name: dev_atravel_mysql
+    restart: always
+    ports:
+      - "127.0.0.1:4306:3306"
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: atsportugal_dev_db

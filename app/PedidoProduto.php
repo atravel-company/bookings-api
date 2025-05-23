@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -117,35 +118,46 @@ class PedidoProduto extends Model implements Auditable
     }
 
 
-    public function getFirstCheckinAttribute()
+    /**
+     * Get the earliest relevant date for this specific PedidoProduto item.
+     * Relies on nested relationships being EAGER-LOADED.
+     *
+     * @return \Carbon\Carbon|null
+     */
+    public function getFirstCheckinAttribute(): ?Carbon
     {
-        try {
-            if ($this->TipoProduto == null) {
-                return null;
-            }
+        $dateValue = null;
+        $relationName = null;
+        $dateColumn = null;
 
-            $rel = "pedido" . $this->tipoProduto;
-
-            $field = "data";
-            switch ($this->tipoProduto) {
-                case "quarto":
-                    $field = "checkin";
-                    break;
-                case "car":
-                    $field = "pickup_data";
-                    break;
-            }
-
-            $data =  $this->$rel()->get()->sortBy(function ($col) use ($field) {
-                return $col->checkin;
-            })->values()->first();
-
-            if ($data) {
-                return $data->$field;
-            }
-        } catch (ModelNotFoundException $ex) {
-            dd($ex);
+        switch ($this->tipoproduto) {
+            case 'quarto':
+                $relationName = 'pedidoquarto'; $dateColumn = 'checkin'; break;
+            case 'transfer':
+                $relationName = 'pedidotransfer'; $dateColumn = 'data'; break;
+            case 'game':
+                $relationName = 'pedidogame'; $dateColumn = 'data'; break;
+            case 'car':
+                $relationName = 'pedidocar'; $dateColumn = 'pickup_data'; break;
+            case 'ticket':
+                $relationName = 'pedidoticket'; $dateColumn = 'data'; break;
         }
+
+        if ($relationName && $dateColumn && $this->relationLoaded($relationName)) {
+            $relatedItems = $this->$relationName;
+            if ($relatedItems) {
+                if ($relatedItems instanceof \Illuminate\Database\Eloquent\Collection) {
+                    if ($relatedItems->isNotEmpty()) {
+                        $dateValue = $relatedItems->min($dateColumn);
+                    }
+                } else {
+                    // Attribute access should return Carbon or null due to casting
+                    $dateValue = $relatedItems->$dateColumn;
+                }
+            }
+        }
+
+        return $dateValue;
     }
 
     public function getTotalOfRelatioAttribute($rel)

@@ -12,6 +12,10 @@ class PedidoTicket extends Model implements Auditable
 
     protected $appends = ['checkin', 'TotalPax', 'ats_total_rate'];
 
+    protected $casts = [
+        'data' => 'date',
+    ];
+    
     public function getCheckinAttribute()
     {
         return $this->data;

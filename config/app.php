@@ -254,6 +254,11 @@ return [
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'Clockwork' => Clockwork\Support\Laravel\Facade::class,
         'Image' => Intervention\Image\Facades\Image::class,
+<<<<<<< HEAD
+=======
+
+        'Debugbar' => Barryvdh\Debugbar\Facade::class,
+>>>>>>> 5fbbe5b9eb3dd31ed8ab8ae725e626beb49c3d97
     ],
 
 ];
