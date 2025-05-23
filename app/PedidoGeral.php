@@ -63,16 +63,25 @@ class PedidoGeral extends Model implements Auditable
             ->orWhere('status', 'Waiting Confirmation');
     }
 
-    public function scopeViewWithAllProd($query, $userRequest = []) // Default to empty array
+    public function scopeViewWithAllProd($query, $userRequest = [], $produtoIdOrIds = null) // Default to empty array
     {
+        $eagerLoadPedidoProdutos = function ($sql) use ($produtoIdOrIds) {
+            // If produtoIdOrIds is provided, constrain the loaded pedidoprodutos
+            if ($produtoIdOrIds !== null) {
+                if (is_array($produtoIdOrIds) && !empty($produtoIdOrIds)) {
+                    $sql->whereIn('pedido_produto.produto_id', $produtoIdOrIds); // Use qualified column name for clarity
+                } elseif (!is_array($produtoIdOrIds) && $produtoIdOrIds) { // Ensure it's not null/empty if single
+                    $sql->where('pedido_produto.produto_id', $produtoIdOrIds);
+                }
+            }
+            // Load common nested relationships for the (potentially filtered) pedidoprodutos
+            $sql->with('extras', 'valorquarto', 'pedidoquarto', 'valortransfer', 'pedidotransfer', 'valorgame', 'pedidogame', 'valorcar', 'pedidocar', 'valorticket', 'pedidoticket', 'produto');
+        };
+
         // Base Eager Loading - Load relationships needed in almost all cases
         // Consider if *all* of these are *always* needed. Reducing eager loading helps.
         $query->with('payments', 'user')
-            ->with(['pedidoprodutos' => function ($sql) {
-                // Load common nested relationships for products
-                // Be critical: Are all of these needed even when just listing orders?
-                $sql->with('extras', 'valorquarto', 'pedidoquarto', 'valortransfer', 'pedidotransfer', 'valorgame', 'pedidogame', 'valorcar', 'pedidocar', 'valorticket', 'pedidoticket', 'produto');
-            }]);
+              ->with(['pedidoprodutos' => $eagerLoadPedidoProdutos]);
 
         // Prepare dates - Use Carbon directly for parsing
         $startDate = null;

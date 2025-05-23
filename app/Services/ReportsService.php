@@ -33,16 +33,15 @@ class ReportsService
     if ($products !== null) {
       $query->whereHas('pedidoprodutos', function ($q) use ($products) {
         if (is_array($products) && !empty($products)) {
-          // Filter where pedidoprodutos has a produto_id in the given array
           $q->whereIn('produto_id', $products);
-        } elseif (!is_array($products)) {
-          // Filter where pedidoprodutos has a specific produto_id
+        } elseif (!is_array($products) && $products) {
           $q->where('produto_id', $products);
         }
       });
     }
 
-    $pedidos = $query->viewWithAllProd([])
+
+    $pedidos = $query->viewWithAllProd([], $products)
       ->customDataFilters(['start' => $start, 'end' => $end])
       ->get();
 
