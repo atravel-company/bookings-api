@@ -21,9 +21,9 @@ class ReportsController extends Controller
     $validatedData = $request->validated();
 
     $dates = $validatedData['dates'] ?? null; // Use null coalescing for safety
-    $userId = $validatedData['user_id'] ?? null;
+    $users = $validatedData['users'] ?? null;
 
-    $filteredReports = $this->reportService->getFilteredReports($dates, $userId);
+    $filteredReports = $this->reportService->getFilteredReports($dates, $users);
 
     $payload = $filteredReports->flatMap(function ($report) {
       return [new ReportResource($report)];
