@@ -3,7 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ReportsController;
-use App\Http\Controllers\Api\SuppliersController;
+use App\Http\Controllers\Api\UsersController;
+use App\Http\Controllers\Api\ProductsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,4 +23,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('/reports', [ReportsController::class, 'index']);
 
-Route::get('/suppliers', [SuppliersController::class, 'index']);
+Route::get('/users', [UsersController::class, 'index']);
+
+Route::get('/products', [ProductsController::class, 'index']);

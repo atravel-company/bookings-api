@@ -4,7 +4,6 @@ namespace App\Http\Requests\Report;
 
 use App\Http\Requests\Traits\NormalizesCommaSeparated;
 use Illuminate\Foundation\Http\FormRequest;
-use Carbon\Carbon;
 
 // Tuple sample:
 // http://localhost:9000/api/reports?dates[0]=2025-02-01&dates[1]=2025-02-02
@@ -17,14 +16,43 @@ class IndexReportRequest extends FormRequest
 
     public function rules()
     {
-        return is_array($this->input(
-            'dates'
-        )) ? [
-            'dates' => 'array',
-            'dates.*' => 'date',
-            'dates.1' => 'after_or_equal:dates.0',
-        ] : [
-            'dates' => 'nullable|date'
-        ];
+        $dateRules = [];
+        if (is_array($this->input('dates'))) {
+            $dateRules = [
+                'dates' => 'required|array|size:2',
+                'dates.*' => 'required|date_format:Y-m-d',
+                'dates.1' => 'after_or_equal:dates.0',
+            ];
+        } else {
+            $dateRules = [
+                'dates' => 'nullable|date_format:Y-m-d'
+            ];
+        }
+
+        $userIdRules = [];
+        if (is_array($this->input('users'))) {
+            $userIdRules = [
+                'users' => 'nullable|array',
+                'users.*' => 'integer|exists:users,id',
+            ];
+        } else {
+            $userIdRules = [
+                'users' => 'nullable|integer|exists:users,id',
+            ];
+        }
+
+        $produtoIdRules = [];
+        if (is_array($this->input('products'))) {
+            $produtoIdRules = [
+                'products' => 'nullable|array',
+                'products.*' => 'integer|exists:produtos,id',
+            ];
+        } else {
+            $produtoIdRules = [
+                'products' => 'nullable|integer|exists:produtos,id',
+            ];
+        }
+
+        return array_merge($dateRules, $userIdRules, $produtoIdRules);
     }
 }
